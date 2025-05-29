@@ -1,0 +1,2 @@
+<?php
+runThemePart('footer');

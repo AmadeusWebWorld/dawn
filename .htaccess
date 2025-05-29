@@ -1,0 +1,7 @@
+# https://gist.github.com/nixta/0b98d7975562bc31c4c9
+# Add these three lines to CORSify your server for everyone.
+# https://www.webconfs.com/http-header-check.php
+
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET"
+Header set Access-Control-Allow-Headers "Content-Type, Authorization"

@@ -1,0 +1,12 @@
+#key	value
+name	Amadeus Web Core v7
+byline	A Different sort of Platfom
+safeName	amadeusweb8
+footer-message	
+siteMenuName	Amadeus Web
+scaffold	search
+_next	, sitemap
+sections_no	docs, all
+local-url	http://localhost/amadeus8/
+live-url	https://v8.amadeusweb.com/
+year	2019
