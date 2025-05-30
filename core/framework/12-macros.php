@@ -182,9 +182,16 @@ function processAudioShortcode($html) {
 	]);
 }
 
+DEFINE('SPACERSTART', '<div class="divider divider-center" style="margin: 0"><h1>');
+DEFINE('SPACEREND', '</h1></div>');
+
 function processSpacerShortcode($html) {
 	return replaceItems($html, [
-		'[spacer]' => cbCloseAndOpen() . '<div class="divider divider-center" style="margin: 0"><h1>',
-		'[/spacer]' => NEWLINE . '</h1></div>' . cbCloseAndOpen(),
+		'[spacer]' => cbCloseAndOpen('spacer') . SPACERSTART,
+		'[/spacer]' => NEWLINE . SPACEREND . cbCloseAndOpen(),
 	]);
+}
+
+function printH1InDivider($text) {
+	echo SPACERSTART . $text . NEWLINE . SPACEREND . cbCloseAndOpen('container');
 }

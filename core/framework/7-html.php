@@ -73,8 +73,8 @@ function cbWrapAndReplaceHr($raw) {
 	return $start . str_replace(HRTAG, $closeAndOpen, $raw) . $end;
 }
 
-function cbCloseAndOpen() {
-	return contentBox('end', '', true) . contentBox('', '', true);
+function cbCloseAndOpen($class = '') {
+	return contentBox('end', '', true) . contentBox('', $class, true);
 }
 
 function _getCBClassIfWanted($additionalClass) {

@@ -8,7 +8,7 @@ function before_render() {
 		addStyle('amadeusweb-network', 'app-static');
 	*/
 
-	if (variable('use-site-static')) 
+	if (!variable('dont-use-site-static')) 
 	variable('site-static',
 		assetMeta(variable('network') ? 'network-static' : 'site-static')['location']);
 

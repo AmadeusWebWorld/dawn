@@ -203,7 +203,7 @@ function _copyright($return = false) {
 	$before = variable('owned-by') ? '<strong>' . variable('name') . '</strong>, ' : '';
 	$after = variable('owned-by') ? variable('owned-by') : variable('name');
 
-	$result = '&copy; ' . $before . 'Copyright <strong><span>' . $after . '</span></strong>. ' . $from . $year . ' All Rights Reserved';
+	$result = '&copy; ' . $before . 'Copyright <strong><span>' . $after . '</span></strong>. ' . $from . $year . ' All Rights Reserved.';
 	if ($return) return $result; else echo $result;
 }
 
@@ -213,7 +213,7 @@ function _credits($pre = '', $return = false) {
 	$url = variable('main') . '?utm_content=site-credits&utm_referrer=' . variable('safeName');
 	$result = $pre . sprintf('Built With <a href="%s" target="_blank" class="amadeus-credits" style="display: inline-block;">' .
 		variable('nl') . '			<img src="%s" height="50" alt="%s" style="vertical-align: middle;"></a>',
-		$url, variable('app') . 'amadeusweb8@2x.png', 'Amadeus Web Core');
+		$url, variable('world') . 'amadeuswebworld-logo@2x.png', 'Amadeus Web World');
 
 	if ($return) return $result; else echo $result;
 }
