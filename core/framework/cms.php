@@ -1,16 +1,8 @@
 <?php
 function before_render() {
-	addStyle('amadeusweb7', 'app-static');
-	addStyle('amadeus-web-features', 'app-static');
-	addScript('amadeusweb7', 'app-static');
-	/* NEEDED?
-	if (contains(SITEPATH, 'awe'))
-		addStyle('amadeusweb-network', 'app-static');
-	*/
-
-	if (!variable('dont-use-site-static')) 
-	variable('site-static',
-		assetMeta(variable('network') ? 'network-static' : 'site-static')['location']);
+	addStyle('amadeusweb7', COREASSETS);
+	addStyle('amadeus-web-features', COREASSETS);
+	addScript('amadeusweb7', COREASSETS);
 
 	if (hasSpecial()) { afterSectionSet(); return; }
 

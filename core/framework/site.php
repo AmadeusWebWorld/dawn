@@ -23,6 +23,9 @@ if (contains($url = $siteVars[variable(SITEURLKEY)], 'localhost')) {
 	__testSiteVars(['url-for-localhost' => $url]);
 }
 
+variable(assetKey(SITEASSETS, ASSETFOLDER), SITEPATH . '/assets/');
+variable(assetKey(SITEASSETS), $url . 'assets/');
+
 function parseSectionsAndGroups($siteVars, $return = false, $forNetwork = false) {
 	if (variable('sections') && !$forNetwork) return;
 	$sections = isset($siteVars['sections']) ? $siteVars['sections'] : false;
@@ -124,8 +127,6 @@ _always($siteVars);
 $safeName = $siteVars['safeName'];
 $network = variable('network');
 
-//TODO: impl needed if using static?! if (disk_file_exists(SITEPATH . '/assets/site.css')) addStyle('site', 'site');
-
 variables($op = [
 	//version will be done with txt file if needed (see 11-assets.php)
 	'folder' => 'content/',
@@ -149,7 +150,9 @@ __testSiteVars($op);
 if ($network) setupNetwork();
 
 function setupNetwork() {
-	disk_include_once(siteRealPath('/../network.php'));
+	if (disk_file_exists($nw = siteRealPath('/../network.php')))
+		disk_include_once($nw);
+
 	$siteNames = textToList(disk_file_get_contents(siteRealPath('/../sites.txt')));
 
 	$op = [];

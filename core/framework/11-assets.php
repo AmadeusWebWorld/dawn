@@ -43,7 +43,19 @@ function title($return = false) {
 	echo $r;
 }
 
-function assetMeta($location = 'site', $setValueOr = false) {
+//locations
+DEFINE('NODEASSETS', 'NODE');
+DEFINE('NETWORKASSETS', 'NETWORK');
+DEFINE('SITEASSETS', 'SITE');
+DEFINE('COREASSETS', 'CORE');
+
+DEFINE('ASSETFOLDER', '-folder');
+
+function assetKey($type, $suffix = '') {
+	return 'ASSETSOF' . $type . $suffix;
+}
+
+function assetMeta($location = SITEASSETS, $setValueOr = false) {
 	$key = '__assetmanager_meta_' . $location; //cache it to prevent long manipulations/file reads below
 
 	if (is_array($setValueOr)) {
@@ -53,30 +65,11 @@ function assetMeta($location = 'site', $setValueOr = false) {
 
 	//dont do early return as get could be for one item of array alone
 	if (!($result = variable($key))) {
-		$bits = explode('--', $location);
-		$twoBits = explode('-', $bits[0], 2);
-
-		$mainFol = variableOr('site-static-folder', SITEPATH . '/');
-		$mainUrl = variableOr('site-static', fileUrl('assets/'));
-		if ($twoBits[0] == 'app') {
-			$mainFol = AMADEUSROOT . $twoBits[1] . '/';
-			$mainUrl = variable($bits[0]);
-		} else if ($twoBits[0] == 'network' && isset($twoBits[1])) {
-			$mainFol = variable('network-static-folder') .  $twoBits[1] . '/';
-			$mainUrl = variable('network-static');
-		} else if ($twoBits[0] == 'node') {
-			$mainFol = variable('node-static-folder') .  $twoBits[1] . '/';
-			$mainUrl = variable('node-static');
-		}
-
-		$middlePath = (in_array($twoBits[0], ['network', 'app'])
-			&& isset($bits[1])) ? $bits[1] . '/' : '';
-
-		$versionFile = $mainFol . $middlePath .'_version.txt';
+		$mainFol = variable(assetKey($location, ASSETFOLDER));
+		$versionFile = $mainFol . '_version.txt';
 		$version = disk_file_exists($versionFile) ? '?' . disk_file_get_contents($versionFile) : '';
-		$location = $mainUrl . $middlePath;
 
-		$result = ['location' => $location, 'version' => $version];
+		$result = ['location' => variable(assetKey($location)), 'version' => $version];
 
 		//print_r($result); debug_print_backtrace();
 		variable($key, $result);
@@ -89,15 +82,18 @@ function assetMeta($location = 'site', $setValueOr = false) {
 	return $result;
 }
 
-function siteOrNetworkOrAppStatic($relative, $assertSite = false) {
-	$nodeStatic = hasVariable('node-static') && $assertSite == false;
-	$where = $nodeStatic ? 'node-static' : variableOr('site-static', 'app-static');
-	$subFol = $nodeStatic || hasVariable('site-static') ? '' : variable('safeName') . '/';
-
-	return assetUrl($subFol . $relative, $where);
+function resolveLogo($noNode = false, $big = true) {
+	$file = variableOr('nodeSafeName' . ($noNode ? 'blah' : ''), variable('safeName')) . '-logo' . ($big ? '@2x' : '') . '.png';
+	return _resolveFile($file);
 }
 
-//TODO: support for network-static and site-static
+DEFINE('APPFILE', 3);
+function _resolveFile($file, $where = 0) {
+	$hierarchy = [NODEASSETS, NETWORKASSETS, SITEASSETS, COREASSETS];
+	while (true) { if (hasVariable( assetKey($hierarchy[$where]))) break; else $where++; }
+	return assetUrl($file, $hierarchy[$where]);
+}
+
 function assetUrl($file, $location) {
 	if (startsWith($file, 'http') || startsWith($file, '//'))
 		parameterError('ASSETMANAGER: direct urls not supported in beta', $file, DOTRACE, DODIE);
@@ -111,11 +107,11 @@ variables([
 	'scripts' => [],
 ]);
 
-function addStyle($name, $location = 'site') {
+function addStyle($name, $location = SITEASSETS) {
 	_addAssets($name, $location, 'styles');
 }
 
-function addScript($name, $location = 'site') {
+function addScript($name, $location = SITEASSETS) {
 	_addAssets($name, $location, 'scripts');
 }
 

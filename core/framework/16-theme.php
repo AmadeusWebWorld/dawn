@@ -71,13 +71,13 @@ function runThemePart($what) {
 		'optional-right-button' => '',
 		'header-align' => '', //an addon class needed if video page title has an image and wants content on right
 		'search-url' => searchUrl(contains(variable('node'), 'search')),
-		'app-static' => assetMeta('app-static')['location'],
+		'app-static' => assetMeta(COREASSETS)['location'],
 	];
 
 	if ($what == 'header') {
 		$iconLink = replaceItems('%url%%safeName%-icon.png%version%',
 			[ 'url' => variableOr('node-static', fileUrl()), 'safeName' => variableOr('nodeSafeName', variable('safeName')),
-				'version' => assetMeta('site', 'version')], '%');
+				'version' => assetMeta(SITEASSETS, 'version')], '%');
 
 		$icon = '<link rel="icon" href="' . $iconLink . '" sizes="192x192">';
 
@@ -87,7 +87,7 @@ function runThemePart($what) {
 
 		//TODO: icon link to node home, should have 2nd menu & back to home
 		$baseUrl = hasVariable('nodeSafeName') ? pageUrl(variable('node')) : pageUrl();
-		$logo2x = siteOrNetworkOrAppStatic(variableOr('nodeSafeName', variable('safeName')) . '-logo@2x.png');
+		$logo2x = resolveLogo();
 		$vars['logo'] = concatSlugs(['<a href="', $baseUrl, '"><img src="', $logo2x, '" class="img-fluid img-max-',
 			variableOr('footer-logo-max-width', '500'), '" alt="', variableOr('nodeSiteName', variable('name')), '"></a><br>'], '');
 
@@ -106,7 +106,7 @@ function runThemePart($what) {
 		setMenuSettings(true);
 	} else if ($what == 'footer') {
 		if (!variable('footer-widgets-in-enrich')) {
-			$logo2x = siteOrNetworkOrAppStatic(variable('safeName') . '-logo@2x.png', true);
+			$logo2x = resolveLogo(true);
 			$logo = concatSlugs(['<a href="', pageUrl(), '"><img src="', $logo2x, '" style="border-radius: 20px;" class="img-fluid" alt="', variable('name'), '"></a><br>'], '');
 
 			$message = !variable('footer-message') ? '' : '<span class="footer-message">' . renderSingleLineMarkdown(variable('footer-message'), ['echo' => false]) . '</span>' . NEWLINE;

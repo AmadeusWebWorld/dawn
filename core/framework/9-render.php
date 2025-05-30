@@ -189,10 +189,10 @@ function _renderImplementation($fileOrRaw, $settings) {
 	$replacesParams = isset($settings['replaces']) ? $settings['replaces'] : [];
 	$plainReplaces = isset($settings['plainReplaces']) ? $settings['plainReplaces'] : [];
 	$builtinReplaces = [
-		'site-assets' => variable('site-static') . 'assets/',
-		'site-assets-images' => variable('site-static') . 'assets/images/',
+		'site-assets' => variable(assetKey(SITEASSETS)),
+		'site-assets-images' => variable(assetKey(SITEASSETS)) . 'images/',
 		'app' => variable('app'),
-		'app-assets' => variable('app-static') . 'assets/',
+		'app-assets' => variable(assetKey(COREASSETS)),
 		'world-url' => variable('world'),
 	];
 

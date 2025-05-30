@@ -84,7 +84,9 @@ function before_bootstrap() {
 	variable('global', $local ? replaceVariables('http://localhost%port%/amadeusweb/network/', 'port') : '//amadeusweb.site/');
 
 	variable('app-themes', $local && !$isMobile ? replaceVariables('http://localhost%port%/amadeus8/themes/', 'port') : '//v8.amadeusweb.com/themes/');
-	variable('app-static', $local && !$isMobile ? replaceVariables('http://localhost%port%/amadeus8/assets/', 'port') : '//v8.amadeusweb.com/assets/');
+
+	variable(assetKey(COREASSETS, ASSETFOLDER), AMADEUSROOT . 'assets/');
+	variable(assetKey(COREASSETS), variable('app') . 'assets/');
 
 	$php = contains($_SERVER['DOCUMENT_ROOT'], 'magique') || contains($_SERVER['DOCUMENT_ROOT'], 'Magique');
 	variable('no_url_rewrite', $isMobile || $php);
@@ -211,9 +213,9 @@ function _credits($pre = '', $return = false) {
 	if (variable('dont_show_amadeus_credits')) return '';
 
 	$url = variable('main') . '?utm_content=site-credits&utm_referrer=' . variable('safeName');
-	$result = $pre . sprintf('Built With <a href="%s" target="_blank" class="amadeus-credits" style="display: inline-block;">' .
-		variable('nl') . '			<img src="%s" height="50" alt="%s" style="vertical-align: middle;"></a>',
-		$url, variable('world') . 'amadeuswebworld-logo@2x.png', 'Amadeus Web World');
+	$result = $pre . sprintf('<a href="%s" target="_blank" class="amadeus-credits" title="Built With AmadeusWeb.world" style="display: inline-block;">' .
+		variable('nl') . '			<img src="%s" height="70" alt="%s" style="border-radius: 12px; vertical-align: middle;"></a>',
+		$url, variable('world') . 'assets/amadeuswebworld-logo@2x.png', 'Amadeus Web World');
 
 	if ($return) return $result; else echo $result;
 }
