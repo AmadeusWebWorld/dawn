@@ -74,12 +74,12 @@ function runThemePart($what) {
 		'app-static' => assetMeta(COREASSETS)['location'],
 	];
 
-	if ($what == 'header') {
-		$iconLink = replaceItems('%url%%safeName%-icon.png%version%',
-			[ 'url' => variableOr('node-static', fileUrl()), 'safeName' => variableOr('nodeSafeName', variable('safeName')),
-				'version' => assetMeta(SITEASSETS, 'version')], '%');
+	$siteIcon = getLogoOrIcon('icon', 'site');
+	$nodeIcon = getLogoOrIcon('icon', 'node');
 
-		$icon = '<link rel="icon" href="' . $iconLink . '" sizes="192x192">';
+	if ($what == 'header') {
+
+		$icon = '<link rel="icon" href="' . $nodeIcon . '" sizes="192x192">';
 
 		$vars['head-includes'] = '<title>' . title(true) . '</title>' . NEWLINE . '	' . $icon . NEWLINE . main::runAndReturn();
 		$vars['seo'] = seo_tags(true);
@@ -87,11 +87,11 @@ function runThemePart($what) {
 
 		//TODO: icon link to node home, should have 2nd menu & back to home
 		$baseUrl = hasVariable('nodeSafeName') ? pageUrl(variable('node')) : pageUrl();
-		$logo2x = resolveLogo();
+		$logo2x = getLogoOrIcon('logo', 'node');
 		$vars['logo'] = concatSlugs(['<a href="', $baseUrl, '"><img src="', $logo2x, '" class="img-fluid img-max-',
 			variableOr('footer-logo-max-width', '500'), '" alt="', variableOr('nodeSiteName', variable('name')), '"></a><br>'], '');
 
-		$vars['optional-page-menu'] = _page_menu($iconLink);
+		$vars['optional-page-menu'] = _page_menu($siteIcon, $nodeIcon);
 
 		$header = _substituteThemeVars($content, 'header', $vars);
 
@@ -106,18 +106,20 @@ function runThemePart($what) {
 		setMenuSettings(true);
 	} else if ($what == 'footer') {
 		if (!variable('footer-widgets-in-enrich')) {
-			$logo2x = resolveLogo(true);
-			$logo = concatSlugs(['<a href="', pageUrl(), '"><img src="', $logo2x, '" style="border-radius: 20px;" class="img-fluid" alt="', variable('name'), '"></a><br>'], '');
+			$logo2x = getLogoOrIcon('logo', 'site');
+			$logo = NEWLINE . '			' . concatSlugs(['<a href="', pageUrl(), '">' . NEWLINE .
+				'				<img src="', $logo2x, '" style="border-radius: 20px;" class="img-fluid" alt="', variable('name'), '">' . NEWLINE . '			</a><br>'], '');
 
-			$message = !variable('footer-message') ? '' : '<span class="footer-message">' . renderSingleLineMarkdown(variable('footer-message'), ['echo' => false]) . '</span>' . NEWLINE;
+			$message = !variable('footer-message') ? '' : NEWLINE . '			<span class="footer-message">' . renderSingleLineMarkdown(variable('footer-message'), ['echo' => false])
+				. '			</span>' . NEWLINE;
 			$loneMessage = contains($content['footer-widgets'], '##footer-message##');
 
 			$contact = getSnippet('contact');
 			$loneContact = contains($content['footer-widgets'], '##footer-contact##');
 
-			$nodeName = hasVariable('nodeSiteName') ? '<span class="h5" style="margin-left: 15px;">&#10148; ' . variable('nodeSiteName') . '</span>' . NEWLINE : '';
+			$nodeName = hasVariable('nodeSiteName') ? BRNL . '				<span class="h5" style="margin-left: 15px;">&#10148; ' . variable('nodeSiteName') . '</span>' . NEWLINE : '';
 			$fwVars = [
-				'footer-logo' => $logo . '<h4 class="mt-sm-4">' . variable('name') . $nodeName . '</h4>'
+				'footer-logo' => $logo . NEWLINE . '			<h4 class="mt-sm-4">' . variable('name') . $nodeName . '			</h4>'
 					. (!$loneMessage ? $message : '') . (!$loneContact ? BRNL . BRNL . $contact : ''),
 				'site-widgets' => siteWidgets(),
 				'copyright' => _copyright(true),
@@ -159,17 +161,16 @@ function runThemePart($what) {
 	}
 }
 
-function _page_menu($iconLink) {
+function _page_menu($siteIcon, $nodeIcon) {
 	if (!variable('submenu-at-node')) return '<!--no-page-menu-->';
 
-	$menuFile = getThemeFile('page-menu.html');
+	$menuFile = getThemeFile('snippets/page-menu.html');
 	$menuContent = disk_file_get_contents($menuFile);
 
 	$menuVars = [
 		'menu-title' => 
-			   '<a href="' . pageUrl() . '"><img height="40" src="' . $iconLink . '" /></a>&nbsp;&nbsp;&nbsp;'
-			 . '<a href="' . pageUrl(variable('node'))
-			 . '"><abbr title="sub-site home"><i class="fa-solid fa-home-user text-white"></i></abbr></a>&nbsp;&nbsp;&nbsp;'
+			   '<a href="' . pageUrl() . '"><img height="40" src="' . $siteIcon . '" /></a>&nbsp;&nbsp;&nbsp;'
+			 . '<a href="' . pageUrl(variable('node')) . '"><img height="40" src="' . $nodeIcon . '" /></a>&nbsp;&nbsp;&nbsp;'
 			 . variable('nodeSiteName'),
 	];
 	$menuContent = replaceItems($menuContent, $menuVars, '##');
@@ -250,7 +251,7 @@ function siteWidgets() {
 	$grid = [1 => 12, 2 => 6, 3 => 4];
 	$colspan = $grid[$colsInUse];
 
-	$start = sprintf('<div id="footer-[WHAT]" class="col-md-%s mt-sm-%s pt-xs-3"><hr class="d-sm-none">', $colspan, $colspan) . NEWLINE;
+	$start = sprintf('<div id="footer-[WHAT]" class="col-md-%s mt-sm-2 pt-xs-3"><hr class="d-sm-none">', $colspan) . NEWLINE;
 
 	//TODO: Showcase + Misc
 	$op = [];

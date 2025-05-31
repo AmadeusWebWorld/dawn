@@ -82,12 +82,21 @@ function assetMeta($location = SITEASSETS, $setValueOr = false) {
 	return $result;
 }
 
-function resolveLogo($noNode = false, $big = true) {
-	$file = variableOr('nodeSafeName' . ($noNode ? 'blah' : ''), variable('safeName')) . '-logo' . ($big ? '@2x' : '') . '.png';
-	return _resolveFile($file);
+//what == logo | icon
+//which = site | node (falls back to site)
+function getLogoOrIcon($what, $which = 'site') {
+	$suffix = ($what == 'icon' ? '-icon' : '-logo@2x') . '.png';
+	$name = variable(hasVariable('nodeSafeName') && $which == 'node' ? 'nodeSafeName' : 'safeName') . $suffix;
+	$node = $which == 'node' && DEFINED('NODEPATH');
+	$prefix = ($node ? (variable('network') ? SITENAME . '/' : '') . variable('section') . '/' : '');
+	return _resolveFile($prefix . $name);
 }
 
-DEFINE('APPFILE', 3);
+DEFINE('STARTATNODE', 0);
+DEFINE('STARTATNETWORK', 1);
+DEFINE('STARTATSITE', 2);
+DEFINE('STARTATCORE', 3);
+
 function _resolveFile($file, $where = 0) {
 	$hierarchy = [NODEASSETS, NETWORKASSETS, SITEASSETS, COREASSETS];
 	while (true) { if (hasVariable( assetKey($hierarchy[$where]))) break; else $where++; }
