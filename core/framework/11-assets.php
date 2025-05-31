@@ -85,11 +85,12 @@ function assetMeta($location = SITEASSETS, $setValueOr = false) {
 //what == logo | icon
 //which = site | node (falls back to site)
 function getLogoOrIcon($what, $which = 'site') {
-	$suffix = ($what == 'icon' ? '-icon' : '-logo@2x') . '.png';
+	$suffix = ($what == 'icon' ? '-icon' : '-logo') . '.png';
 	$name = variable(hasVariable('nodeSafeName') && $which == 'node' ? 'nodeSafeName' : 'safeName') . $suffix;
 	$node = $which == 'node' && DEFINED('NODEPATH');
-	$prefix = ($node ? (variable('network') ? SITENAME . '/' : '') . variable('section') . '/' : '');
-	return _resolveFile($prefix . $name);
+	$prefix = ($node ? (variable('network') ? SITENAME . '/' : '') . (variable('section') ? variable('section') . '/' : '') : '');
+	$where = $what == 'icon' && !$node ? STARTATSITE : (variable('network') ? STARTATNETWORK : STARTATNODE);
+	return _resolveFile($prefix . $name, $where, $node);
 }
 
 DEFINE('STARTATNODE', 0);
@@ -97,10 +98,12 @@ DEFINE('STARTATNETWORK', 1);
 DEFINE('STARTATSITE', 2);
 DEFINE('STARTATCORE', 3);
 
-function _resolveFile($file, $where = 0) {
+function _resolveFile($file, $where = 0, $includeAssets = true) {
 	$hierarchy = [NODEASSETS, NETWORKASSETS, SITEASSETS, COREASSETS];
 	while (true) { if (hasVariable( assetKey($hierarchy[$where]))) break; else $where++; }
-	return assetUrl($file, $hierarchy[$where]);
+	$result = assetUrl($file, $hierarchy[$where]);
+	if (!$includeAssets) $result = str_replace('/assets/', '/', $result);
+	return $result;
 }
 
 function assetUrl($file, $location) {

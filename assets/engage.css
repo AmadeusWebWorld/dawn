@@ -1,0 +1,16 @@
+/* ENGAGE - TODO: colouring! */
+.engage { padding: 0; --bs-border-width: 4px; }
+
+.engage h2, .engage h3 { font-size: inherit; padding: 6px; border: 1px solid gray; border-radius: 8px; }
+.engage h3 { background-color: var(--amw-site-background, #c9a45e); }
+.engage h2 { background-color: var(--amw-footer-background, rgb(151, 197, 182)); } 
+
+.engage ol, .engage ul { list-style-type: none; margin: 4px 0 15px 60px; }
+.engage li { margin-bottom: 20px; background-color: var(--after-content-background, #eee);
+	padding: 8px 6px 8px 12px; border-radius: 15px; }
+.engage label, .engage p { text-transform: none!important; font-size: 18px; }
+.engage label { width: 100%; }
+.engage input[type="checkbox"] { position: absolute; margin: -2px 0 0 -60px; width: 40px; height: 40px; }
+
+.btn-fill { margin: 10px; width: 100%; padding: 15px; }
+.btn-fill:hover { text-decoration: underline; }

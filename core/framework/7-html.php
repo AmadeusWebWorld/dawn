@@ -209,7 +209,7 @@ function replaceHtml($html) {
 }
 
 variable('_marqueeStart', '<marquee onmouseover="this.stop();" onmouseout="this.start();">');
-variable('_errorStart', '<div style="padding: 20px; font-size: 130%; font-weight: bold; background-color: #fee; margin-top: 20px;">');
+variable('_errorStart', '<div class="container mt-4 p-5 alert alert-warning text-center" style="border-radius: 25px;">');
 
 function togglingH2($text, $initialArrow = 'down') {
 	return '<h2 class="amadeus-icon toggle-parent-panel mb-3">'

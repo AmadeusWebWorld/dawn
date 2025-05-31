@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="x-ua-compatible" content="IE=edge">
+	##seo##
+
+	<!-- Font Imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800;900&family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+	<!-- Core Style -->
+	<link rel="stylesheet" href="##theme##style.css">
+
+	<!-- Font Icons -->
+	<link rel="stylesheet" href="##theme##css/font-icons.css">
+	<link rel="stylesheet" href="##theme##one-page/css/et-line.css">
+
+	<!-- Plugins/Components CSS -->
+	<link rel="stylesheet" href="##theme##css/swiper.css">
+
+	<!-- Niche Demos -->
+	<link rel="stylesheet" href="##theme##demos/business/business.css">
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="##theme##css/custom.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	##head-includes##
+</head>
+
+<body class="stretched ##body-classes##">
+
+	<!-- Document Wrapper
+	============================================= -->
+	<div id="wrapper">
+
+		<!-- Header
+		============================================= -->
+		<header id="header" class="full-header transparent-header" data-sticky-shrink="false">
+			<div id="header-wrap">
+				<div class="container">
+					<div class="header-row">
+
+						<!-- Logo
+						============================================= -->
+						<div id="logo">
+							##logo##
+						</div><!-- #logo end -->
+
+						<div class="header-misc">
+
+							<!-- Top Search
+							============================================= -->
+							<div id="top-search" class="header-misc-icon">
+								<a href="#" id="top-search-trigger"><i class="uil uil-search"></i><i class="bi-x-lg"></i></a>
+							</div><!-- #top-search end -->
+
+						</div>
+
+						<div class="primary-menu-trigger">
+							<button class="cnvs-hamburger" type="button" title="Open Mobile Menu">
+								<span class="cnvs-hamburger-box"><span class="cnvs-hamburger-inner"></span></span>
+							</button>
+						</div>
+
+						<!-- Primary Navigation
+						============================================= -->
+						<nav class="primary-menu">
+							##menu##
+						</nav><!-- #primary-menu end -->
+
+						<form class="top-search-form" action="##search-url##" method="get">
+							<input type="text" name="q" class="form-control" value="" placeholder="Type &amp; Hit Enter.." autocomplete="off">
+						</form>
+
+					</div>
+				</div>
+			</div>
+			<div class="header-wrap-clone"></div>
+		</header><!-- #header end -->
+
+		##optional-page-menu##
+
+		##optional-slider##
+
+		<!-- Content
+		============================================= -->
+		<section id="content" class="content">
+
+			<div class="content-wrap pb-0" style="z-index: 1;">
+				##content##
+			</div>
+		</section><!-- #content end -->
+
+		<!-- Footer
+		============================================= -->
+		<footer id="footer" class="border-0" style="padding: 30px 0;">
+			<div class="container">
+				##footer-widgets##
+			</div>
+		</footer><!-- #footer end -->
+
+	</div><!-- #wrapper end -->
+
+	<!-- Go To Top
+	============================================= -->
+	<div id="gotoTop" class="uil uil-angle-up"></div>
+
+	<!-- JavaScripts
+	============================================= -->
+	<script src="##theme##js/plugins.min.js"></script>
+	<script src="##theme##js/functions.bundle.js"></script>
+
+	<script>
+		jQuery(window).on( 'load', function(){
+			jQuery('#oc-features').owlCarousel({
+				items: 1,
+				margin: 60,
+			    nav: true,
+			    navText: ['<i class="bi-arrow-left"></i>','<i class="bi-arrow-right"></i>'],
+			    dots: false,
+			    stagePadding: 30,
+			    responsive:{
+					768: { items: 2 },
+					1200: { stagePadding: 200 }
+				},
+			});
+		});
+	</script>
+
+</body>
+</html>

@@ -88,8 +88,10 @@ function runThemePart($what) {
 		//TODO: icon link to node home, should have 2nd menu & back to home
 		$baseUrl = hasVariable('nodeSafeName') ? pageUrl(variable('node')) : pageUrl();
 		$logo2x = getLogoOrIcon('logo', 'node');
-		$vars['logo'] = concatSlugs(['<a href="', $baseUrl, '"><img src="', $logo2x, '" class="img-fluid img-max-',
-			variableOr('footer-logo-max-width', '500'), '" alt="', variableOr('nodeSiteName', variable('name')), '"></a><br>'], '');
+		$vars['logo'] = concatSlugs(['<a href="', $baseUrl, '">' . NEWLINE
+			. '								<img src="', $logo2x, '" class="img-fluid img-max-',
+			variableOr('footer-logo-max-width', '500'), '" alt="', variableOr('nodeSiteName', variable('name')), '">' . NEWLINE
+			. '							</a><br>'], '');
 
 		$vars['optional-page-menu'] = _page_menu($siteIcon, $nodeIcon);
 
@@ -168,10 +170,10 @@ function _page_menu($siteIcon, $nodeIcon) {
 	$menuContent = disk_file_get_contents($menuFile);
 
 	$menuVars = [
-		'menu-title' => 
-			   '<a href="' . pageUrl() . '"><img height="40" src="' . $siteIcon . '" /></a>&nbsp;&nbsp;&nbsp;'
-			 . '<a href="' . pageUrl(variable('node')) . '"><img height="40" src="' . $nodeIcon . '" /></a>&nbsp;&nbsp;&nbsp;'
-			 . variable('nodeSiteName'),
+		'menu-title' => NEWLINE .
+			   '<a href="' . pageUrl() . '">' . NEWLINE . '		<img height="40" src="' . $siteIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE
+			 . '<a href="' . pageUrl(variable('node')) . '">' . NEWLINE . '		<img height="40" src="' . $nodeIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE
+			 . variable('nodeSiteName') . NEWLINE,
 	];
 	$menuContent = replaceItems($menuContent, $menuVars, '##');
 

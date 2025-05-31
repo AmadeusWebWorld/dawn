@@ -173,7 +173,14 @@ function render() {
 				}
 			}
 
-			error('<h1 class="flash flash-red">Could NOT find file "' . variable('node') . '"</h1>in ' . $folder);
+			$breadcrumbs = variable('breadcrumbs');
+			$file = variable('node'); $message = 'at level 1 (content / section / node)';
+			if ($breadcrumbs) {
+				$file = BRNL . variableOr('all_page_parameters', 'node/section missing?');
+				$message = 'found only these valid params:' . BRNL . BRNL . '<strong>' . implode(' &mdash; ', $breadcrumbs) . '</strong>';
+			}
+			error('<h1 class="alert alert-danger rounded-pill mt-3 mb-0">Couldn\'t find page:</h1>'
+				. '<h2 class="mt-3 mb-3">' . $file . '</h2>' . BRNL . NEWLINE . '<p class="rounded-pill alert alert-secondary">' . $message . '</p>');
 		}
 	}
 

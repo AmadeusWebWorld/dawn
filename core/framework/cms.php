@@ -50,44 +50,52 @@ function before_render() {
 			//die('Coulnt Find File in v7.1'); //let it fall back
 		}
 
-		//NOTE: rewritten in v 7.2
-		$baseFol = variable('path') . '/' . $slug . '/' . ($slug != $node ? $node . '/' : '');
+		//NOTE: rewritten in v 7.2 & 8.0
+		$baseFol = variable('path') . '/' . $slug . ($slug != $node ? '/' . $node : ''); //no trailing slash
 
 		if (!disk_is_dir($baseFol)) {
 			continue;
 		}
 
 		if (!empty($innerSlugs)) {
-			$innerReverse = [];
+			$reversedVars = [];
 			$breadcrumbs = [];
-			$thisRelative = '';
-			$relative = '';
-			foreach ($innerSlugs as $item) {
-				$thisRelative = $relative;
-				$thisFol = $baseFol . $relative;
+			$folderAbsolute = $baseFol;
 
-				$exists = disk_is_dir($thisFol . $item);
-				if ($exists) $breadcrumbs[] = $item;
-				$thisBreadcrumbs = $breadcrumbs;
-				$innerReverse[] = compact('item', 'thisFol', 'thisBreadcrumbs', 'thisRelative');
-				//for next
-				$relative .= $item . ($relative ? '' : '/');
+			foreach ($innerSlugs as $item) {
+				$matchType = false;
+				$fileExtension = false;
+
+				if (disk_is_dir($folderAbsolute . '/' . $item))
+					$matchType = 'folder';
+				else if ($fileExtension = disk_one_of_files_exist($folderAbsolute . '/' . $item . '.', 'php, md, tsv, html'))
+					$matchType = 'file';
+
+				if (!$matchType) break;
+				if ($matchType == 'folder') $breadcrumbs[] = $item;
+				$reversedVars[] = compact('item', 'matchType', 'fileExtension', 'breadcrumbs', 'folderAbsolute');
+
+				if ($matchType == 'file') break;
+
+				$folderAbsolute .=  '/' . $item;
 			}
 
-			$innerReverse = array_reverse($innerReverse);
+			$reversedVars = array_reverse($reversedVars);
 
 			$fileToTry = 'home';
-			foreach ($innerReverse as $vars) {
+			foreach ($reversedVars as $vars) {
 				extract($vars);
-				if (disk_is_dir($thisFol)) {
-					$fileToTry = $item;
-					if (setFileIfExists($slug, $baseFol . $thisRelative . $item . '.', $thisBreadcrumbs, false)) { return; }
-					if (setFileIfExists($slug, $thisFol . 'home.', $thisBreadcrumbs, false)) return;
-					break;
-				}
+
+				if ($matchType == 'file')
+					variable('file', $folderAbsolute . '/' . $item . '.' . $fileExtension);
+
+				variable('section', $slug);
+				variable('breadcrumbs', $breadcrumbs);
+				afterSectionSet();
+				return;
 			}
 
-			if (setFileIfExists($slug, $baseFol . 'home.', [], false)) return;
+			return; //let it throw a missing file exception
 		} else {
 			if (setFileIfExists($slug, $baseFol . 'home.', false, false)) return;
 			continue;
@@ -120,6 +128,7 @@ function afterSectionSet() {
 }
 
 function did_render_page() {
+	if (function_exists('did_site_render_page') && did_site_render_page()) return true;
 	if (renderedSpecial()) return true;
 
 	if (variable('directory_of')) {
