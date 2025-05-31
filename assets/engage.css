@@ -1,8 +1,8 @@
 /* ENGAGE - TODO: colouring! */
 .engage { padding: 0; --bs-border-width: 4px; }
 
-.engage h2, .engage h3 { font-size: inherit; padding: 6px; border: 1px solid gray; border-radius: 8px; }
-.engage h3 { background-color: var(--amw-site-background, #c9a45e); }
+.engage h2, .engage h3 { font-size: inherit; padding: 6px; border: 1px solid gray; border-radius: 8px; margin: 15px 0 5px 0; }
+.engage h2:first-child, .engage h3 { background-color: var(--amw-site-background, #c9a45e); }
 .engage h2 { background-color: var(--amw-footer-background, rgb(151, 197, 182)); } 
 
 .engage ol, .engage ul { list-style-type: none; margin: 4px 0 15px 60px; }

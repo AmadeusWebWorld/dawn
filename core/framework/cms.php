@@ -56,7 +56,6 @@ function before_render() {
 		if (!disk_is_dir($baseFol)) {
 			continue;
 		}
-
 		if (!empty($innerSlugs)) {
 			$reversedVars = [];
 			$breadcrumbs = [];
@@ -68,7 +67,7 @@ function before_render() {
 
 				if (disk_is_dir($folderAbsolute . '/' . $item))
 					$matchType = 'folder';
-				else if ($fileExtension = disk_one_of_files_exist($folderAbsolute . '/' . $item . '.', 'php, md, tsv, html'))
+				else if ($fileExtension = disk_one_of_files_exist($folderAbsolute . '/' . $item . '.', CONTENTFILES))
 					$matchType = 'file';
 
 				if (!$matchType) break;
@@ -91,13 +90,15 @@ function before_render() {
 
 				variable('section', $slug);
 				variable('breadcrumbs', $breadcrumbs);
+				variable('folderGoesUpto', $folderAbsolute);
 				afterSectionSet();
 				return;
 			}
 
 			return; //let it throw a missing file exception
 		} else {
-			if (setFileIfExists($slug, $baseFol . 'home.', false, false)) return;
+			variable('folderGoesUpto', dirname($baseFol));
+			if (setFileIfExists($slug, $baseFol . '/home.', false, false)) return;
 			continue;
 		}
 	}
@@ -109,11 +110,12 @@ function before_render() {
 function setFileIfExists($section, $fwe, $breadcrumbs, $itemToAdd) {
 	if ($breadcrumbs) variable('breadcrumbs', $breadcrumbs);
 
-	$ext = disk_one_of_files_exist($fwe, 'php, md, tsv, html');
+	$ext = disk_one_of_files_exist($fwe, CONTENTFILES);
 	if (!$ext) return false;
 
 	variable('file', $fwe . $ext);
 	variable('section', $section);
+	variable('folderGoesUpto', dirname($fwe));
 	if ($itemToAdd) $breadcrumbs[] = $itemToAdd;
 	if ($breadcrumbs) variable('breadcrumbs', $breadcrumbs);
 

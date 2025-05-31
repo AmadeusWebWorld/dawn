@@ -4,11 +4,9 @@ addScript('engage', COREASSETS);
 
 //TODO: Make a toggle-more when the md contains <!--more-->
 function _renderEngage($name, $raw, $open = false, $echo = true) {
-	//deprecating the name - heading of form should do
-	$id = variableOr('all_page_parameters', variable('node'));
-	if (!$open) echo engageButton($id, $name, $class);
+	if (!$open) echo engageButton($name, $class);
 
-	$result = '	<div id="engage-' . $id . '" class="' . _getCBClassIfWanted('engage') . '" ' .
+	$result = '	<div id="engage-' . urlize($name) . '" class="' . _getCBClassIfWanted('engage') . '" ' .
 		($open ? '' : 'style="display: none" ') .
 		'data-to="' . ($email = variable('email')) . '" data-cc="' .
 		variableOr('assistantEmail', variable('systemEmail')) .
@@ -34,12 +32,11 @@ function _renderEngage($name, $raw, $open = false, $echo = true) {
 }
 
 function _runEngageFromSheet($pageName, $sheetName) {
-	$pageName = humanize($pageName);
 	$sheet = getSheet($sheetName);
 	$contentIndex = $sheet->columns['content'];
 	$introIndex = $sheet->columns['section-intro'];
 	$varsIndex = valueIfSet($sheet->columns, 'item_vars');
-	$introduction = valueIfSet($sheet->values, 'introduction', 'Welcome to <b>' . $pageName . '</b> page of <	b>' . variable('name') . '</b>.');
+	$introduction = valueIfSet($sheet->values, 'introduction', 'Welcome to <b>' . humanize($pageName) . '</b> page of <b>' . variable('name') . '</b>.');
 
 	//TODO: use faq by category like canvas' FAQ?
 	//$items = []; //trying to make as pills in a later version

@@ -13,6 +13,9 @@ variables([
 	'exclude-folders' => ['home', 'assets', 'data', 'engage', 'home', 'images', 'thumbnails'],
 ]);
 
+DEFINE('CONTENTFILES', 'php, md, tsv, html');
+DEFINE('ENGAGEFILES', 'md, tsv');
+
 function autoRender($file) {
 	if (endsWith($file, '.php')) {
 		renderAnyFile($file);
@@ -24,14 +27,16 @@ function autoRender($file) {
 	$embed = hasPageParameter('embed');
 	$pageName = title('params-only');
 
-	if (startsWith($raw, '|is-engage')) {
+	//cannot use startsWith as edit in vs-code wouldnt work
+	if (contains($raw, '|is-engage')) {
 		if (!endsWith($file, '.tsv'))
 			parameterError('ENGAGE SUPPORTS ONLY TSV IN BETA', $file, DOTRACE, DODIE);
 
 		runFeature('engage');
 
-		sectionId('special-form', 'container');
+		sectionId('special-form' . ($ix = variableOr('special-form', 1)), 'container');
 		_runEngageFromSheet(getPageName(), $file);
+		variableOr('special-form', ++$ix);
 		section('end');
 
 		pageMenu($file);
@@ -261,7 +266,7 @@ function _renderedDeck($deck, $title) {
 	} else {
 		echo sprintf('<section class="deck-container">'
 			. '<iframe src="%s&iframe=1"></iframe></section>', $embedUrl);
-		addScript('presentation-toolbar', 'app-static');
+		addScript('presentation-toolbar', COREASSETS);
 	}
 }
 

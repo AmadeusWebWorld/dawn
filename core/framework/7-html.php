@@ -188,7 +188,7 @@ function replaceHtml($html) {
 			'%safeName%' =>  variable('safeName'),
 			'%section%' => $section, //let archives break!
 			'%section_r%' => humanize($section),
-			'%site-engage-btn%' => engageButton('site', 'Engage With Us', 'inline'),
+			'%site-engage-btn%' => engageButton('Engage With Us', 'inline'),
 
 			'%node-url%' => $section ? $safeUrl . $node . '/' : '##not-in-a-node',
 			'%node-assets%' => $section && $section != $node ? variable('assets-url') . $section . '/' . $node . '/assets/' : '##not-in-a-node',
@@ -250,10 +250,10 @@ function featureHeading($id, $return = 'full', $text = false) {
 
 variable('_engageButtonFormat', '<a href="javascript: void(0);" class="btn btn-primary btn-%class% toggle-engage" data-engage-target="engage-%id%">%name%</a>');
 
-function engageButton($id, $name, $class, $scroll = false) {
+function engageButton($name, $class, $scroll = false) {
 	if ($scroll) $class .= ' engage-scroll';
 	$class .= ' btn-fill';
-	return replaceItems(variable('_engageButtonFormat'), ['id' => $id, 'name' => $name, 'class' => $class], '%') . variable('nl');
+	return replaceItems(variable('_engageButtonFormat'), ['id' => urlize($name), 'name' => $name, 'class' => $class], '%') . variable('nl');
 }
 
 ///Other Amadeus Stuff

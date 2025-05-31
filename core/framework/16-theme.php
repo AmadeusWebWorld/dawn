@@ -155,6 +155,7 @@ function runThemePart($what) {
 		}
 
 		print_stats(); //returns if not needed
+		if (function_exists('before_footer_assets')) before_footer_assets();
 		styles_and_scripts();
 		if (function_exists('after_footer_assets')) after_footer_assets();
 
@@ -277,16 +278,20 @@ function siteWidgets() {
 	if ($showSocial) {
 		$op[] = str_replace('[WHAT]', 'social', $start);
 		$op[] = '<h4>Social</h4>';
-		foreach($social as $item) {
-			$op[] = '<a target="_blank" href="' . $item['url'] . '" class="social-link me-4 mt-2">';
-			$op[] = '	<i class="social-icon text-light si-mini rounded-circle ' . (contains($item['type'], ' ')
-				? $item['type'] : 'fa-brands fa-'. $item['type'] . ' bg-' . $item['type']) . '"></i> ' . $item['name'] . '</a>';
-			$op[] = '';
-		}
+		appendSocial($social, $op);
 		$op[] = '</div>'; $op[] = '';
 	}
 
 	return implode(variable('nl'), $op);
+}
+
+function appendSocial($social, &$op) {
+	foreach($social as $item) {
+		$op[] = '<a target="_blank" href="' . $item['url'] . '" class="social-link me-4 mt-2">';
+		$op[] = '	<i class="social-icon text-light si-mini rounded-circle ' . (contains($item['type'], ' ')
+			? $item['type'] : 'fa-brands fa-'. $item['type'] . ' bg-' . $item['type']) . '"></i> ' . $item['name'] . '</a>';
+		$op[] = '';
+	}
 }
 
 function getBreadcrumbs($items) {
