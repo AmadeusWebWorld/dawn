@@ -17,7 +17,6 @@ function _menuULStart($endAndName = false) {
 	echo MENUPADLEFT . '	<li class="' . $itemClass . '"><a class="' . $anchorClass . '" href="javascript: void(0);">' . $mainMenu . '</a>' . NEWLINE;
 }
 
-
 function _handleSlashes($file, $handle, $useMDash) {
 	if (!$handle || contains($file, '#') || !contains($file, '/'))
 		return $file;
@@ -69,10 +68,10 @@ function pageMenu($file) {
 	if (variable('no-page-menu') || !variable('section')) return;
 
 	$breadcrumbs = variable('breadcrumbs');
+
 	if (!$breadcrumbs) {
 		variable('in-node', true);
 		if (variable('section') != variable('node')) {
-			variable('breadcrumbs', [variable('section')]);
 			variable('directory_of', variable('section') . '/' . variable('node'));
 			runFeature('directory');
 		}

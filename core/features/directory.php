@@ -42,11 +42,13 @@ if (disk_file_exists($home = $folder . 'home.md')) {
 	variable('seo-handled', false);
 
 
-	if ($breadcrumbs || variable('in-node')) {
-		//TODO: develop asap!
-		$sectionItems = [];
-	} else {
-		$sectionItems = [getFolderMeta($folder, false, $where)];
+	$sectionItems = [];
+	if ($breadcrumbs) {
+		$clone = array_merge($breadcrumbs);
+		if (count($clone) > 1)
+			$first = array_shift($clone);
+		$last = end($clone);
+		$sectionItems[] = getFolderMeta($folder, false, '__' . $last);
 	}
 
 	$files = disk_scandir($folder);
@@ -57,7 +59,7 @@ if (disk_file_exists($home = $folder . 'home.md')) {
 		$sectionItems[] = getFolderMeta($folder, $fol);
 	}
 
-	$relativeUrl = $breadcrumbs ? variable('node') . '/' . implode('/', $breadcrumbs) . '/' : '';
+	$relativeUrl = (variable('node') . '/') . ($breadcrumbs ? implode('/', $breadcrumbs) . '/' : '');
 
 	if (hasPageParameter('generate-index')) {
 		addScript('engage', 'app-static--common-assets'); //TODO: better way than against DRY?	

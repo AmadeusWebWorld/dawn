@@ -27,6 +27,8 @@ function _table_row_values($item, $cols, $tsv) {
 		if (contains($value, $tiu = '%col-1-val%'))
 			$value = str_replace($tiu, $item[0], $value); //assumes its the first col!!
 
+		$start = startsWith($value, '__');
+
 		if (!$value || (startsWith($key, '__') && !(variable('allow-internal'))))
 			$r[$key] = '';
 		else if (endsWith($key, '_link') && $key != '_link')
@@ -34,14 +36,15 @@ function _table_row_values($item, $cols, $tsv) {
 		else if (endsWith($key, '_md') || in_array($key, ['about', 'content']))
 			$r[$key] = renderSingleLineMarkdown($value, ['echo' => false]);
 		else if (endsWith($key, '_urlized'))
-			$r[$key] = in_array($value, ['__node', '__page']) ? '' : $value . '/';
+			$r[$key] = $start ? '' : $value . '/';
 		else
 			$r[$key] = $value; 
 
+		$wrap = $start ? ['<b>', '</b>'] : ['', ''];
+		if ($start) $value = substr($value, 2);
+
 		if (endsWith($key, '_urlized'))
-			$r[str_replace('_urlized', '', $key) . '_humanized'] = humanize($item[$c] == '__page' ? variable('page_parameter1') : 
-				($item[$c] == '__node' ? variable('node') : $item[$c]))
-				. ($item[$c] == '__node' ? ' (Site)' : ($item[$c] == '__page' ? ' (Page)'  :''));
+			$r[str_replace('_urlized', '', $key) . '_humanized'] = $wrap[0] . humanize($value) . $wrap[1];
 	}
 
 	return $r;
