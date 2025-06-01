@@ -126,7 +126,6 @@ function getFolderMeta($folder, $fol, $folName = false) {
 	}
 
 	return [
-		'site' => '#unused',
 		'name_urlized' => $folName ? $folName : $fol,
 		'about' => $about . $inline,
 		'tags' => $tags

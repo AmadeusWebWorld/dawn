@@ -37,6 +37,10 @@ function strip_paragraph($txt) {
 	return replaceItems($txt, ['</p>' => '', '<p>' => '']);
 }
 
+function first_of_underscore($txt) {
+	return explode('_', $txt, 2)[0];
+}
+
 function humanize($txt, $how = false) {
 	$words = ucwords(replaceItems($txt, ['--' => ' &mdash; ', '-' => ' ', '_' => '']));
 	if ($how !== 'no-site' && function_exists('site_humanize')) $words = site_humanize($words, 'title', $how);

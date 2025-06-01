@@ -71,7 +71,7 @@ function add_table($id, $dataFile, $columnList, $template) {
 		$tsv = 'array';
 		$rows = $dataFile;
 		if (is_string($columnList)) $columnList = [$columnList];
-		$headingNames = array_map('humanize', explode(', ', $columnList[0]));
+		$headingNames = array_map('humanize', array_map('first_of_underscore', explode(', ', $columnList[0])));
 		$columns = explode(', ', implode(', ', $columnList));
 	} else if (!$tsv && !$json) {
 		$rows = $dataFile;

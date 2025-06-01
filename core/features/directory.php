@@ -57,7 +57,7 @@ if (disk_file_exists($home = $folder . 'home.md')) {
 		$sectionItems[] = getFolderMeta($folder, $fol);
 	}
 
-	$relativeUrl = $breadcrumbs ? variable('node') . '/' . implode($breadcrumbs) . '/' : '';
+	$relativeUrl = $breadcrumbs ? variable('node') . '/' . implode('/', $breadcrumbs) . '/' : '';
 
 	if (hasPageParameter('generate-index')) {
 		addScript('engage', 'app-static--common-assets'); //TODO: better way than against DRY?	
@@ -72,8 +72,7 @@ if (disk_file_exists($home = $folder . 'home.md')) {
 		echo '</textarea>' . NEWLINE;
 	} else {
 		runFeature('tables');
-		add_table('sections-table', $sectionItems,
-			$sectionItems ? ['site, about, tags', 'name_urlized'] : 'site-name, about, tags',
+		add_table('sections-table', $sectionItems, 'name_urlized, about, tags',
 			'<tr><td><a href="%url%' . $relativeUrl . '%name_urlized%">%name_humanized%</a></td><td>%about%</td><td>%tags%</td></tr>');
 	}
 

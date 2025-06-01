@@ -61,7 +61,6 @@ function getEngageTab($what) {
 
 	doToBuffering(1);
 
-	//h2(humanize($what)); echo BRNL . BRNL;
 	autoRender($file);
 
 	$result = doToBuffering(2);
@@ -75,7 +74,7 @@ function resolveEngage() {
 	while (startsWith($fol, SITEPATH) && $fol != SITEPATH) {
 		$extension = disk_one_of_files_exist($file = $fol . '/_engage.', ENGAGEFILES);
 		if ($extension) return $file . $extension;
-		echo $file . BRNL;
+
 		$fol = dirname($fol);
 	}
 	return false;

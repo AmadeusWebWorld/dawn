@@ -58,25 +58,36 @@ function before_render() {
 		}
 		if (!empty($innerSlugs)) {
 			$reversedVars = [];
-			$breadcrumbs = [];
+			$thisBreadcrumbs = [];
 			$folderAbsolute = $baseFol;
 
-			foreach ($innerSlugs as $item) {
+			foreach ($innerSlugs as $thisItem) {
 				$matchType = false;
 				$fileExtension = false;
+				$item = $thisItem;
 
-				if (disk_is_dir($folderAbsolute . '/' . $item))
-					$matchType = 'folder';
-				else if ($fileExtension = disk_one_of_files_exist($folderAbsolute . '/' . $item . '.', CONTENTFILES))
+				if ($fileExtension = disk_one_of_files_exist($folderAbsolute . '/' . $item . '/home.', CONTENTFILES)) {
 					$matchType = 'file';
+					$thisBreadcrumbs[] = $item;
+					$item .= '/home';
+				} else if ($fileExtension = disk_one_of_files_exist($folderAbsolute . '/' . $item . '.', CONTENTFILES)) {
+					$matchType = 'file';
+				} else if (disk_is_dir($folderAbsolute . '/' . $item)) {
+					$matchType = 'folder';
+				}
 
 				if (!$matchType) break;
-				if ($matchType == 'folder') $breadcrumbs[] = $item;
+
+				if ($matchType == 'folder') {
+					$folderAbsolute .=  '/' . $thisItem;
+					$thisBreadcrumbs[] = $item;
+				}
+
+				$breadcrumbs = $thisBreadcrumbs;
 				$reversedVars[] = compact('item', 'matchType', 'fileExtension', 'breadcrumbs', 'folderAbsolute');
 
-				if ($matchType == 'file') break;
-
-				$folderAbsolute .=  '/' . $item;
+				if ($matchType != 'folder')
+					$folderAbsolute .=  '/' . $thisItem;
 			}
 
 			$reversedVars = array_reverse($reversedVars);

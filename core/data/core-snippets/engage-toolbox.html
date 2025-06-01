@@ -1,0 +1,26 @@
+<div class="action-wrapper content-box p-4 after-content text-center">
+
+	<div class="btn-group m-auto mt-2 mb-3" role="group" aria-label="Engaging with Us">
+		<a style="width: 54px; margin-right: 10px;" target="_blank" class="send-icon send-via-whatsapp disabled text-light si-mini rounded-circle fa-2x fa-brands bg-dark-subtle fa-whatsapp"></a>
+		<a style="width: 54px; margin-right: 10px;" target="_blank" class="send-icon send-via-email disabled text-light si-mini rounded-circle fa-2x fa-classic bg-dark-subtle fa-envelope"></a>
+
+		<div class="btn-group" role="group">
+			<button id="engage-help" type="button" class="btn btn-secondary dropdown-toggle" style="border-radius: 28px;" data-bs-toggle="dropdown" aria-expanded="false">
+				What Is This?
+			</button>
+			<div class="dropdown-menu" aria-labelledby="engage-help">
+				<a class="dropdown-item" href="javascript: alert('We use a simple system of direct communication. A draft of what you have filled is created in the box below, which can then be sent by YOUR email / whatsapp to us.');">How this works&hellip;</a>
+				<a class="dropdown-item" href="javascript: $('#engage-note').removeClass('d-none');">Problem with Email?</a>
+				<a class="dropdown-item" href="%amadeus-url%#todo-engage" target="_blank">Link to <abbr title="v7.AmadeusWeb.com (core)">AMC</abbr> help</a>
+			</div>
+		</div>
+	</div>
+
+	<input type="text" name="full-name" class="form-control sender-name w-100 text-center"
+		onfocus="this.phStore = this.placeholder; this.placeholder = '';"
+		onblur="this.placeholder = this.phStore;" placeholder="[Your Name]" />
+	<button class="prepare-message btn btn-secondary d-inline-block mt-3 mb-3">Prepare message to Send Us</button>
+	<textarea class="message-content d-block d-none text-left w-100 m-3"></textarea>
+	<a target="_blank" class="send-via-whatsapp bg-whatsapp btn d-inline-block d-none mt-2">Send Message on WhatsApp</a>
+	<a target="_blank" class="send-via-email bg-info btn d-inline-block d-none mt-2">Send Email (opens mail client)</a>
+</div>

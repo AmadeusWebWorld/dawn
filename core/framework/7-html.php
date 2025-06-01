@@ -286,6 +286,9 @@ function prepareLinks($output) {
 	$campaign = isset($_GET['utm_campaign']) ? '&utm_campaign=' . $_GET['utm_campaign'] : '';
 	$output = str_replace('#utm', '?utm_source=' . variable('safeName') . $campaign, $output);
 
+	$output = replaceItems($output, ['/class' => '', 'class' => '" class="', ], '~');
+	$output = str_replace('NBSP', ' ', $output);
+
 	return $output;
 }
 
