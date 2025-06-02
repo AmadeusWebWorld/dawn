@@ -63,11 +63,13 @@ function _skipExcludedFiles($files, $excludeNames = 'home', $excludeExtensions =
 }
 
 function pageMenu($file) {
+
 	print_seo();
 
 	if (variable('no-page-menu') || !variable('section')) return;
 
 	$breadcrumbs = variable('breadcrumbs');
+	//peDie('YIPPEKAYE', $breadcrumbs, true);
 
 	if (!$breadcrumbs) {
 		variable('in-node', true);

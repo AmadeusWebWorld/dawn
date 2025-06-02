@@ -19,22 +19,22 @@ function _sections($current) {
 
 $folder = SITEPATH . '/' . $where . '/';
 
-if (disk_file_exists($home = $folder . 'home.md')) {
+_renderMenu(variable('file') ? false : $folder . 'home.md', $folder, $where);
+
+function _renderMenu($home, $folder, $where) {
 	$breadcrumbs = variable('breadcrumbs');
 
 	if (!$breadcrumbs && !variable('in-node'))
 		h2(humanize($where) . currentLevel(), 'amadeus-icon');
 
-	$isIndex = variable('node') == 'index';
-	$isSection = variable('section') == variable('node');
-	if ($isIndex || $isSection) {
+	if ($home) {
 		contentBox('home');
 		renderFile($home);
 		contentBox('end');
 	}
 
 	echo GOOGLEOFF;
-	contentBox('nodes', 'after-content');
+	contentBox('nodes', 'after-content mb-5');
 
 	if (!$breadcrumbs)
 		_sections($where);
@@ -59,7 +59,7 @@ if (disk_file_exists($home = $folder . 'home.md')) {
 		$sectionItems[] = getFolderMeta($folder, $fol);
 	}
 
-	$relativeUrl = (variable('node') . '/') . ($breadcrumbs ? implode('/', $breadcrumbs) . '/' : '');
+	$relativeUrl = (variable('node') != variable('section') ? variable('node') . '/' : '') . ($breadcrumbs ? implode('/', $breadcrumbs) . '/' : '');
 
 	if (hasPageParameter('generate-index')) {
 		addScript('engage', 'app-static--common-assets'); //TODO: better way than against DRY?	

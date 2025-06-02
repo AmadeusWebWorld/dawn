@@ -93,7 +93,7 @@ function runThemePart($what) {
 		//TODO: icon link to node home, should have 2nd menu & back to home
 		$baseUrl = hasVariable('nodeSafeName') ? pageUrl(variable('node')) : pageUrl();
 		$logo2x = getLogoOrIcon('logo', 'node');
-		$vars['logo'] = concatSlugs(['<a href="', $baseUrl, '">' . NEWLINE
+		$vars['logo'] = concatSlugs(['<a href="', $baseUrl . variableOr('nodeChildSlug', ''), '">' . NEWLINE
 			. '								<img src="', $logo2x, '" class="img-fluid img-max-',
 			variableOr('footer-logo-max-width', '500'), '" alt="', variableOr('nodeSiteName', variable('name')), '">' . NEWLINE
 			. '							</a><br>'], '');
@@ -169,6 +169,14 @@ function runThemePart($what) {
 	}
 }
 
+function site_and_node_icons($siteIcon = null, $nodeIcon = null, $nodeSuffix = '') {
+	if (!$siteIcon) $siteIcon = getLogoOrIcon('icon', 'site');
+	if (!$nodeIcon) $nodeIcon = getLogoOrIcon('icon', 'node' . $nodeSuffix);
+
+	return '<a href="' . pageUrl() . '">' . NEWLINE . '		<img height="40" src="' . $siteIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE
+	. '<a href="' . pageUrl(variable('node')) . '">' . NEWLINE . '		<img height="40" src="' . $nodeIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE;
+}
+
 function _page_menu($siteIcon, $nodeIcon) {
 	if (!variable('submenu-at-node')) return '<!--no-page-menu-->';
 
@@ -176,9 +184,7 @@ function _page_menu($siteIcon, $nodeIcon) {
 	$menuContent = disk_file_get_contents($menuFile);
 
 	$menuVars = [
-		'menu-title' => NEWLINE .
-			   '<a href="' . pageUrl() . '">' . NEWLINE . '		<img height="40" src="' . $siteIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE
-			 . '<a href="' . pageUrl(variable('node')) . '">' . NEWLINE . '		<img height="40" src="' . $nodeIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE
+		'menu-title' => NEWLINE . site_and_node_icons($siteIcon, $nodeIcon)
 			 . variable('nodeSiteName') . NEWLINE,
 	];
 	$menuContent = replaceItems($menuContent, $menuVars, '##');
