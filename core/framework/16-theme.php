@@ -44,6 +44,11 @@ function getThemeBlock($name, $location = false) {
 	return ['start' => $bits[0], 'item' => $bits[1], 'end' => $bits[2]];
 }
 
+function getThemeSection($name, $section, $location = false) {
+	$file = getThemeFile('rich-pages/' . $name . '/' . $section . '.html', $location);
+	return disk_file_get_contents($file);
+}
+
 function getThemeSnippet($name, $location = false) {
 	$file = getThemeFile('snippets/' . $name . '.html', $location);
 	$html = renderAny($file, ['echo' => false, 'strip-paragraph-tag' => true]);
