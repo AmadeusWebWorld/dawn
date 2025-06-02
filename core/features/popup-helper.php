@@ -23,7 +23,7 @@ function getPopupTabs($tabs = [ENGAGETAB, SITEWIDETAB, CONTACTTAB, SOCIALTAB]) {
 
 	$opTabs = [];
 	$opTabs[] = '<div class="tab-content">';
-	$fmtTab = '<div class="tab-pane fade%active%" id="tab-popup-%slug%" role="tabpanel" aria-labelledby="popup-%slug%-tab" tabindex="0">%content%</div>';
+	$fmtTab = '<div class="tab-pane fade%active%" id="tab-popup-%slug%" role="tabpanel" aria-labelledby="popup-%slug%-tab" tabindex="0"><div id="%id%">%content%</div></div>';
 
 
 	$ix = 0;
@@ -32,6 +32,7 @@ function getPopupTabs($tabs = [ENGAGETAB, SITEWIDETAB, CONTACTTAB, SOCIALTAB]) {
 		$selected = $ix++ == 0;
 
 		$opNav[] = replaceItems($fmtNav, $vars = [
+			'id' => 'panel-' . $key,
 			'active' => $selected ? ' active' : '',
 			'selected' => $selected ? ' true' : 'false',
 			'slug' => $key, 'text' => humanize($key),
@@ -70,7 +71,7 @@ function getEngageTab($what) {
 }
 
 function resolveEngage() {
-	$fol = variable('folderGoesUpto');
+	$fol = variableOr('leafFolder', variable('folderGoesUpto'));
 	while (startsWith($fol, SITEPATH) && $fol != SITEPATH) {
 		$extension = disk_one_of_files_exist($file = $fol . '/_engage.', ENGAGEFILES);
 		if ($extension) return $file . $extension;
@@ -82,6 +83,8 @@ function resolveEngage() {
 
 function getSocialTab() {
 	$op = [];
+	$op[] = contentBox('social', 'container', true);
 	appendSocial(variableOr('social', main::defaultSocial()), $op);
+	$op[] = contentBox('end', '', true);
 	return implode(NEWLINE . BRNL, $op);
 }

@@ -138,8 +138,9 @@ function afterSectionSet() {
 	//TODO: include _folder.php on $file if it exists
 	if (function_exists('site_before_render')) site_before_render();
 
-	$leafFolder = variable('file') ? dirname(variable('file')) : variable('folderGoesUpto');
-	if (disk_file_exists($inc2File = $leafFolder . '/_include.php'))
+	$leafFolder = variable('file') ? dirname(variable('file')) . '/' : variable('folderGoesUpto');
+	variable('leafFolder', $leafFolder);
+	if (disk_file_exists($inc2File = $leafFolder . '_include.php'))
 		disk_include_once($inc2File);
 
 	read_seo();

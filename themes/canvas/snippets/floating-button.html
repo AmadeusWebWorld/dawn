@@ -119,6 +119,9 @@
 		right: auto;
 	}
 
+	.mfp-container { padding-top: calc(var(--cnvs-header-height-shrink, 100) + 20px)!important; }
+	.mfp-content, .mfp-content .container { width: auto!important; padding-left: 0!important; padding-right: 0!important; }
+	.mfp-container, .mfp-content { vertical-align: top!important; }
 </style>
 
 <div class="floating-btn-wrap">
@@ -127,7 +130,7 @@
 		<i class="floating-btn-icon btn-active uil uil-plus"></i>
 	</div>
 
-	<div class="floating-btn-box">
+	<div id="floating-btn-modal" class="floating-btn-box">
 		%floating-button-codesnippet%
 	</div>
 </div>

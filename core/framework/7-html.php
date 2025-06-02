@@ -171,6 +171,7 @@ function replaceHtml($html) {
 			'%assets%' => variableOr('assets-override', variable('assets-url') . 'assets/'),
 			'%node%' => variable('node'),
 
+			//TODO: high! - let this come from network...
 			'%core-url%' => scriptSafeUrl(variable('app')),
 			'%amadeus-url%' => scriptSafeUrl(variable('main')),
 			'%world-url%' => scriptSafeUrl(variable('world')),
@@ -190,9 +191,9 @@ function replaceHtml($html) {
 			'%section_r%' => humanize($section),
 			'%site-engage-btn%' => engageButton('Engage With Us', 'inline'),
 
-			'%node-url%' => $section ? $safeUrl . $node . '/' : '##not-in-a-node',
-			'%node-assets%' => $section && $section != $node ? variable('assets-url') . $section . '/' . $node . '/assets/' : '##not-in-a-node',
-			'%nodeSiteName%' => variableOr('nodeSiteName', '##not-in-a-node'),
+			'%node-url%' => pageUrl(hasVariable('nodeSafeName') ? variable('node') : '') . variableOr('nodeChildSlug', ''),
+			'%node-assets%' => _resolveFile((variable('network') ? SITENAME . '/' : '') . (variable('section') ? variable('section') . '/' : '') . variableOr('nodeChildSlug', ''), STARTATNODE),
+			'%node-site-name%' => variableOr('nodeSiteName', '##not-in-a-node'),
 
 			'%page-url%' => variable('page_parameter1') ? $safeUrl . $node . '/' . variable('page_parameter1') . '/' : '##not-in-a-page',
 			'%sub-page-url%' => variable('page_parameter2') ? $safeUrl . $node . '/' . variable('page_parameter1') . '/'  . variable('page_parameter2') . '/' : '##not-in-a-sub-page',

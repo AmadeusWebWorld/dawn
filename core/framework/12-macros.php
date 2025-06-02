@@ -29,6 +29,9 @@ function runAllMacros($html) {
 	if (contains($html, '[audio]'))
 		$html = processAudioShortcode($html);
 
+	if (contains($html, '[video]'))
+		$html = processVideoShortcode($html);
+
 	if (contains($html, '[spacer]'))
 		$html = processSpacerShortcode($html);
 
@@ -123,7 +126,8 @@ function replaceEngageButtons($html) {
 
 	foreach ($engage as $where => $array) {
 		$class = $where == 'all' ? ENGAGENODE : ENGAGENODEITEM;
-		foreach ($array as $id => $name) {
+		foreach ($array as $name) {
+			$id = urlize($name);
 			$html = str_replace('%engage-btn-' . $id . '%', engageButton($id, $name, $class, true), $html);
 		}
 	}
@@ -179,6 +183,13 @@ function processAudioShortcode($html) {
 	return replaceItems($html, [
 		'[audio]' => '<audio style="width: 100%" height="27" preload="none" controls><source src="',
 		'[/audio]' => '" type="audio/mp3"></audio>',
+	]);
+}
+
+function processVideoShortcode($html) {
+	return replaceItems($html, [
+		'[video]' => '<div class="video-container"><video loop autoplay controls><source src="',
+		'[/video]' => '" type="video/mp4"></video></div>',
 	]);
 }
 

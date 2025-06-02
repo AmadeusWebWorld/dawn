@@ -3,3 +3,46 @@
 		</div>
 
 	</main><!-- .postcontent end -->
+
+	<!-- Sidebar
+	============================================= -->
+	<aside class="sidebar col-lg-4">
+		<div class="sidebar-widgets-wrap">
+
+			<div>
+				<h3 class="fw-bold h2 mb-2 color">Rs %pledged-value% Pledged</h3>
+				<span class="text-uppercase text-smaller op-07">pledged of Rs %goal-value% Goal</span>
+				<div class="skill-progress mt-4 mb-3" data-percent="%pledged-percent%" style="--cnvs-progress-height: 0.25rem;">
+					<div class="skill-progress-title d-flex justify-content-between mb-2 text-uppercase">
+						<span class="counter counter-xs h6 mb-0"><span data-from="0" data-to="%pledged-percent%" data-refresh-interval="10" data-speed="1200"></span><strong>%</strong> Funded</span>
+						<span class="counter counter-xs h6 mb-0"><span data-from="0" data-to="%days-left%" data-refresh-interval="3" data-speed="1200"></span> Days Left</span>
+					</div>
+					<div class="skill-progress-bar">
+						<div class="skill-progress-percent bg-color"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="line line-sm"></div>
+
+			<div>
+				<h3 class="fw-bold h1 mb-2">%days-left%</h3>
+				<span class="text-uppercase text-smaller op-07">Days Remaining</span>
+			</div>
+			<div class="clear mt-4"></div>
+
+			<a href="%call-to-action-lightbox-id%" data-lightbox="inline" data-caption="Support Form" class="button button-xlarge fw-semibold button-rounded ls-0 text-transform-none ms-0 my-4 w-100 text-center">Support Us</a>
+
+			<!-- Post Author Info
+			============================================= -->
+			<div class="card mt-4">
+				<div class="card-header"><strong>Posted by <a target="_blank" href="%posted-by-link%">%posted-by-name%</a></strong></div>
+				<div class="card-body">
+					<div class="author-image">
+						<img src="%posted-by-picture%" alt="%posted-by-name%" class="rounded-circle">
+					</div>
+					%posted-by-message%
+				</div>
+			</div><!-- Post Single - Author End -->
+		</div>
+	</aside>

@@ -117,7 +117,7 @@ function assetUrl($file, $location) {
 		parameterError('ASSETMANAGER: direct urls not supported in beta', $file, DOTRACE, DODIE);
 
 	$meta = assetMeta($location);
-	return $meta['location'] . $file . $meta['version'];
+	return $meta['location'] . $file . (contains($file, '.') ? $meta['version'] : '');
 }
 
 variables([

@@ -28,14 +28,18 @@ function autoRender($file) {
 	$pageName = title('params-only');
 
 	//cannot use startsWith as edit in vs-code wouldnt work
-	if (contains($raw, '|is-engage')) {
-		if (!endsWith($file, '.tsv'))
-			parameterError('ENGAGE SUPPORTS ONLY TSV IN BETA', $file, DOTRACE, DODIE);
+	if (contains($raw, '|is-engage') || contains($raw, '<!--is-engage-->')) {
+		$md = !endsWith($file, '.tsv');
 
 		runFeature('engage');
 
 		sectionId('special-form' . ($ix = variableOr('special-form', 1)), 'container');
-		_runEngageFromSheet(getPageName(), $file);
+
+		if ($md)
+			_renderEngage($pageName, $raw, true);
+		else
+			_runEngageFromSheet(getPageName(), $file);
+
 		variableOr('special-form', ++$ix);
 		section('end');
 
