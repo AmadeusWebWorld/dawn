@@ -298,10 +298,10 @@ function specialLinkVars($item) {
 	//$url sent
 	$text = $name;
 
-	if ($type == 'email') $classType = 'fa-classic bg-info fa-envelope';
-	if ($type == 'phone') $classType = 'fa-classic bg-info fa-solid fa-phone';
+	if ($type == 'email') $classType = 'fa-classic p-2 rounded-circle bg-info fa-envelope';
+	if ($type == 'phone') $classType = 'fa-classic p-2 rounded-circle bg-info fa-solid fa-phone';
 
-	$class = isset($classType) ? $classType : 'fa-brands fa-'. $type . ' bg-' . $type;
+	$class = isset($classType) ? $classType : 'p-2 rounded-circle fa-brands fa-'. $type . ' bg-' . $type;
 
 	if ($type == 'phone') {
 		$url = 'tel:' . $url;

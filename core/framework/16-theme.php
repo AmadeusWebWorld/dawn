@@ -124,9 +124,9 @@ function runThemePart($what) {
 			$contact = getSnippet('contact');
 			$loneContact = contains($content['footer-widgets'], '##footer-contact##');
 
-			$nodeName = hasVariable('nodeSiteName') ? BRNL . '				<span class="h5" style="margin-left: 15px;">&#10148; ' . variable('nodeSiteName') . '</span>' . NEWLINE : '';
+			$nodeName = hasVariable('nodeSiteName') ? NEWLINE . '				<span class="btn btn-light" style="letter-spacing: 2px;">&#10148; ' . variable('nodeSiteName') . '</span>' . NEWLINE : '';
 			$fwVars = [
-				'footer-logo' => $logo . NEWLINE . '			<h4 class="mt-sm-4">' . variable('name') . $nodeName . '			</h4>'
+				'footer-logo' => $logo . NEWLINE . '			<h4 class="mt-sm-4 mb-0">' . variable('name') . '</h4>' . $nodeName
 					. (!$loneMessage ? $message : '') . (!$loneContact ? BRNL . BRNL . $contact : ''),
 				'site-widgets' => siteWidgets(),
 				'copyright' => _copyright(true),
