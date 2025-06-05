@@ -33,8 +33,8 @@ function _table_row_values($item, $cols, $tsv) {
 			$r[$key] = '';
 		else if (endsWith($key, '_link') && $key != '_link')
 			$r[$key] = _table_link($item, $c);
-		else if (endsWith($key, '_md') || in_array($key, ['about', 'content']))
-			$r[$key] = renderSingleLineMarkdown($value, ['echo' => false]);
+		else if (endsWith($key, '_md') || in_array($key, ['about', 'content', 'description']))
+			$r[$key] = returnLine($value);
 		else if (endsWith($key, '_urlized'))
 			$r[$key] = $start ? '' : $value . '/';
 		else
@@ -111,7 +111,7 @@ function add_table($id, $dataFile, $columnList, $template) {
 	echo '
 	<table id="amadeus-table-' . $id . '" class="' . $datatableClass . 'table table-striped table-bordered" cellspacing="0" width="100%">
 	<thead>
-		<tr>
+		<tr class="align-text-top">
 			<th>' . $headings . '</th>
 		</tr>
 	</thead>

@@ -85,7 +85,6 @@ function _visane($siteVars) {
 		//['address-url', '#address'], //not here as needed for social too
 
 		['description', false],
-		['network', variable('network')], //can be defined in site.tsv / loader
 	];
 
 	if (!hasVariable('theme')) {
@@ -150,17 +149,21 @@ __testSiteVars($op);
 if ($network) setupNetwork();
 
 function setupNetwork() {
-	if (disk_file_exists($nw = siteRealPath('/../network.php')))
+	if (!DEFINED('NETWORKPATH')) DEFINE('NETWORKPATH', siteRealPath('/../') . '/');
+	if (disk_file_exists($nw = NETWORKPATH . 'network.php'))
 		disk_include_once($nw);
 
-	$siteNames = textToList(disk_file_get_contents(siteRealPath('/../sites.txt')));
+	$siteNames = textToList(disk_file_get_contents(NETWORKPATH . 'sites.txt'));
 
 	$op = [];
 	$newTab = true ? 'target="_blank" ' : '';
 	$sites = [];
 
+	$networkItems = [];
+	$networkUrls = [];
+
 	foreach ($siteNames as $site) {
-		$sheetFile = siteRealPath('/../' . $site . '/data/site.tsv');
+		$sheetFile = NETWORKPATH . $site . '/data/site.tsv';
 		if (!sheetExists($sheetFile)) { continue; }
 
 		$sheet = getSheet($sheetFile, 'key');
@@ -181,6 +184,10 @@ function setupNetwork() {
 			$sections = parseSectionsAndGroups(['sections' =>
 				$item['sections'][0][$val]], true, true)['sections'];
 
+		$icon = $item['iconName'][0][$val];
+		$networkUrls[$site . '-url'] = $url;
+		$networkItems[] = ['url' => $url, 'name' => humanize($icon), 'icon' => $icon];
+
 		$sites[$site] = [
 			'name' => $name, 'byline' => $byline,
 			'safeName' => $item['safeName'][0][$val],
@@ -190,6 +197,18 @@ function setupNetwork() {
 			'icon' => $site,
 		];
 	}
+
+	$country = (contains(_makeSlashesConsistent(SITEPATH), 'global' . DIRECTORY_SEPARATOR));
+	if ($country) {
+		$networkUrls['world-url'] = variable('world');
+		$networkItems[] = [ 'url' => variable('world'), 'name' => 'World', 'icon' => 'world' ];
+	} else {
+		$networkItems[] = [ 'url' => variable('app'), 'name' => 'Core v8', 'icon' => 'core' ];
+	}
+
+	$networkUrls['network-assets'] = variable(assetKey(NETWORKASSETS));
+	variable('networkItems', $networkItems);
+	variable('networkUrls', $networkUrls);
 	
 	variable('network-sites', $sites);
 }

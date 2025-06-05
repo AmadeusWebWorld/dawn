@@ -1,0 +1,14 @@
+body { background-color: #B571B1!important; font-weight: 900; }
+.reveal *, .reveal h1, .reveal h2, .reveal h3 { color: #fff; }
+
+#topbar-wrapper { position: absolute; margin-top: 10px; z-index:500; width: 100%; }
+#topbar { background-color: #c28dbf; line-height: 20px; font-size: 16px; width: fit-content; padding: 8px; margin: auto; }
+#topbar img { vertical-align: middle; }
+
+.box-shadow { border-radius: 20px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
+
+#topbar-wrapper, .slides { text-align: center; }
+.slides ul { list-style-type: 0; }
+.slides li { padding: 4px; border-bottom: 1px #999 solid; }
+
+.reveal a { padding: 6px;  border-radius: 10px; background-color: #fcc3f9; --r-link-color: #333; display: inline-block; clear: left; }

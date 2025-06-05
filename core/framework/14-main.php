@@ -21,19 +21,6 @@ class main {
 		];
 	}
 
-	static function defaultNetwork() {
-		if (variable('not-a-network')) return [];
-		return [
-			[ 'url' => variable('world') . 'integral-living/', 'name' => 'Integral Living for All', 'icon' => 'integral-living' ],
-			[ 'url' => variable('world') . 'imran/', 'name' => 'Imran\'s World - Poems and Ideas', 'icon' => 'imran' ],
-			[ 'url' => variable('world'), 'name' => 'AWW for Lightworkers', 'icon' => 'world' ],
-			[ 'url' => variable('global'), 'name' => 'AMW for Countries', 'icon' => 'global' ],
-			[ 'url' => variable('main'), 'name' => 'AMW Web Consulting', 'icon' => 'web' ],
-			[ 'url' => variable('app'), 'name' => 'AMW v8 Builder', 'icon' => 'core' ],
-			//TODO: WO + Listings + Imran
-		];
-	}
-
 	static function defaultSearches() {
 		return [
 			'amadeusweb' => ['code' => 'c0a96edc60a44407a', 'name' => 'AmadeusWeb Network&nbsp;&nbsp;', 'description' => 'All AmadeusWeb sites from 2025'],

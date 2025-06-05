@@ -251,8 +251,8 @@ function siteWidgets() {
 	if ($showSections) $showSections = count($sections = variableOr('sections', []));
 	if ($showSections) $colsInUse += 1;
 
-	$showNetwork = !variable('no-network-in-footer');
-	if ($showNetwork) $showNetwork = count($sites = variableOr('network-sites', main::defaultNetwork()));
+	$showNetwork = !variable('no-network-in-footer') && !variable('not-a-network');
+	if ($showNetwork) $showNetwork = count($sites = variableOr('networkItems', []));
 	if ($showNetwork) $colsInUse += 1;
 
 	$showSocial = !variable('no-social-in-footer');

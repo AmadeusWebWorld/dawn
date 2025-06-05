@@ -4,11 +4,17 @@ function read_seo($file = false) {
 
 	$fileGiven = !!$file;
 	if (!$file) $file = variable('file');
-	if ($file && endsWith($file, '.md')) {
+	if (!$file) return;
+
+	$meta = false;
+	if (endsWith($file, '.md')) {
 		$raw = disk_file_get_contents($file);
 		$meta = parseMeta($raw);
-		if (!$meta) return;
+	} else if (endsWith($file, '.tsv')) {
+		$meta = getSheet($file, false)->values;
+	}
 
+	if ($meta) {
 		$aboutFields = ['About', 'about'];
 		$descriptionFields = ['Description', 'description'];
 
@@ -100,17 +106,18 @@ function inlineMeta($meta) {
 }
 
 function getFolderMeta($folder, $fol, $folName = false) {
-	$home = $folder . ($fol ? $fol . '/' : ''). 'home.md';
-	$page = $folder . ($fol ? $fol : ''). '.md';
+	$home = $folder . ($fol ? $fol . '/' : ''). 'home.';
+	$page = $folder . ($fol ? $fol : ''). '.';
 	$about = 'No About Set';
 	$tags = 'No Tags Set';
 	$inline = '';
 
-	$homeFound = disk_file_exists($home);
-	$pageFound = !$homeFound ? disk_file_exists($page) : false;
+	$homeExtension = disk_one_of_files_exist($home, FILESWITHMETA);
+	$pageExtension = !$homeExtension ? disk_one_of_files_exist($page, FILESWITHMETA) : false;
 
-	if ($homeFound || $pageFound) {
-		$vars = read_seo($pageFound ? $page : $home);
+	if ($homeExtension || $pageExtension) {
+		$file = $homeExtension ? $home . $homeExtension : $page . $pageExtension;
+		$vars = read_seo($file);
 
 		if ($vars) {
 			if (isset($vars['about']))

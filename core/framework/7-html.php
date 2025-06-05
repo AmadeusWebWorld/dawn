@@ -133,7 +133,7 @@ function pipeToBR($raw) {
 }
 
 function csvToHashtags($raw) {
-	$begin = '<a class="hashtag fs-4">#';
+	$begin = '<a class="hashtag">#';
 	$end = '</a>';
 	$replaces = [
 		', ' => $end . ' ' . $begin,
@@ -168,14 +168,14 @@ function replaceHtml($html) {
 		variable($key, $replaces = [
 			//Also, we should incorporate dev tools like w3c & broken link checkers
 			'%url%' => variable('page-url'),
-			'%assets%' => variableOr('assets-override', variable('assets-url') . 'assets/'),
-			'%node%' => variable('node'),
+
+			'%node-assets%' => _resolveFile('', STARTATNODE),
+			'%site-assets%' => _resolveFile('', STARTATSITE),
+			'%core-assets%' => _resolveFile('', STARTATCORE),
 
 			//TODO: high! - let this come from network...
 			'%core-url%' => scriptSafeUrl(variable('app')),
 			'%amadeus-url%' => scriptSafeUrl(variable('main')),
-			'%world-url%' => scriptSafeUrl(variable('world')),
-			'%network-url%' => variableOr('network-static', '##no-network-url') . basename(SITEPATH) . '/',
 
 			'%phone%' => variableOr('phone', ''),
 			'%email%' => variableOr('email', ''),
@@ -191,7 +191,9 @@ function replaceHtml($html) {
 			'%section_r%' => humanize($section),
 			'%site-engage-btn%' => engageButton('Engage With Us', 'inline'),
 
+			/* TODO: cleanup?
 			'%node-url%' => pageUrl(hasVariable('nodeSafeName') ? variable('node') : '') . variableOr('nodeChildSlug', ''),
+			*/
 			'%node-assets%' => _resolveFile((variable('network') ? SITENAME . '/' : '') . (variable('section') ? variable('section') . '/' : '') . variableOr('nodeChildSlug', ''), STARTATNODE),
 			'%node-site-name%' => variableOr('nodeSiteName', '##not-in-a-node'),
 
@@ -206,6 +208,8 @@ function replaceHtml($html) {
 		variable('whatsapp-txt-start', $wame);
 	}
 
+	if ($nw = variable('networkUrls'))
+		$html = replaceItems($html, $nw, '%');
 	return replaceItems($html, $replaces);
 }
 
@@ -287,6 +291,7 @@ function prepareLinks($output) {
 	$campaign = isset($_GET['utm_campaign']) ? '&utm_campaign=' . $_GET['utm_campaign'] : '';
 	$output = str_replace('#utm', '?utm_source=' . variable('safeName') . $campaign, $output);
 
+	$output = replaceItems($output, ['BTNSITE' => '~class~btnNBSPbtn-successNBSPbtn-site~/class~']); //TODO: site colour!
 	$output = replaceItems($output, ['/class' => '', 'class' => '" class="', ], '~');
 	$output = str_replace('NBSP', ' ', $output);
 
@@ -298,10 +303,10 @@ function specialLinkVars($item) {
 	//$url sent
 	$text = $name;
 
-	if ($type == 'email') $classType = 'fa-classic p-2 rounded-circle bg-info fa-envelope';
-	if ($type == 'phone') $classType = 'fa-classic p-2 rounded-circle bg-info fa-solid fa-phone';
+	if ($type == 'email') $classType = 'fa-classic amadeus-2x-icon rounded-circle bg-info fa-envelope';
+	if ($type == 'phone') $classType = 'fa-classic amadeus-2x-icon rounded-circle bg-info fa-solid fa-phone';
 
-	$class = isset($classType) ? $classType : 'p-2 rounded-circle fa-brands fa-'. $type . ' bg-' . $type;
+	$class = isset($classType) ? $classType : 'amadeus-2x-icon rounded-circle fa-brands fa-'. $type . ' bg-' . $type;
 
 	if ($type == 'phone') {
 		$url = 'tel:' . $url;

@@ -15,6 +15,7 @@ variables([
 
 DEFINE('CONTENTFILES', 'php, md, tsv, html');
 DEFINE('ENGAGEFILES', 'md, tsv');
+DEFINE('FILESWITHMETA', 'md, tsv');
 
 function autoRender($file) {
 	if (endsWith($file, '.php')) {
@@ -62,16 +63,20 @@ function autoRender($file) {
 	}
 
 	if (endsWith($file, '.tsv')) {
-		if (!$embed) sectionId('special-table', _getCBClassIfWanted('container'));
+		$istwt = contains($raw, '|is-table-with-template') && $meta = getSheet($file, false);
+		if ($istwt) h2(title('params-only') . currentLevel(), 'amadeus-icon');
 
+		if (!$embed) sectionId('special-table', _getCBClassIfWanted('container'));
 		runFeature('tables');
 
-		if (startsWith($raw, '|is-deck'))
+		if (contains($raw, '|is-deck'))
 			renderSheetAsDeck($file, variableOr('all_page_parameters', variable('node')) . '/');
 		else if (startsWith($raw, '|is-rich-page'))
 			renderRichPage($file);
 		else if (startsWith($raw, '|is-table'))
 			add_table(pathinfo($file, PATHINFO_FILENAME), $file, 'auto', disk_file_get_contents(dirname($file) . '/.template.html'));
+		else if ($istwt)
+			add_table(pathinfo($file, PATHINFO_FILENAME), $file, $meta->values['head-columns'], $meta->values['row-template']);
 		else
 			parameterError('unsupported tsv file - see line 1 for type definition', $file);
 
@@ -228,8 +233,7 @@ function renderSheetAsDeck($deck, $link) {
 
 function _renderedDeck($deck, $title) {
 	function __parseDeck($deck) {
-		if (endsWith($deck, '.md'))
-			$deck = renderMarkdown($deck, [ 'echo' => false ]);
+		$deck = renderMarkdown($deck, [ 'echo' => false ]);
 		return $deck;
 	}
 
