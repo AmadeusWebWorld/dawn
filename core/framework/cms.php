@@ -140,8 +140,13 @@ function afterSectionSet() {
 
 	$leafFolder = variable('file') ? dirname(variable('file')) . '/' : variable('folderGoesUpto');
 	variable('leafFolder', $leafFolder);
-	if (disk_file_exists($inc2File = $leafFolder . '_include.php'))
-		disk_include_once($inc2File);
+
+	$fol = $leafFolder;
+	while (startsWith($fol, SITEPATH) && $fol != SITEPATH) {
+		if (disk_file_exists($file = $fol . '/_include.php'))
+			disk_include_once($file); //its in include once so no worry
+		$fol = dirname($fol);
+	}
 
 	read_seo();
 }

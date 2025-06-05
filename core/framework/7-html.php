@@ -195,7 +195,7 @@ function replaceHtml($html) {
 			'%node-url%' => pageUrl(hasVariable('nodeSafeName') ? variable('node') : '') . variableOr('nodeChildSlug', ''),
 			*/
 			'%node-assets%' => _resolveFile((variable('network') ? SITENAME . '/' : '') . (variable('section') ? variable('section') . '/' : '') . variableOr('nodeChildSlug', ''), STARTATNODE),
-			'%node-site-name%' => variableOr('nodeSiteName', '##not-in-a-node'),
+			'%nodeSiteName%' => variableOr('nodeSiteName', '##not-in-a-node'),
 
 			'%page-url%' => variable('page_parameter1') ? $safeUrl . $node . '/' . variable('page_parameter1') . '/' : '##not-in-a-page',
 			'%sub-page-url%' => variable('page_parameter2') ? $safeUrl . $node . '/' . variable('page_parameter1') . '/'  . variable('page_parameter2') . '/' : '##not-in-a-sub-page',

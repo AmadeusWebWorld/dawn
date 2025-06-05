@@ -1,6 +1,6 @@
 <?php
 function read_seo($file = false) {
-	if (variable('seo-handled') && !$file) return;
+	if (variable('seo-handled')) return;
 
 	$fileGiven = !!$file;
 	if (!$file) $file = variable('file');
@@ -38,8 +38,10 @@ function read_seo($file = false) {
 				$description = $value;
 			} else if (in_array($key, $keywordsFields)) {
 				$keywords[] = $value;
+			/* TODO: DECIDE and REMOVE after seeing how seo reacts!
 			} else if ($key == SINGLEFILECONTENT) {
 				variable(SINGLEFILECONTENT, $value);
+			*/
 			} else if ($key == 'Custom Title') {
 				$customTitle = $value;
 			}
@@ -47,6 +49,7 @@ function read_seo($file = false) {
 
 		$keywords = count($keywords) ? implode(', ', $keywords) : '';
 
+		variable('meta_' . $file, $meta);
 		if ($fileGiven) return compact('about', 'description', 'keywords', 'meta');
 
 		if ($description) {
@@ -64,16 +67,16 @@ function read_seo($file = false) {
 function print_seo() {
 	if (variable('meta-rendered')) return;
 	$file = variable('file');
-	if (!$file || !endsWith($file, '.md')) return;
+	if (!$file) return;
 
 	$meta = variable('meta_' . $file);
 	if (!$meta) return;
 
-	$show = ['About', 'Description', 'Primary Keyword', 'Date', 'Prompted By', 'Meta Author', 'Page Author', 'Related Keywords', 'Long-Tail Keywords'];
+	$show = ['About', 'Description', 'Primary Keyword', 'Date', 'Author', 'Prompted By', 'Published', 'Meta Author', 'Related Keywords', 'Long-Tail Keywords'];
 	$info = [];
 
 	foreach ($show as $col) {
-		if (!isset($meta[$col])) return;
+		if (!isset($meta[$col])) continue;
 		$val = $meta[$col];
 		if (contains($col, 'key'))
 			$val = csvToHashtags($val);
@@ -90,7 +93,7 @@ function print_seo() {
 }
 
 function inlineMeta($meta) {
-	$show = ['Date', 'Primary Keyword', 'Prompted By', 'Meta Author', 'Page Author'];
+	$show = ['Date', 'Primary Keyword', 'Prompted By', 'Meta Author', 'Author'];
 	$info = [];
 
 	foreach ($show as $col) {

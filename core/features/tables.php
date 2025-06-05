@@ -139,8 +139,12 @@ function _tableHeadingsOnLeft($id, $data) {
 	$header = '	<thead><tr class="header"><th>%th%</th><th class="left">%td%</th></tr></thead><tbody>' . variable('nl');
 	$row = '	<tr><th>%th%</th><td>%td%</td></tr>' . variable('nl');
 
-	foreach ($data as $th => $td)
-		echo replaceItems(($hdg = startsWith($th, '+')) ? $header : $row, ['th' => $hdg ? substr($th, 1) : $th, 'td' => $td], '%');
+	foreach ($data as $th => $td) {
+		if (in_array($th, ['Author', 'Prompted By', 'Published', 'Meta Author']))
+			$td = returnLine($td);
+
+			echo replaceItems(($hdg = startsWith($th, '+')) ? $header : $row, ['th' => $hdg ? substr($th, 1) : $th, 'td' => $td], '%');
+	}
 
 	echo '</tbody></table>' . variable('2nl');
 }

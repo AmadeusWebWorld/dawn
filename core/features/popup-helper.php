@@ -70,6 +70,7 @@ function getEngageTab($what) {
 	return $result;
 }
 
+//similar method in cms
 function resolveEngage() {
 	$fol = variableOr('leafFolder', variable('folderGoesUpto'));
 	while (startsWith($fol, SITEPATH) && $fol != SITEPATH) {

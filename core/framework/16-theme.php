@@ -117,24 +117,21 @@ function runThemePart($what) {
 			$logo = NEWLINE . '			' . concatSlugs(['<a href="', pageUrl(), '">' . NEWLINE .
 				'				<img src="', $logo2x, '" style="border-radius: 20px;" class="img-fluid" alt="', variable('name'), '">' . NEWLINE . '			</a><br>'], '');
 
-			$message = !variable('footer-message') ? '' : NEWLINE . '			<span class="footer-message">' . renderSingleLineMarkdown(variable('footer-message'), ['echo' => false])
-				. '			</span>' . NEWLINE;
-			$loneMessage = contains($content['footer-widgets'], '##footer-message##');
+			$message = !variable('footer-message') ? '' : (NEWLINE . '			<span class="btn btn-info nocolor h4 mb-2">' . returnLine(variable('footer-message')) . '</span>' . NEWLINE);
 
 			$contact = getSnippet('contact');
-			$loneContact = contains($content['footer-widgets'], '##footer-contact##');
+			if (!$contact) $contact = getSnippet('contact', CORESNIPPET);
 
 			$nodeName = hasVariable('nodeSiteName') ? NEWLINE . '				<span class="btn btn-light" style="letter-spacing: 2px;">&#10148; ' . variable('nodeSiteName') . '</span>' . NEWLINE : '';
+
 			$fwVars = [
-				'footer-logo' => $logo . NEWLINE . '			<h4 class="mt-sm-4 mb-0">' . variable('name') . '</h4>' . $nodeName
-					. (!$loneMessage ? $message : '') . (!$loneContact ? BRNL . BRNL . $contact : ''),
+				'footer-logo' => $logo . NEWLINE . '			<h4 class="mt-sm-4 mb-0">' . variable('name') . '</h4>' . $nodeName,
 				'site-widgets' => siteWidgets(),
+				'footer-message' => '<h2 class="text-align-center p-3">' . $message . '</h2>',
+				'footer-contact' => $contact,
 				'copyright' => _copyright(true),
 				'credits' => _credits('', true),
 			];
-
-			if ($loneMessage) $fwVars['footer-message'] = '<h2 class="text-align-center p-3">' . $message . '</h2>';
-			if ($loneContact) $fwVars['footer-contact'] = '<hr>' . $contact;
 
 			$vars['footer-widgets'] = _substituteThemeVars($content, 'footer-widgets', $fwVars);
 		}

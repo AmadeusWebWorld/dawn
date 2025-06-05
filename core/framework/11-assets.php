@@ -90,10 +90,10 @@ function getLogoOrIcon($what, $which = 'site') {
 	$nameVar = 'safeName';
 	if ($which == 'node1' && hasVariable('node1SafeName')) $nameVar = 'node1SafeName';
 	if ($which == 'node' && hasVariable('nodeSafeName')) $nameVar = 'nodeSafeName';
-
-	$name = variable($nameVar) . $suffix;
-
 	$node = ($which == 'node' || $which == 'node1') && DEFINED('NODEPATH');
+
+	$name = ($node ? variableOr('nodeSlug', '') . variableOr('nodeChildSlug', '') : '') . variable($nameVar) . $suffix;
+
 	$prefix = ($node ? (variable('network') ? SITENAME . '/' : '') . (variable('section') ? variable('section') . '/' : '') : '');
 	$where = $what == 'icon' && !$node ? STARTATSITE : (variable('network') ? STARTATNETWORK : STARTATNODE);
 	return _resolveFile($prefix . $name, $where, $node);

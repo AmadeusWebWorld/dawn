@@ -16,8 +16,8 @@ class main {
 		return [
 			[ 'type' => 'linkedin', 'url' => 'https://www.linkedin.com/company/amadeusweb/', 'name' => 'Amadeus Web' ],
 			[ 'type' => 'linkedin', 'url' => 'https://www.linkedin.com/in/imran-ali-namazi/', 'name' => 'Founder Imran' ],
-			[ 'type' => 'youtube', 'url' => 'https://www.youtube.com/@amadeuswebbuilder', 'name' => 'AMW Core' ],
-			[ 'type' => 'github', 'url' => 'https://github.com/AmadeusWebInAction/', 'name' => 'AMW Network Code' ],
+			[ 'type' => 'youtube', 'url' => 'https://www.youtube.com/@amadeuswebbuilder', 'name' => 'Amadeus Core' ],
+			[ 'type' => 'github', 'url' => 'https://github.com/AmadeusWebInAction/', 'name' => 'Network Code' ],
 		];
 	}
 

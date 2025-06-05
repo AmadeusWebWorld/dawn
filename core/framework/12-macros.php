@@ -54,7 +54,6 @@ function _getSnippetPath($fol, $type = 'plain') {
 function getSnippet($name, $fol = false) {
 	$core = $fol == CORESNIPPET ? '-core' : '-';
 
-	$fileFol = $fol;
 	$fileFol = _getSnippetPath($fol); //plain
 
 	$ext = disk_one_of_files_exist($fileFol . $name . '.', 'html, md');
@@ -199,7 +198,7 @@ DEFINE('SPACEREND', '</h1></div>');
 function processSpacerShortcode($html) {
 	return replaceItems($html, [
 		'[spacer]' => cbCloseAndOpen('spacer') . SPACERSTART,
-		'[/spacer]' => NEWLINE . SPACEREND . cbCloseAndOpen(),
+		'[/spacer]' => NEWLINE . SPACEREND, // . cbCloseAndOpen(),
 	]);
 }
 
