@@ -149,7 +149,10 @@ __testSiteVars($op);
 if ($network) setupNetwork();
 
 function setupNetwork() {
-	if (!DEFINED('NETWORKPATH')) DEFINE('NETWORKPATH', siteRealPath('/../') . '/');
+	if (!DEFINED('NETWORKPATH'))
+		DEFINE('NETWORKPATH', siteRealPath('/../') . '/');
+	//TODO else DEFINE('')
+
 	if (disk_file_exists($nw = NETWORKPATH . 'network.php'))
 		disk_include_once($nw);
 
@@ -202,9 +205,10 @@ function setupNetwork() {
 	if ($country) {
 		$networkUrls['world-url'] = variable('world');
 		$networkItems[] = [ 'url' => variable('world'), 'name' => 'World', 'icon' => 'world' ];
-	} else {
-		$networkItems[] = [ 'url' => variable('app'), 'name' => 'Core v8', 'icon' => 'core' ];
 	}
+
+	//NOTE: no need to add to networksUrl as it's already a 'core-ur' in replaceHtml
+	$networkItems[] = [ 'url' => variable('app'), 'name' => 'Core v8', 'icon' => 'core' ];
 
 	$networkUrls['network-assets'] = variable(assetKey(NETWORKASSETS));
 	variable('networkItems', $networkItems);

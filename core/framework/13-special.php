@@ -66,10 +66,12 @@ function autoRender($file) {
 		$istwt = contains($raw, '|is-table-with-template') && $meta = getSheet($file, false);
 		if ($istwt) h2(title('params-only') . currentLevel(), 'amadeus-icon');
 
-		if (!$embed) sectionId('special-table', _getCBClassIfWanted('container'));
+		$isDeck = contains($raw, '|is-deck');
+		$notRendering = !hasPageParameter('embed') && !hasPageParameter('expanded');
+		if (!$embed) sectionId('special-table', _getCBClassIfWanted('container' . ($isDeck && !$notRendering ? ' deck deck-from-sheet' : '')));
 		runFeature('tables');
 
-		if (contains($raw, '|is-deck'))
+		if ($isDeck)
 			renderSheetAsDeck($file, variableOr('all_page_parameters', variable('node')) . '/');
 		else if (startsWith($raw, '|is-rich-page'))
 			renderRichPage($file);

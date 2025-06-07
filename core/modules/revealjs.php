@@ -38,6 +38,7 @@
 			// More info about initialization & config:
 			// - https://revealjs.com/initialization/
 			// - https://revealjs.com/config/
+			const hashOnPageLoad = location.hash;
 			Reveal.addEventListener('slidechanged', setHashId);
 
 			Reveal.initialize({
@@ -54,16 +55,23 @@
 				slides.forEach(function (slide) {
 					slideIndex++;
 					if (slide.id) return;
+
 					var hidden = slide.querySelectorAll('input[type=hidden]');
-					if (hidden.length) slide.id = hidden[0].value;
-					else slide.id = '00' + slideIndex; //abs count
+
+					let id = '0' + slideIndex;
+					if (hidden.length) id += '-' + hidden[0].value.replaceAll(' ', '-');
+
+					slide.id = id;
 				});
+
+				if (hashOnPageLoad)
+					location.hash = hashOnPageLoad;
 
 				setHashId(event);
 			}
 
 			function setHashId(event) {
-				document.getElementById('hash-id').innerText = '# ' + event.currentSlide.id.replaceAll('-', ' ');
+				document.getElementById('hash-id').innerText = event.currentSlide.id.replaceAll('-', ' ');
 			}
 		</script>
 	</body>

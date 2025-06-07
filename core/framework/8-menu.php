@@ -65,7 +65,7 @@ function _skipExcludedFiles($files, $excludeNames = 'home', $excludeExtensions =
 function pageMenu($file) {
 	print_seo();
 
-	if (variable('no-page-menu') || !variable('section')) return;
+	if (variable('no-page-menu') || !variable('section') || hasPageParameter('embed')) return;
 
 	$breadcrumbs = variable('breadcrumbs');
 

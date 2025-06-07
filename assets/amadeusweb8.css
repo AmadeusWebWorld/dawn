@@ -2,3 +2,7 @@
 /* MISC */
 .amadeus-2x-icon { font-size: 36px; line-height: 54px; width: 54px; margin: 0 5px 5px 0; --cnvs-link-color: #fff; }
 textarea.full { width: 95%; }
+
+.amadeus-header-row { --bs-table-bg: #fdfbbe;  }
+.navigated-to { --bs-table-bg: mistyrose; }
+abbr::after { content: ' ? '; background-color: #fcc3f9; border-radius: 50%; height: 1.5ex; display: inline-block; padding: .35ex; line-height: .7; margin-left: 8px; }

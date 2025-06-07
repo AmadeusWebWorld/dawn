@@ -16,7 +16,7 @@ function getTableTemplate($name) {
 	//return disk_file_get_contents(featurePath('tables/' . $name . '.html'));
 }
 
-function _table_row_values($item, $cols, $tsv, $values) {
+function _table_row_values($item, $cols, $tsv, $values, $template) {
 	//TODO: HIGH: use $tsv for sticking with old code path.. seems buggy
 	if (!$tsv && $tsv != 'array') { $r = []; foreach ($cols as $c) $r[$c] = !is_int($item) && $item[$c] ? $item[$c] : ''; return $r; }
 	$r = [];
@@ -24,8 +24,9 @@ function _table_row_values($item, $cols, $tsv, $values) {
 	foreach ($cols as $key => $c) {
 		if (is_numeric($key)) $key = $c;
 		$value = $item[$c];
-		if (contains($value, $tiu = '%col-1-val%'))
-			$value = str_replace($tiu, $item[0], $value); //assumes its the first col!!
+
+		if (contains($template, $mr = '%' . $key . '_mr%'))
+			$r[$key . '_mr'] = urlize($value);
 
 		$start = startsWith($value, '__');
 
@@ -120,7 +121,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	echo '
 	<table id="amadeus-table-' . $id . '" class="' . $datatableClass . 'table table-striped table-bordered" cellspacing="0" width="100%">
 	<thead>
-		<tr class="align-text-top">
+		<tr class="align-text-top amadeus-header-row">
 			<th>' . $headings . '</th>
 		</tr>
 	</thead>
@@ -129,7 +130,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	foreach ($rows as $item) {
 		$more = isset($item[0]) && $item[0] == '<!--more-->';
 		if ($more) { if (variable('is-in-directory')) break; else continue; }
-		echo replaceHtml(replaceItems($template, _table_row_values($item, $columns, $tsv, $values), '%'));
+		echo replaceHtml(replaceItems($template, _table_row_values($item, $columns, $tsv, $values, $template), '%'));
 	}
 	echo '
 	</tbody>

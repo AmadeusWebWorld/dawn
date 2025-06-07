@@ -173,7 +173,7 @@ function replaceHtml($html) {
 			'%site-assets%' => _resolveFile('', STARTATSITE),
 			'%core-assets%' => _resolveFile('', STARTATCORE),
 
-			//TODO: high! - let this come from network...
+			//NOTE: cannot let this come from network...
 			'%core-url%' => scriptSafeUrl(variable('app')),
 			'%amadeus-url%' => scriptSafeUrl(variable('main')),
 
@@ -291,7 +291,7 @@ function prepareLinks($output) {
 	$campaign = isset($_GET['utm_campaign']) ? '&utm_campaign=' . $_GET['utm_campaign'] : '';
 	$output = str_replace('#utm', '?utm_source=' . variable('safeName') . $campaign, $output);
 
-	$output = replaceItems($output, ['BTNSITE' => '~class~btnNBSPbtn-successNBSPbtn-site~/class~']); //TODO: site colour!
+	$output = replaceItems($output, ['BTNSITE' => '~class~btnNBSPbtn-successNBSPbtn-site~/class~']);
 	$output = replaceItems($output, ['/class' => '', 'class' => '" class="', ], '~');
 	$output = str_replace('NBSP', ' ', $output);
 
