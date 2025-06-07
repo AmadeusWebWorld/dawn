@@ -16,7 +16,7 @@ function getTableTemplate($name) {
 	//return disk_file_get_contents(featurePath('tables/' . $name . '.html'));
 }
 
-function _table_row_values($item, $cols, $tsv) {
+function _table_row_values($item, $cols, $tsv, $values) {
 	//TODO: HIGH: use $tsv for sticking with old code path.. seems buggy
 	if (!$tsv && $tsv != 'array') { $r = []; foreach ($cols as $c) $r[$c] = !is_int($item) && $item[$c] ? $item[$c] : ''; return $r; }
 	$r = [];
@@ -32,7 +32,7 @@ function _table_row_values($item, $cols, $tsv) {
 		if (!$value || (startsWith($key, '__') && !(variable('allow-internal'))))
 			$r[$key] = '';
 		else if (endsWith($key, '_link') && $key != '_link')
-			$r[$key] = _table_link($item, $c);
+			$r[$key] = _table_link($item, $c, $values, $key, $cols);
 		else if (endsWith($key, '_md') || in_array($key, ['about', 'content', 'description']))
 			$r[$key] = returnLine($value);
 		else if (endsWith($key, '_urlized'))
@@ -40,18 +40,28 @@ function _table_row_values($item, $cols, $tsv) {
 		else
 			$r[$key] = $value; 
 
-		$wrap = $start ? ['<b>', '</b>'] : ['', ''];
-		if ($start) $value = substr($value, 2);
-
-		if (endsWith($key, '_urlized'))
+		if (endsWith($key, '_urlized')) {
+			$wrap = $start ? ['<b>', '</b>'] : ['', ''];
+			if ($start) $value = substr($value, 2);
 			$r[str_replace('_urlized', '', $key) . '_humanized'] = $wrap[0] . humanize($value) . $wrap[1];
+		}
 	}
 
 	return $r;
 }
 
-function _table_link($item, $c) {
+function _table_link($item, $c, $values, $key, $cols) {
 	$link = $item[$c];
+
+	if (isset($values[$key . '_template'])) {
+		$lookup = []; foreach ($cols as $ix => $c) $lookup[$ix] = $item[$c];
+		$format = trim($values[$key . '_template'], '	'); //comes from vscode tsv editor
+		$text = str_replace('_link', '', $key);
+		$link = replaceHtml(replaceItems($format, $lookup, '%'));
+		$class = isset($values[$key . '_class']) ? trim($values[$key . '_class'], '	') : ''; //comes from vscode tsv editor
+		return getLink($text, $link, $class);
+	}
+
 	$text = 'open';
 
 	if (contains($link, 'docs.google.com'))
@@ -59,13 +69,12 @@ function _table_link($item, $c) {
 	else if (contains($link, '/folders/'))
 		$text = 'folder';
 
-
 	return makeLink($text, $link, 'external');
 }
 
 //TEST: http://localhost/amadeus8/code/
 
-function add_table($id, $dataFile, $columnList, $template) {
+function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	variable('allow-internal', variable('local') || isset($_GET['internal']));
 	$tsv = is_string($dataFile) && endsWith($dataFile, '.tsv');
 	$json = is_string($dataFile) && endsWith($dataFile, '.json');
@@ -120,7 +129,7 @@ function add_table($id, $dataFile, $columnList, $template) {
 	foreach ($rows as $item) {
 		$more = isset($item[0]) && $item[0] == '<!--more-->';
 		if ($more) { if (variable('is-in-directory')) break; else continue; }
-		echo replaceHtml(replaceItems($template, _table_row_values($item, $columns, $tsv), '%'));
+		echo replaceHtml(replaceItems($template, _table_row_values($item, $columns, $tsv, $values), '%'));
 	}
 	echo '
 	</tbody>

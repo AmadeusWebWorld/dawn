@@ -76,7 +76,7 @@ function autoRender($file) {
 		else if (startsWith($raw, '|is-table'))
 			add_table(pathinfo($file, PATHINFO_FILENAME), $file, 'auto', disk_file_get_contents(dirname($file) . '/.template.html'));
 		else if ($istwt)
-			add_table(pathinfo($file, PATHINFO_FILENAME), $file, $meta->values['head-columns'], $meta->values['row-template']);
+			add_table(pathinfo($file, PATHINFO_FILENAME), $file, $meta->values['head-columns'], $meta->values['row-template'], $meta->values);
 		else
 			parameterError('unsupported tsv file - see line 1 for type definition', $file);
 

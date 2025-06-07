@@ -6,7 +6,8 @@ footer-message	A Developer Assisted Builder for Intricate Websites
 siteMenuName	Amadeus Web
 scaffold	search
 _next	, sitemap
-sections_no	docs, all
+sections	all
+sections_no	docs
 local-url	http://localhost/amadeus8/
 live-url	https://v8.amadeusweb.com/
 year	2019

@@ -1,6 +1,7 @@
 <?php
 function before_render() {
 	addStyle('amadeusweb7', COREASSETS);
+	addStyle('amadeusweb8', COREASSETS);
 	addStyle('amadeus-web-features', COREASSETS);
 	addScript('amadeusweb7', COREASSETS);
 

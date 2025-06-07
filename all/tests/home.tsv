@@ -1,0 +1,9 @@
+#name	about	expected	test_link	notes
+|is-table-with-template
+
+||test_link_class: show-test-inline				
+||test_link_template: %test_link%?test=%name%				
+||head-columns: name <hr> expected, about <hr> notes				
+||row-template: <tr><td class="fw-bold fst-italic">%test_link%<hr><textarea name="ro" readonly class="full autosize">%expected%</textarea></td><td><span class="text-success fw-bold">%about%</span><hr class="mx-3 my-2">%notes%</td></tr>				
+
+assets	problems	x-y-z	%world-url%	fix asap

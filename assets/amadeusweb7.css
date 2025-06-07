@@ -1,0 +1,102 @@
+:root {
+	--cnvs-content-padding: 15px;
+	--popup-width: min(60vh, 700px);
+	--footer-widgets-link--: #666;
+	--no-slider-background--: #666;
+	--scrollbar-width: calc(100vw - 100%); /* https://stackoverflow.com/a/56382662 */
+	--alternate-row-bg: #E2E2E2;
+	--alternate-box-bg: #EEE;
+	--cnvs-header-height-shrink: 80px;
+}
+
+body { cursor: default; }
+
+body.theme-canvas .menu-link { padding-top: 10px; padding-bottom: 10px; } /* menu */
+#header { z-index: 1050; }
+.device-down-md #page-menu { --cnvs-page-submenu-sticky-offset: 0px!important; }
+
+
+.content-wrap { overflow: visible; }
+body.has-chatra, body.side-header.has-chatra #header { padding-bottom: 90px; }
+#gotoTop { bottom: 20px!important; }
+
+/* menu */
+body:not(.is-expanded-menu) .primary-menu a { font-size: 130%; padding-top: 15px; padding-bottom: 15px; }
+
+/* theme adjustments */
+.footer-widgets-wrap a { color: var(--footer-widgets-link, #fff); font-weight: bold; letter-spacing: 1px; }
+.footer-widgets a, a.icon { display: inline-block; margin-top: 6px; line-height: 30px; }
+.footer-widgets h4 { text-decoration: underline; margin-bottom: 6px; }
+.device-sm .container, .device-xs .container { margin: 10px 10px 25px 10px; width: calc(100vw - 20px - var(--scrollbar-width)); }
+body.theme-canvas #content { padding-bottom: 10px; }
+
+#content a.icon { margin-left: 8px; text-decoration: underline overline; }
+a.icon { padding-left: 35px; background-repeat: no-repeat; background-position: top left; background-size: 30px 30px; }
+
+/* content */
+.content-box:not(.plain) {
+	background-color: #fff;
+	padding: 25px;
+	border-radius: 15px;
+	border: 1pt solid #666;
+	margin-bottom: 20px;
+}
+
+.content-box:not(.plain), .box-shadow {
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.content-box blockquote { padding: 5px 0 5px 10px; font-size: inherit; background-color: rgba(240, 240, 134, 0.363);
+	border: 1pt solid var(--cnvs-contrast-200, #aaa); border-left-width: 8px; }
+.content-box blockquote p { margin: 4px 0 4px 0; }
+
+#content ul, #content ol { padding-left: 30px; }
+
+.node-share .content-wrap > div.container { margin: auto; max-width: min(800px, calc(100vw - 100px - var(--scrollbar-width)))!important; text-align: center; }
+.node-share .content-box div { background-color: var(--cnvs-footer-bg, #999); padding: 5px; border-radius: 10px; font-size: 110%; font-weight: bolder; margin-top: 15px; }
+.node-share .content-box div label { display: unset; font-size: larger; }
+.node-share .content-box div textarea { margin: 20px auto; width: 95%; text-align: center; }
+.node-share .content-box .text-copied { background-color: var(--amw-copied-bg, rgb(190, 246, 213)); }
+.node-share .content-box div .fa-2x { position: relative; top: 8px; }
+
+.hide-h2 h2 { display: none; } /* articles page... */
+
+/* after content */
+.after-content { background-color: var(--after-content-background, #f0f0f0)!important; }
+#statistics .after-content { background-color: rgb(255, 229, 195)!important; }
+.after-content table, .after-content .block-links { background-color: white; }
+.after-content .block-links { padding: 15px; border: 1px solid #666; }
+ul.block-links li { list-style-type: none; margin-bottom: 8px; }
+
+/* image related */
+.has-floating-images::after { display: block; clear: both; content: ''; }
+.float-left { float: left; }
+.float-right { float: right; }
+.img-fluid { width: 100%; }
+.img-max-500 { max-width: 500px; }
+.img-max-400 { max-width: 400px; }
+.img-max-300 { max-width: 300px; }
+.img-max-200 { max-width: 200px; }
+
+/* https://stackoverflow.com/a/24630169 */
+@media screen and (min-aspect-ratio: 13/9) { .show-in-portrait { display: none; } } 
+@media screen and (max-aspect-ratio: 13/9) { .show-in-landscape { display: none; } }
+
+div.toolbar { background-color: white; padding: 10px 20px 10px 20px!important; width: fit-content; border-radius: 15px; margin: 0 auto 15px auto; }
+
+/* EMBEDS */
+.deck-container { padding: 10px; }
+.deck-container iframe { width: 100%; height: 85vh; border-radius: 20px; }
+
+/* https://www.h3xed.com/web-development/how-to-make-a-responsive-100-width-youtube-iframe-embed */
+.video-container { position: relative; width: 100%; height: 0; padding-bottom: 56.25%; margin-bottom: 20px; }
+
+a.is-full-screen { position: absolute; top: 80px; right: 20px; z-index: 1200; }
+iframe.is-full-screen { position: absolute; top: 60px; right: 0; bottom: 10px; left: 10px; z-index: 1100; }
+
+/* LISTS & TABLES */
+.alternate-box { background-color: var(--alternate-box-bg, rgba(224, 224, 255))!important; }
+.striped-list li:nth-of-type(even) { background-color: var(--alternate-row-bg, rgba(224, 255, 224))!important; }
+.white-list, .white-bg { background-color: #fff; }
+.reset-list { padding-left: 0!important; }
+.reset-list, .reset-list li { margin-left: 0; }
