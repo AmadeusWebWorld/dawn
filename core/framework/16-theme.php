@@ -294,10 +294,11 @@ function siteWidgets() {
 }
 
 function appendSocial($social, &$op) {
+	if (empty($social)) return;
 	foreach($social as $item) {
-		$op[] = '<a target="_blank" href="' . $item['url'] . '" class="social-link me-4 mt-2">';
+		$op[] = '<a target="_blank" href="' . $item['url'] . '" class="social-link">';
 		$op[] = '	<i class="social-icon text-light si-mini rounded-circle ' . (contains($item['type'], ' ')
-			? $item['type'] : 'fa-brands fa-'. $item['type'] . ' bg-' . $item['type']) . '"></i> ' . $item['name'] . '</a>';
+			? $item['type'] : 'fa-brands fa-'. $item['type'] . ' bg-' . $item['type']) . '"></i> ' . $item['name'] . '</a><hr class="spacer" />';
 		$op[] = '';
 	}
 }

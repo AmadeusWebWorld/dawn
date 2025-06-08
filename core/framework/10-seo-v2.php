@@ -72,7 +72,7 @@ function print_seo() {
 	$meta = variable('meta_' . $file);
 	if (!$meta) return;
 
-	$show = ['About', 'Description', 'Primary Keyword', 'Date', 'Author', 'Prompted By', 'Published', 'Meta Author', 'Related Keywords', 'Long-Tail Keywords'];
+	$show = ['About', 'Description', 'Primary Keyword', 'Date', 'Author', 'Page Custodian', 'Prompted By', 'Published', 'Meta Author', 'Related Keywords', 'Long-Tail Keywords'];
 	$info = [];
 
 	foreach ($show as $col) {
@@ -93,7 +93,7 @@ function print_seo() {
 }
 
 function inlineMeta($meta) {
-	$show = ['Date', 'Primary Keyword', 'Prompted By', 'Meta Author', 'Author'];
+	$show = ['Date', 'Primary Keyword', 'Page Custodian', 'Prompted By', 'Meta Author', 'Author'];
 	$info = [];
 
 	foreach ($show as $col) {

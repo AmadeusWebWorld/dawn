@@ -38,6 +38,8 @@ function _table_row_values($item, $cols, $tsv, $values, $template) {
 			$r[$key] = returnLine($value);
 		else if (endsWith($key, '_urlized'))
 			$r[$key] = $start ? '' : $value . '/';
+		else if (contains($key, 'tags'))
+			$r[$key] = csvToHashtags($value);
 		else
 			$r[$key] = $value; 
 
@@ -150,7 +152,7 @@ function _tableHeadingsOnLeft($id, $data) {
 	$row = '	<tr><th>%th%</th><td>%td%</td></tr>' . variable('nl');
 
 	foreach ($data as $th => $td) {
-		if (in_array($th, ['Author', 'Prompted By', 'Published', 'Meta Author']))
+		if (in_array($th, ['Author', 'Page Custodian', 'Prompted By', 'Published', 'Meta Author']))
 			$td = returnLine($td);
 
 			echo replaceItems(($hdg = startsWith($th, '+')) ? $header : $row, ['th' => $hdg ? substr($th, 1) : $th, 'td' => $td], '%');

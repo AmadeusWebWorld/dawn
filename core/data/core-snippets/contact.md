@@ -1,3 +1,3 @@
-Call Us On [%phone%](tel:%phone%)
-/ Message Us On WhatsApp [%whatsapp-number%](%whatsapp%%enquiry%)
-/ Email Us On [%email%](mailto:%email%?subject=%enquiry%)
+Call us on [%phone%](tel:%phone%)
+/ Message us on WhatsApp at [%whatsapp-number%](%whatsapp%%enquiry%)
+/ Email us on [%email%](mailto:%email%?subject=%enquiry%)

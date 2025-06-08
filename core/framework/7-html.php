@@ -178,11 +178,13 @@ function replaceHtml($html) {
 			'%amadeus-url%' => scriptSafeUrl(variable('main')),
 
 			'%phone%' => variableOr('phone', ''),
+			'%phone2%' => variableOr('phone2', ''),
 			'%email%' => variableOr('email', ''),
 			'%whatsapp-number%' => $wa = variableOr('whatsapp', '##no-number-specified'),
 			'%whatsapp%' => $wame = 'https://wa.me/'. $wa . '?text=',
 
 			'%address%' => variableOr('address', '[no-address]'),
+			'%address2%' => variableOr('address2', '[no-address2]'),
 			'%address-url%' => variableOr('address-url', '#no-link'),
 
 			'%siteName%' => $sn = variable('name'),
