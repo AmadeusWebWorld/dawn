@@ -180,8 +180,8 @@ function replaceHtml($html) {
 			'%phone%' => variableOr('phone', ''),
 			'%phone2%' => variableOr('phone2', ''),
 			'%email%' => variableOr('email', ''),
-			'%whatsapp-number%' => $wa = variableOr('whatsapp', '##no-number-specified'),
-			'%whatsapp%' => $wame = 'https://wa.me/'. $wa . '?text=',
+			'%whatsapp-number%' => ($wa = variableOr('whatsapp', '##no-number-specified')) . variableOr('whatsapp-info', ''),
+			'%whatsapp%' => $wame = 'https://wa.me/'. replaceItems($wa, ['+' => '', '.' => '', '-' => '']) . '?text=', //TODO: create a sanitize method
 
 			'%address%' => variableOr('address', '[no-address]'),
 			'%address2%' => variableOr('address2', '[no-address2]'),

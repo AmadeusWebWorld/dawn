@@ -13,7 +13,7 @@ variables([
 	'exclude-folders' => ['home', 'assets', 'data', 'engage', 'home', 'images', 'thumbnails'],
 ]);
 
-DEFINE('CONTENTFILES', 'php, md, tsv, html');
+DEFINE('CONTENTFILES', 'php, md, tsv, txt, html');
 DEFINE('ENGAGEFILES', 'md, tsv');
 DEFINE('FILESWITHMETA', 'md, tsv');
 

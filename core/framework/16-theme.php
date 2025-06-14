@@ -298,7 +298,7 @@ function appendSocial($social, &$op) {
 	foreach($social as $item) {
 		$op[] = '<a target="_blank" href="' . $item['url'] . '" class="social-link">';
 		$op[] = '	<i class="social-icon text-light si-mini rounded-circle ' . (contains($item['type'], ' ')
-			? $item['type'] : 'fa-brands fa-'. $item['type'] . ' bg-' . $item['type']) . '"></i> ' . $item['name'] . '</a><hr class="spacer" />';
+			? $item['type'] : 'fa-brands fa-'. $item['type'] . ' bg-' . $item['type']) . '"></i> ' . $item['name'] . '</a><hr style="visibility: hidden; margin: 0;" />';
 		$op[] = '';
 	}
 }
