@@ -8,7 +8,7 @@ function getThemeBaseUrl() {
 
 function getThemeFile($file, $folder = false) {
 	$themeName = variable('theme');
-	return concatSlugs([$folder ? $folder : AMADEUSTHEMESFOLDER, $themeName, $file]);
+	return concatSlugs([($folder ? $folder : AMADEUSTHEMESFOLDER) . $themeName, $file]);
 }
 
 function setSubTheme($name) {
@@ -205,7 +205,7 @@ function _substituteThemeVars($content, $what, $vars) {
 		$vars = enrichThemeVars($vars, $what);
 
 	if ($what == 'header') {
-		//if ($vars['optional-slider'] == '')
+		if ($vars['optional-slider'] == '')
 			$vars['body-classes'] = $vars['body-classes'] . ' no-slider';
 	}
 	return replaceItems($content[$what], $vars, '##');

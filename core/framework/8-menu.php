@@ -70,11 +70,15 @@ function pageMenu($file) {
 	$breadcrumbs = variable('breadcrumbs');
 
 	if (!$breadcrumbs) {
+		if (variable('section') == variable('node')) return;
+
+		//happens when: 'sections-have-files' (Ag)
+		if (!disk_is_dir(concatSlugs([variable('path'), variable('section'), variable('node')]))) return;
+
 		variable('in-node', true);
-		if (variable('section') != variable('node')) {
-			variable('directory_of', variable('section') . '/' . variable('node'));
-			runFeature('directory');
-		}
+
+		variable('directory_of', variable('section') . '/' . variable('node'));
+		runFeature('directory');
 		return;
 	}
 

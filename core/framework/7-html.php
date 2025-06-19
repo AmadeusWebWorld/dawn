@@ -172,6 +172,7 @@ function replaceHtml($html) {
 			'%node-assets%' => _resolveFile('', STARTATNODE),
 			'%site-assets%' => _resolveFile('', STARTATSITE),
 			'%core-assets%' => _resolveFile('', STARTATCORE),
+			'##theme##' => getThemeBaseUrl(),
 
 			//NOTE: cannot let this come from network...
 			'%core-url%' => scriptSafeUrl(variable('app')),

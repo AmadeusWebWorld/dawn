@@ -121,6 +121,10 @@ function bootstrap($config) {
 	variable('node', variableOr('node-alias', $node));
 }
 
+function getPageParameterAt($index = 1) {
+	return variable('page_parameter' . $index);
+}
+
 function hasPageParameter($param) {
 	return in_array($param, variableOr('page_parameters', [])) || isset($_GET[$param]);
 }
