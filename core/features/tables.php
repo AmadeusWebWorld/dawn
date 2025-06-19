@@ -54,8 +54,14 @@ function _table_row_values($item, $cols, $tsv, $values, $template) {
 		}
 	}
 
-	if (contains($template, 'Instagram_Embed'))
-		$r['Instagram_Embed'] = replaceItems(isset($cols['InstagramReel']) && $cols['InstagramReel'] ? IGREELFORMAT : IGPOSTFORMAT, $r, '%');
+	$wantsIG = contains($template, 'Instagram_Embed');
+	$wantsYT = contains($template, 'YouTube_Embed');
+	$wantsSOC = contains($template, 'Social_Embed');
+
+	if ($wantsYT || ($wantsSOC && isset($cols['YouTube']) && $r['YouTube']))
+		$r[$wantsYT ? 'YouTube_Embed' : 'Social_Embed'] = processYouTubeShortcode('[youtube]' . $r['YouTube'] . '[/youtube]', '%');
+	else if ($wantsIG || ($wantsSOC && isset($cols['Instagram']) && $r['Instagram']))
+		$r[$wantsIG ? 'Instagram_Embed' : 'Social_Embed'] = replaceItems(isset($cols['InstagramReel']) && $cols['InstagramReel'] ? IGREELFORMAT : IGPOSTFORMAT, $r, '%');
 
 	return $r;
 }
@@ -152,7 +158,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	</tbody>
 </table>
 ';
-	if (contains($template, 'Instagram_Embed')) echo NEWLINES2 . '<script async src="//www.instagram.com/embed.js"></script>';
+	if (contains($template, '_Embed')) echo NEWLINES2 . '<script async src="//www.instagram.com/embed.js"></script>';
 }
 
 function _tableHeadingsOnLeft($id, $data) {
