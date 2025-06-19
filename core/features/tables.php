@@ -12,6 +12,9 @@ variable('calendar-cells', explode(',', '1-1,1-2,1-3,1-4,1-5,1-6,1-7,2-1,'
 	. '2-2,2-3,2-4,2-5,2-6,2-7,3-1,3-2,3-3,3-4,3-5,3-6,3-7,'
 	. '4-1,4-2,4-3,4-4,4-5,4-6,4-7,5-1,5-2,5-3,5-4,5-5,5-6,5-7'));
 
+DEFINE('IGPOSTFORMAT', '<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/%Instagram%/" data-instgrm-version="14"></blockquote>');
+DEFINE('IGREELFORMAT', '<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/%Instagram%/" data-instgrm-version="14" style="max-width:540px; min-width:326px;"></blockquote>');
+
 function getTableTemplate($name) {
 	//return disk_file_get_contents(featurePath('tables/' . $name . '.html'));
 }
@@ -20,6 +23,7 @@ function _table_row_values($item, $cols, $tsv, $values, $template) {
 	//TODO: HIGH: use $tsv for sticking with old code path.. seems buggy
 	if (!$tsv && $tsv != 'array') { $r = []; foreach ($cols as $c) $r[$c] = !is_int($item) && $item[$c] ? $item[$c] : ''; return $r; }
 	$r = [];
+
 	//parameterError('Table Debugger', [$item, $cols], false); die();
 	foreach ($cols as $key => $c) {
 		if (is_numeric($key)) $key = $c;
@@ -49,6 +53,9 @@ function _table_row_values($item, $cols, $tsv, $values, $template) {
 			$r[str_replace('_urlized', '', $key) . '_humanized'] = $wrap[0] . humanize($value) . $wrap[1];
 		}
 	}
+
+	if (contains($template, 'Instagram_Embed'))
+		$r['Instagram_Embed'] = replaceItems(isset($cols['InstagramReel']) && $cols['InstagramReel'] ? IGREELFORMAT : IGPOSTFORMAT, $r, '%');
 
 	return $r;
 }
@@ -119,7 +126,11 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 
 	$isInList = variable('is-in-directory');
 	$datatableClass = $isInList ? '' : 'amadeus-table ';
+	$skipItemFn = isset($values['skipItem']) ? $values['skipItem'] : false;
 
+	$wantsBSRow = isset($values['use-a-bootstrap-row']) && $values['use-a-bootstrap-row'];
+
+	if ($wantsBSRow) echo '<div  id="amadeus-bs-row-' . $id . '" class="row">'; else
 	echo '
 	<table id="amadeus-table-' . $id . '" class="' . $datatableClass . 'table table-striped table-bordered" cellspacing="0" width="100%">
 	<thead>
@@ -132,12 +143,16 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	foreach ($rows as $item) {
 		$more = isset($item[0]) && $item[0] == '<!--more-->';
 		if ($more) { if (variable('is-in-directory')) break; else continue; }
-		echo replaceHtml(replaceItems($template, _table_row_values($item, $columns, $tsv, $values, $template), '%'));
+		$row = _table_row_values($item, $columns, $tsv, $values, $template);
+		if ($skipItemFn && $skipItemFn($row)) continue;
+		echo replaceHtml(replaceItems($template, $row, '%'));
 	}
+	if ($wantsBSRow) echo '</div><!-- end #' . $id . ' -->' . NEWLINES2; else
 	echo '
 	</tbody>
 </table>
 ';
+	if (contains($template, 'Instagram_Embed')) echo NEWLINES2 . '<script async src="//www.instagram.com/embed.js"></script>';
 }
 
 function _tableHeadingsOnLeft($id, $data) {
