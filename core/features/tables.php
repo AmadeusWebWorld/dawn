@@ -47,6 +47,9 @@ function _table_row_values($item, $cols, $tsv, $values, $template) {
 		else
 			$r[$key] = $value; 
 
+		if (contains($template, $key . '_slug'))
+			$r[$key . '_slug'] = urlize($value);
+
 		if (endsWith($key, '_urlized')) {
 			$wrap = $start ? ['<b>', '</b>'] : ['', ''];
 			if ($start) $value = substr($value, 2);

@@ -127,7 +127,7 @@ function runThemePart($what) {
 			$fwVars = [
 				'footer-logo' => $logo . NEWLINE . '			<h4 class="mt-sm-4 mb-0">' . variable('name') . '</h4>' . $nodeName,
 				'site-widgets' => siteWidgets(),
-				'footer-message' => '<h2 class="text-align-center p-3">' . $message . '</h2>',
+				'footer-message' => '<h2 class="text-align-center p-3 pt-0">' . $message . '</h2>',
 				'footer-contact' => $contact,
 				'copyright' => _copyright(true),
 				'credits' => _credits('', true),

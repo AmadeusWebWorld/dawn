@@ -174,6 +174,12 @@ function replaceHtml($html) {
 			'%core-assets%' => _resolveFile('', STARTATCORE),
 			'##theme##' => getThemeBaseUrl(),
 
+			'%cdn%' => variable('assets-url') . 'cdn/',
+
+			'%node-name%' => $node,
+			'%node-item%' => getPageParameterAt(1, ''),
+			'%node-item2%' => getPageParameterAt(2, ''),
+
 			//NOTE: cannot let this come from network...
 			'%core-url%' => scriptSafeUrl(variable('app')),
 			'%amadeus-url%' => scriptSafeUrl(variable('main')),

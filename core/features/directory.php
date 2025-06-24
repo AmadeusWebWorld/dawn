@@ -4,6 +4,8 @@ variable('omit-long-keywords', true);
 
 sectionId('directory', 'container');
 function _sections($current) {
+	if (variable('node') != variable('section')) return;
+
 	contentBox('', 'toolbar text-align-left');
 	echo 'Section: ' . variable('nl');
 	foreach (variable('sections') as $item) {

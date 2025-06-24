@@ -4,8 +4,10 @@ DEFINE('SOCIALTAB', 'social');
 DEFINE('CONTACTTAB', 'contact-us');
 DEFINE('SITEWIDETAB', 'site-form');
 
-function getPopupTabs($tabs = [ENGAGETAB, SITEWIDETAB, CONTACTTAB, SOCIALTAB]) {
-	$output = [];
+DEFINE('DEFAULTTABS', [ENGAGETAB, SITEWIDETAB, CONTACTTAB, SOCIALTAB]);
+
+function getPopupTabs($tabs = DEFAULTTABS, $startsWith = []) {
+	$output = count($startsWith) ? $startsWith : [];
 	foreach ($tabs as $tab) {
 		if ($tab == ENGAGETAB)
 			$output['engage'] = getEngageTab(ENGAGETAB);
@@ -55,6 +57,8 @@ function getEngageTab($what) {
 		$extension = disk_one_of_files_exist($file, ENGAGEFILES);
 		if (!$extension) return false;
 		$file .= $extension;
+	} elseif (disk_file_exists($what)) {
+		$file = $what;
 	} else {
 		$file = resolveEngage();
 		if (!$file) return false;
