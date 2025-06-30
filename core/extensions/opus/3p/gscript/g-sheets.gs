@@ -1,0 +1,85 @@
+function TestSheetInits() {
+  /*
+  var wo = _getSheetObject('Demo - Donors from Imran at WiseOwls', 'Contacts Pulled 1')
+  Logger.log({ testName: 'WO', expected: 'ok', actual: wo })
+
+  var dupe = _getSheet('Duplicate A for Opus Testing', 'Sheet 1')
+  Logger.log({ testName: 'DU', expected: 'fail', actual: dupe })
+
+  var nfe = _getSheet('Duplicate B for Opus Testing', '__NEW')
+  Logger.log({ testName: 'NFE', expected: 'fail', actual: nfe })
+  */
+
+  var nf = _getSheet('Duplicate B for Opus Testing', '__NEW', 'AMW Opus Demo Project')
+  Logger.log({ testName: 'NF', expected: 'ok', actual: nf })
+}
+
+//TODO: code and test all usages / failure scenarios
+function _getSheet(fileName, sheetName, parentFolder = 'NONE') {
+  var files = DriveApp.getFilesByName(fileName)
+
+  if (!files.hasNext()) {
+    if (parentFolder == 'NONE')
+      return new ReferenceError('No File: "' + fileName + '" in anywhere in drive.');
+    
+    const parent = DriveApp.getFoldersByName(parentFolder).next() //TODO: make this a tech function
+    SpreadsheetApp.create(fileName)
+    var newFile = DriveApp.getFilesByName(fileName).next()
+    newFile.moveTo(parent)
+    Logger.log('Createe the file "%s" and moved to: "%s"', fileName, parentFolder)
+    files = DriveApp.getFilesByName(fileName) //repeat else state makes things messy
+  }
+
+  var first = files.next();
+  if (files.hasNext()) {
+    Logger.log(first.getUrl())
+    while (files.hasNext())
+      Logger.log(files.next().getUrl())
+    return new ReferenceError('Multiple Files found with: ' + fileName);
+  }
+
+  var sheetFile = SpreadsheetApp.openById(first.getId())
+  var sheet = sheetFile.getSheetByName(sheetName)
+
+  if (sheet == null) {
+    Logger.log('Having to create "%s" Sheet in: "%s"', sheetName, sheetFile.getName())
+    sheetFile.insertSheet(sheetName)
+  } else {
+    Logger.log('Detected "%s" Sheet in: "%s" and clearing it', sheetName, sheetFile.getName())
+    sheet.clearContents().clearFormats()
+  }
+
+  return sheet
+}
+
+function _setCount(to, row, sheet) {
+  sheet.getRange(row + 2, 4).setValue(to)
+}
+
+function _sanitizeSheet(sheet) {
+  __removeEmptyColumns(sheet)
+  __removeEmptyRows(sheet)
+  sheet.autoResizeColumns(1, sheet.getLastColumn()) //to support reasonable multiline
+}
+
+//FROM: https://stackoverflow.com/a/34781833
+
+//Remove All Empty Columns in the Current Sheet
+function __removeEmptyColumns(sheet) {
+  var max = sheet.getMaxColumns(), last = sheet.getLastColumn()
+
+  if (max - last != 0)
+    sheet.deleteColumns(last + 1, max - last)
+
+  sheet.autoResizeColumns(1, last)
+}
+
+//Remove All Empty Rows in the Current Sheet
+function __removeEmptyRows(sheet) {
+  var max = sheet.getMaxRows(), last = sheet.getLastRow()
+
+  if (max - last != 0)
+    sheet.deleteRows(last + 1, max - last)
+
+  sheet.autoResizeRows(1, last)
+}
