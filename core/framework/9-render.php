@@ -212,6 +212,7 @@ function _renderImplementation($fileOrRaw, $settings) {
 
 	if ($vars = variable('node-replaces')) $raw = replaceItems($raw, $vars, '%', true);
 	*/
+	if ($svars = variable('siteReplaces')) $raw = replaceItems($raw, $svars, '%', true);
 
 	$markdownStart = variable('markdownStartTag');
 	$autopStart = variable('autopStart');

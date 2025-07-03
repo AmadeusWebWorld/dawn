@@ -188,7 +188,7 @@ function replaceHtml($html) {
 			'%phone2%' => variableOr('phone2', ''),
 			'%email%' => variableOr('email', ''),
 			'%whatsapp-number%' => ($wa = variableOr('whatsapp', '##no-number-specified')) . variableOr('whatsapp-info', ''),
-			'%whatsapp%' => $wame = 'https://wa.me/'. replaceItems($wa, ['+' => '', '.' => '', '-' => '']) . '?text=', //TODO: create a sanitize method
+			'%whatsapp%' => $wame = _whatsAppME($wa),
 
 			'%address%' => variableOr('address', '[no-address]'),
 			'%address2%' => variableOr('address2', '[no-address2]'),
@@ -307,6 +307,10 @@ function prepareLinks($output) {
 	return $output;
 }
 
+function _whatsAppME($mob, $txt = '?text=') {
+	return 'https://wa.me/' . replaceItems($mob, ['+' => '', '-' => '', '.' => '']) . $txt;
+}
+
 function specialLinkVars($item) {
 	extract($item);
 	//$url sent
@@ -322,7 +326,7 @@ function specialLinkVars($item) {
 	}
 
 	if ($type == 'whatsapp') {
-		$url = 'https://wa.me/' . replaceItems($url, ['+' => '', '-' => '', '.' => '']);
+		$url = _whatsAppME($url);
 	}
 
 	if ($type == 'email') {
