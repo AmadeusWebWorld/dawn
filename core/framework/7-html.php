@@ -182,7 +182,8 @@ function replaceHtml($html) {
 
 			//NOTE: cannot let this come from network...
 			'%core-url%' => scriptSafeUrl(variable('app')),
-			'%amadeus-url%' => scriptSafeUrl(variable('main')),
+			'%main-url%' => scriptSafeUrl(variable('main')),
+			'%world-url%' => scriptSafeUrl(variable('world')),
 
 			'%phone%' => variableOr('phone', ''),
 			'%phone2%' => variableOr('phone2', ''),
@@ -199,12 +200,6 @@ function replaceHtml($html) {
 			'%section%' => $section, //let archives break!
 			'%section_r%' => humanize($section),
 			'%site-engage-btn%' => engageButton('Engage With Us', 'inline'),
-
-			/* TODO: cleanup?
-			'%node-url%' => pageUrl(hasVariable('nodeSafeName') ? variable('node') : '') . variableOr('nodeChildSlug', ''),
-			*/
-			'%node-assets%' => _resolveFile((variable('network') ? SITENAME . '/' : '') . (variable('section') ? variable('section') . '/' : '') . variableOr('nodeChildSlug', ''), STARTATNODE),
-			'%nodeSiteName%' => variableOr('nodeSiteName', '##not-in-a-node'),
 
 			'%page-url%' => variable('page_parameter1') ? $safeUrl . $node . '/' . variable('page_parameter1') . '/' : '##not-in-a-page',
 			'%sub-page-url%' => variable('page_parameter2') ? $safeUrl . $node . '/' . variable('page_parameter1') . '/'  . variable('page_parameter2') . '/' : '##not-in-a-sub-page',

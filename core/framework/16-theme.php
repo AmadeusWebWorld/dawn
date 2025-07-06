@@ -279,7 +279,7 @@ function siteWidgets() {
 		$op[] = str_replace('[WHAT]', 'network', $start);
 		$op[] = '<h4>Network</h4>';
 		foreach ($sites as $site)
-			$op[] =  getLink($site['name'], $site['url'], 'icon site-' . $site['icon']) . BRNL;
+			$op[] =  $site['icon-link'] . BRNL;
 		$op[] = '</div>'; $op[] = '';
 	}
 

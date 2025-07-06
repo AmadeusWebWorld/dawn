@@ -72,8 +72,6 @@ parseSectionsAndGroups($siteVars);
 function _visane($siteVars) {
 	//defaults are given, hence guaranteed and site is the only way
 	$guarantees = [
-		['site-home-in-menu', false, 'bool'],
-		['use-menu-files', false, 'bool'],
 		['home-link-to-section', false, 'bool'],
 		['ChatraID', '--use-amadeusweb'],
 		['google-analytics', '--use-amadeusweb'],
@@ -127,14 +125,8 @@ $safeName = $siteVars['safeName'];
 $network = variable('network');
 
 variables($op = [
-	//version will be done with txt file if needed (see 11-assets.php)
 	'folder' => 'content/',
-	//sections also done above in parseSectionsAndGroups
-
 	'siteHumanizeReplaces' => siteHumanize(),
-
-	'home-link-to-section' => true, //directory will show these
-
 	'scaffold' => isset($siteVars['scaffold']) ? explode(', ', $siteVars['scaffold']) : [],
 
 	'path' => SITEPATH,
@@ -146,21 +138,31 @@ __testSiteVars($op);
 
 //TODO: add_foot_hook(AMADEUSTHEMEFOLDER . 'media-kit.php');
 
-if ($network) setupNetwork();
+if ($network) setupNetwork($network);
 
-function setupNetwork() {
-	if (!DEFINED('NETWORKPATH'))
-		DEFINE('NETWORKPATH', siteRealPath('/../') . '/');
-	//TODO else DEFINE('')
+function setupNetwork($network) {
+	if (DEFINED('NETWORKPATH')) {
+		if (disk_file_exists($nw = NETWORKPATH . 'network.php'))
+			disk_include_once($nw);
 
-	if (disk_file_exists($nw = NETWORKPATH . 'network.php'))
-		disk_include_once($nw);
+		$siteNames = textToList(disk_file_get_contents(NETWORKPATH . 'sites.txt'));
+		peDie('149', $siteNames);
+	} else {
+		if (!($at = variable('network-at')))
+			peDie('Setup', 'Expected Variable: "network-at" is missing', true);
 
-	$siteNames = textToList(disk_file_get_contents(NETWORKPATH . 'sites.txt'));
+		DEFINE('NETWORKPATH', ALLSITESROOT);
+		$sites = getSheet($at . '/data/sites.tsv', 'Network');
 
-	$op = [];
+		$siteNames = [];
+		foreach(explode(', ', $network) as $slug) {
+			$items = $sites->group[$slug];
+			foreach ($items as $row)
+				$siteNames[] = $row[$sites->columns['Path']];
+		}
+	}
+
 	$newTab = true ? 'target="_blank" ' : '';
-	$sites = [];
 
 	$networkItems = [];
 	$networkUrls = [];
@@ -174,47 +176,24 @@ function setupNetwork() {
 
 		$item = $sheet->group;
 
+		//expects all to follow the same principle
 		if (contains($url = $item[variable(SITEURLKEY)][0][$val], 'localhost'))
 			$url = replaceItems($url, ['localhost' => 'localhost' . variable('port')]);
 
-		$op[] = sprintf('<a href="%s" %stitle="%s &mdash; %s">%s</a>', $url, $newTab,
+		$site = str_replace('/', '--', $site); //NOTE: escape char
+		$link = sprintf('<a class="site-icon" href="%s" %stitle="%s &mdash; %s"><img src="'
+				. $url . $item['safeName'][0][$val] . '-icon.png" height="30px" />  %s</a>', $url, $newTab,
 			$name = $item['name'][0][$val],
 			$byline = $item['byline'][0][$val],
-				$item['name'][0][$val], variable('nl'));
+			$item['iconName'][0][$val]);
 
-		$sections = isset($item['sections']) ? $item['sections'][0][$val] : [];
-		if (is_string($sections) && $sections != '')
-			$sections = parseSectionsAndGroups(['sections' =>
-				$item['sections'][0][$val]], true, true)['sections'];
-
-		$icon = $item['iconName'][0][$val];
 		$networkUrls[$site . '-url'] = $url;
-		$networkItems[] = ['url' => $url, 'name' => humanize($icon), 'icon' => $icon];
-
-		$sites[$site] = [
-			'name' => $name, 'byline' => $byline,
-			'safeName' => $item['safeName'][0][$val],
-			'sections' => $sections,
-			'url' => $url,
-			'link' => end($op),
-			'icon' => $site,
-		];
+		$networkItems[] = ['url' => $url, 'name' => $name, 'icon-link' => $link];
 	}
-
-	$country = (contains(_makeSlashesConsistent(SITEPATH), 'global' . DIRECTORY_SEPARATOR));
-	if ($country) {
-		$networkUrls['world-url'] = variable('world');
-		$networkItems[] = [ 'url' => variable('world'), 'name' => 'World', 'icon' => 'world' ];
-	}
-
-	//NOTE: no need to add to networksUrl as it's already a 'core-ur' in replaceHtml
-	$networkItems[] = [ 'url' => variable('app'), 'name' => 'Core v8', 'icon' => 'core' ];
 
 	$networkUrls['network-assets'] = variable(assetKey(NETWORKASSETS));
 	variable('networkItems', $networkItems);
 	variable('networkUrls', $networkUrls);
-	
-	variable('network-sites', $sites);
 }
 
 runFrameworkFile('cms');

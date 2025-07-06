@@ -193,7 +193,6 @@ function _renderImplementation($fileOrRaw, $settings) {
 		'site-assets-images' => variable(assetKey(SITEASSETS)) . 'images/',
 		'app' => variable('app'),
 		'app-assets' => variable(assetKey(COREASSETS)),
-		'world-url' => variable('world'),
 	];
 
 	$raw = replaceItems($raw, $replacesParams, '%');

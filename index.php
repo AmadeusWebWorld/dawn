@@ -1,11 +1,8 @@
 <?php
 define('SITEPATH', __DIR__);
 
-if (is_dir($nw = realpath(__DIR__ . '/../amadeusweb/') . '/')) {
-	DEFINE('NETWORKPATH', $nw);
-	include_once($nw . 'loader.php');
-	return;
-}
-
 include_once 'entry.php';
+
+variables(['network-at' => ALLSITESROOT . '/amadeus8', 'network' => OURNETWORK]);
+
 runFrameworkFile('site');

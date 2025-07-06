@@ -1,4 +1,5 @@
 <?php
+DEFINE('OURNETWORK', 'work, world, core');
 
 main::initialize();
 
