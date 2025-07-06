@@ -82,6 +82,7 @@ function _visane($siteVars) {
 		['address', 'Chennai, India'],
 		//['address-url', '#address'], //not here as needed for social too
 
+		['mediakit', '?palette=default'],
 		['description', false],
 	];
 

@@ -148,7 +148,9 @@ function _addAssets($names, $location, $type) {
 
 function styles_and_scripts() {
 	foreach (variable('styles') as $item)
-			cssTag(assetUrl($item['name'] . '.css', $item['location']));
+		cssTag(assetUrl($item['name'] . '.css', $item['location']));
 	foreach (variable('scripts') as $item)
-			scriptTag(assetUrl($item['name'] . '.js', $item['location']));
+		scriptTag(assetUrl($item['name'] . '.js', $item['location']));
+	if (variable('mediakit'))
+		cssTag(variable('app') . 'assets/mediakit.php' . variable('mediakit'));
 }
