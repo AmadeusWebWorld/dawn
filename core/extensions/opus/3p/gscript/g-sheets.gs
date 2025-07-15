@@ -1,3 +1,5 @@
+function NoopGS() {}
+
 function TestSheetInits() {
   /*
   var wo = _getSheetObject('Demo - Donors from Imran at WiseOwls', 'Contacts Pulled 1')
@@ -14,6 +16,12 @@ function TestSheetInits() {
   Logger.log({ testName: 'NF', expected: 'ok', actual: nf })
 }
 
+function TestAlias() {
+  const testColumns = _getColumns(['Action', 'Skip', 'File', 'Access', 'SheetOrTab', 'Setting1', 'Setting2', 'Setting3', 'LastRun'])
+  _appendAliases(testColumns, { Setting12: 'LabelFilter', Setting2: 'MainContactLabel', Setting3: 'ExtraFields' }, 'Pull Contacts')
+  _appendAliases(testColumns, { Setting1: 'OnlyOnLabel', Setting2: 'ExtraFields' }, 'Contacts Fields')
+}
+
 //TODO: code and test all usages / failure scenarios
 function _getSheet(fileName, sheetName, parentFolder = 'NONE') {
   var files = DriveApp.getFilesByName(fileName)
@@ -21,12 +29,12 @@ function _getSheet(fileName, sheetName, parentFolder = 'NONE') {
   if (!files.hasNext()) {
     if (parentFolder == 'NONE')
       return new ReferenceError('No File: "' + fileName + '" in anywhere in drive.');
-    
+
     const parent = DriveApp.getFoldersByName(parentFolder).next() //TODO: make this a tech function
     SpreadsheetApp.create(fileName)
     var newFile = DriveApp.getFilesByName(fileName).next()
     newFile.moveTo(parent)
-    Logger.log('Createe the file "%s" and moved to: "%s"', fileName, parentFolder)
+    Logger.log('Created the file "%s" and moved to: "%s"', fileName, parentFolder)
     files = DriveApp.getFilesByName(fileName) //repeat else state makes things messy
   }
 
@@ -43,7 +51,7 @@ function _getSheet(fileName, sheetName, parentFolder = 'NONE') {
 
   if (sheet == null) {
     Logger.log('Having to create "%s" Sheet in: "%s"', sheetName, sheetFile.getName())
-    sheetFile.insertSheet(sheetName)
+    sheet = sheetFile.insertSheet(sheetName)
   } else {
     Logger.log('Detected "%s" Sheet in: "%s" and clearing it', sheetName, sheetFile.getName())
     sheet.clearContents().clearFormats()
@@ -52,8 +60,55 @@ function _getSheet(fileName, sheetName, parentFolder = 'NONE') {
   return sheet
 }
 
-function _setCount(to, row, sheet) {
-  sheet.getRange(row + 2, 4).setValue(to)
+function _getColumns(names) {
+  const columns = names.map(function (name, index) {
+    return {
+      name: name, index: index,
+
+      getValue: function (arr) { return arr[this.index] },
+
+      getRowValue: function (row) { return row.getRange(row.index, this.index).getValue() },
+      setRowValue: function (row, value) { return row.getRange(row.index, this.index).setValue(value) },
+      setRowRtfValue: function (row, rtf) { return row.getRange(row.index, this.index).setRichTextValue(row.index, rtf) },
+    }
+  })
+
+  const result = { columnNames: names }
+  result.toObj = function (arr) {
+    var obj = {}
+    this.columnNames.map(function (col) {
+      obj[col] = arr[result[col].index]
+    })
+    return obj
+  }
+
+  columns.forEach(function (col) { result[col.name] = col })
+  return result
+}
+
+function _appendAliases(columns, aliases, forWhat) {
+  if (columns.aliases == null) {
+    columns.aliases = {}
+  }
+
+  Object.keys(aliases).forEach(function (name) {
+    const aliasName = aliases[name]
+    const alias = columns[aliasName]
+    if (alias != null) {
+      Logger.log('Alias "' + name + '" already defined for Alias-set: ' + columns[name].aliasedAt)
+      Logger.log(columns.aliases)
+      throw new Error('Conflicting Alias')
+    }
+
+    if (columns[name] == null) {
+      throw new Error('Column Not Found: ' + name)
+    }
+
+    columns[aliasName] = columns[name]
+    columns[name].aliasedAt = forWhat
+  })
+
+  columns.aliases[forWhat] = aliases
 }
 
 function _sanitizeSheet(sheet) {

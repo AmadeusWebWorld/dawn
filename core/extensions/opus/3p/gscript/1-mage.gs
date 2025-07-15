@@ -4,39 +4,37 @@
   * Developed since 2025 and Copyrighted by Imran Ali Namazi
 */
 
-var mageActions
+var mageActions, mageColumns
 
 function RunMageForMe() {
-  const sheetName = 'Opus Mage Work'
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet()
+
+  if (sheet.getRange(1, 1, 1).getValue() != '#Action') {
+    Logger.log('Fatal Error: Expecting active sheet to be special like our demo: \'Opus Mage Work\'')
+    return
+  }
 
   mageActions = []
+  mageColumns = _getColumns(['Action', 'Skip', 'File', 'Access', 'SheetOrTab', 'Setting1', 'Setting2', 'Setting3', 'LastRun'])
+  _appendAliases(mageColumns, { Setting1: 'LabelFilter', Setting2: 'MainContactLabel', Setting3: 'ExtraFields' }, 'Pull Contacts')
+  _appendAliases(mageColumns, { Setting1: 'OnlyOnLabel', Setting2: 'Fields' }, 'Contacts Fields')
 
-  rows = sheet.getRange(1, 1, sheet.getLastRow() - 1, 6).getValues()
+  rows = sheet.getRange(1, 1, sheet.getLastRow() - 1, mageColumns.columnNames.length).getValues()
 
-  rows.forEach(_addMageAction)
-  sheetFile.setActiveSheet(sheet)
-
-  mageActions.forEach(_runMageAction)
+  rows.forEach(_runMageAction)
 }
 
-//#Action	Skip	Where	SettingA	SettingB	SettingC	Output
-function _addMageAction(item) {
-  if (item[0] == "" || item[0].substring(0, 1) == "#") return //empty or th
-  if (item[1] == "Y") return //skip
+function _runMageAction(row) {
+  if (row[0] == "" || row[0].substring(0, 1) == "#") return //empty or th
 
-  mageActions.push({
-    name: item[0],
-    skip: item[1],
-    wher: item[2],
-    varA: item[3],
-    varB: item[4],
-    varC: item[5],
-    indx: actions.length + 1
-  })
-}
+  const item = mageColumns.toObj(row)
+  if (item.Skip == 'Y') return;
 
-function _runMageAction(itm) {
-  if (itm.name == 'Pull Contacts') {
-    _pullContactsInto(itm.varA, itm.varB, itm.varC)
+  //TODO: Access check - * for domain?
+
+  Logger.log(item)
+
+  if (item.Action == 'Pull Contacts') {
+    _pullContactsInto(item)
   }
 }

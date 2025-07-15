@@ -3,18 +3,17 @@
   * A part of Opus for GW by AmadeusWeb.com
   * Developed since 2025 and Copyrighted by Imran Ali Namazi
   * TODO:
-    * Include Comments and Custom Fields
-    * Sheets of Multiple Contacts?
+    * Include Notes and Custom Fields
+    * Sheets of Multiple Contacts - Given in Input
+  * TRAINING
     * Wean away from sending files to sending links / referredBy links
 */
 
-function TestEngage() {
-  _pullContactsInto('', '', 'Demo - Donors from Imran at WiseOwls')
-}
+function NoopEngage() { }
 
-function _pullContactsInto(email, prefix, fileName) {
-  const sheet = _getSheet(fileName, 'Contacts Pulled')
-  Logger.log('About to run "%s" with %s', '_pullContactsInto', JSON.stringify({ email, prefix, fileName }))
+function _pullContactsInto(item) {
+  const sheet = _getSheet(item.File, item.SheetOrTab)
+  Logger.log('About to run "%s" with %s', '_pullContactsInto', JSON.stringify(item))
 
   sheet.appendRow([
     "#GWID",
@@ -52,7 +51,7 @@ function _pullContactsInto(email, prefix, fileName) {
   _sanitizeSheet(sheet)
 
   Logger.log('Names Found: %s', names)
-  Logger.log('Wrote %s Contacts to "%s" Sheet of "%s" File', people.length, sheet.getName(), fileName)
+  Logger.log('Wrote %s Contacts to "%s" Sheet of "%s" File', people.length, item.SheetOrTab, item.File)
 }
 
 function __getContacts() {
@@ -62,13 +61,21 @@ function __getContacts() {
 
   let people = [], tel = '\'' /* TODO: tel: */, mailto = 'mailto:', wame = 'https://wa.me/'
   const warning = SpreadsheetApp.newTextStyle().setBold(true).setForegroundColor('maroon').build()
+  const none = SpreadsheetApp.newRichTextValue().setText('none').setTextStyle(warning).build()
 
   connections.forEach(function (contact) {
     const labels = labelsByMember[contact.resourceName] ? labelsByMember[contact.resourceName].join(', ') : ''
 
-    const numbers =   __concatenateRuns(contact.phoneNumbers.map(function (no) { return __cellRun(no.canonicalForm, tel + no.canonicalForm                 , no.formattedType) }))
-    const whatsapps = __concatenateRuns(contact.phoneNumbers.map(function (no) { return __cellRun(no.canonicalForm, wame + no.canonicalForm.replace('+', ''), no.formattedType) }))
-    const emails = __concatenateRuns(contact.emailAddresses.map(function (em) { return  __cellRun(em.value, mailto + em.value, em.formattedType) }))
+    const numbers = contact.phoneNumbers == undefined ? none :__concatenateRuns(contact.phoneNumbers.map(function (no) { return __cellRun(no.canonicalForm, tel + no.canonicalForm, no.formattedType) }))
+    const whatsapps = contact.phoneNumbers == undefined ? none : __concatenateRuns(contact.phoneNumbers.map(function (no) { return __cellRun(no.canonicalForm, wame + no.canonicalForm.replace('+', ''), no.formattedType) }))
+    const emails = contact.emailAddresses == undefined ? none : __concatenateRuns(contact.emailAddresses.map(function (em) { return __cellRun(em.value, mailto + em.value, em.formattedType) }))
+
+    const link = 'https://contacts.google.com/person/' + contact.resourceName.replace('people/', '')
+
+    if (contact.names == null) {
+      Logger.log('No Name for: ' + link)
+      return
+    }
 
     const person = {
       'gwid': contact.resourceName,
@@ -77,7 +84,7 @@ function __getContacts() {
       'email': emails,
       'phone': numbers,
       'whatsapp': whatsapps,
-      'link': 'https://contacts.google.com/person/' + contact.resourceName.replace('people/', ''),
+      'link': link,
     }
 
     people.push(person)
