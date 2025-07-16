@@ -33,7 +33,9 @@
 			</div>
 		</div>
 
-		<?php scriptTag(assetUrl('3p/reveal.js', COREASSETS));?>
+		<?php scriptTag(assetUrl('3p/reveal.js', COREASSETS)); ?>
+		<?php if (hasVariable('slide-style')) cssTag(variable('slide-style')); ?>
+		<?php echo hasPageparameter('print') ? NEWLINE . variableOr('print-css', '') . NEWLINE : '' ?>
 		<script>
 			// More info about initialization & config:
 			// - https://revealjs.com/initialization/
@@ -43,6 +45,7 @@
 
 			Reveal.initialize({
 				hash: true,
+				<?php echo hasPageparameter('print') ? variableOr('print-config', '') . NEWLINE : '' ?>
 				// Learn about plugins: https://revealjs.com/plugins/
 				// NOTE: making it superlight
 				// plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]

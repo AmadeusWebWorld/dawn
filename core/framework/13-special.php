@@ -222,6 +222,10 @@ function renderSheetAsDeck($deck, $link) {
 		} else if ($type == 'paragraph') {
 			$op[] = $text;
 			$op[] = '';
+		} else if ($type == 'style-file') {
+			variable('style-file', replaceHtml($text));
+		} else if ($type == 'print-config') {
+			variable('print-config', $text);
 		} else if ($type == 'item') {
 			if (end($op) != '') $op[] = '';
 			$op[] = '* ' . $text;
@@ -260,6 +264,7 @@ function _renderedDeck($deck, $title) {
 	//TODO: UI FIX: if (!$expanded) $links[] = '<a class="toggle-deck-fullscreen" href="javascript: $(\'.deck-container\').show();"><span class="text">maximize</span> ' . getIconSpan('expand', 'normal') . '</a>';
 	if ($expanded) $links[] = makeLink('open deck page', $url, false);
 	$links[] = makeLink('open deck fully', $embedUrl, false);
+	$links[] = makeLink('print', $embedUrl . '&print=1', false);
 	$links[] = $expanded ? 'expanded deck below' : makeLink('open deck expanded', $url . '?expanded=1', false);
 	//TODO: get this working and support multi decks
 	//$(this).closest(\'.deck-toolbar\').next(\'.deck-container\').toggle();

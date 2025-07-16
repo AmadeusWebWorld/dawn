@@ -172,6 +172,13 @@ function site_humanize($txt, $field = 'title', $how = false) {
 	if (array_key_exists($key = strtolower($txt), $pages))
 		return $pages[$key];
 
+	$special = [
+		'with ai' => 'With AI',
+	];
+
+	if (array_key_exists($key = strtolower($txt), $special))
+		return $special[$key];
+
 	return $txt;
 }
 

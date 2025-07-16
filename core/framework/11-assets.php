@@ -87,16 +87,14 @@ function assetMeta($location = SITEASSETS, $setValueOr = false) {
 function getLogoOrIcon($what, $which = 'site') {
 	$suffix = ($what == 'icon' ? '-icon' : '-logo') . '.png';
 
-	$nameVar = 'safeName';
-	if ($which == 'node1' && hasVariable('node1SafeName')) $nameVar = 'node1SafeName';
-	if ($which == 'node' && hasVariable('nodeSafeName')) $nameVar = 'nodeSafeName';
-	$node = ($which == 'node' || $which == 'node1') && DEFINED('NODEPATH');
+	$inNode = $which == 'node' && hasVariable('nodeSafeName') && DEFINED('NODEPATH');
+	$name = variable($inNode ? 'nodeSafeName' : 'safeName') . $suffix;
 
-	$name = ($node ? variableOr('nodeSlug', '') . variableOr('nodeChildSlug', '') : '') . variable($nameVar) . $suffix;
+	$netWorkManaged = variable('network-manages-site-assets');
+	$prefix = $netWorkManaged && DEFINED('SITENAME') ? SITENAME . '/' : '';
+	$where = $inNode ? STARTATNODE : ($netWorkManaged ? STARTATNETWORK : STARTATSITE);
 
-	$prefix = ($node ? (variable('network') ? SITENAME . '/' : '') . (variable('section') ? variable('section') . '/' : '') : '');
-	$where = $what == 'icon' && !$node ? STARTATSITE : (variable('network') ? STARTATNETWORK : STARTATNODE);
-	return _resolveFile($prefix . $name, $where, $node);
+	return _resolveFile($prefix . $name, $where, $inNode);
 }
 
 DEFINE('STARTATNODE', 0);

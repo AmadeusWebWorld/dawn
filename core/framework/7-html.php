@@ -176,9 +176,9 @@ function replaceHtml($html) {
 
 			'%cdn%' => variable('assets-url') . 'cdn/',
 
-			'%node-name%' => $node,
-			'%node-item%' => getPageParameterAt(1, ''),
-			'%node-item2%' => getPageParameterAt(2, ''),
+			'%nodeName%' => humanize($node),
+			'%nodeItem%' => getPageParameterAt(1, ''),
+			'%nodeItem2%' => getPageParameterAt(2, ''),
 
 			//NOTE: cannot let this come from network...
 			'%core-url%' => scriptSafeUrl(variable('app')),
@@ -208,6 +208,8 @@ function replaceHtml($html) {
 			'%enquiry%' => str_replace(' ', '+', 'enquiry (for) ' . $sn . ' (at) ' . $loc),
 			'%optional-content-box-class%' => _getCBClassIfWanted(''),
 			'<marquee>' => variable('_marqueeStart'),
+
+			'--large-list--' => cbCloseAndOpen('large-list'),
 		]);
 		variable('whatsapp-txt-start', $wame);
 	}
@@ -296,6 +298,7 @@ function prepareLinks($output) {
 	$output = str_replace('#utm', '?utm_source=' . variable('safeName') . $campaign, $output);
 
 	$output = replaceItems($output, ['BTNSITE' => '~class~btnNBSPbtn-successNBSPbtn-site~/class~']);
+	$output = replaceItems($output, ['MORELINK' => '~class~more-link~/class~']);
 	$output = replaceItems($output, ['/class' => '', 'class' => '" class="', ], '~');
 	$output = str_replace('NBSP', ' ', $output);
 
