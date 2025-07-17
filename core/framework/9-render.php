@@ -296,7 +296,7 @@ function renderRichPage($sheetFile, $groupBy = 'section', $templateName = 'home'
 }
 
 function is_engage($raw) {
-	return contains($raw, ' //engage-->');
+	return contains($raw, ' //engage-->') || contains($raw, '<!--ENGAGE-->');
 }
 
 DEFINE('ENGAGESTART', '<!--start-engage-->');

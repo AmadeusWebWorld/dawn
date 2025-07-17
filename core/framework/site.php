@@ -72,7 +72,8 @@ parseSectionsAndGroups($siteVars);
 function _visane($siteVars) {
 	//defaults are given, hence guaranteed and site is the only way
 	$guarantees = [
-		['home-link-to-section', false, 'bool'],
+		['link-to-site-home', true, 'bool'],
+		['link-to-section-home', false, 'bool'],
 		['ChatraID', '--use-amadeusweb'],
 		['google-analytics', '--use-amadeusweb'],
 
@@ -142,6 +143,8 @@ __testSiteVars($op);
 if ($network) setupNetwork($network);
 
 function setupNetwork($network) {
+	$networkUrls = [];
+
 	if (DEFINED('NETWORKPATH')) {
 		if (disk_file_exists($nw = NETWORKPATH . 'network.php'))
 			disk_include_once($nw);
@@ -158,19 +161,27 @@ function setupNetwork($network) {
 		$siteNames = [];
 		foreach(explode(', ', $network) as $slug) {
 			$items = $sites->group[$slug];
-			foreach ($items as $row)
-				$siteNames[] = $row[$sites->columns['Path']];
+			foreach ($items as $row) {
+				$path = $row[$sites->columns['Path']];
+				if ($row[$sites->columns['Type']] == 'Node')
+					$networkUrls[$row[$sites->columns['Slug']] . '-url'] = $row[$sites->columns['NodeUrl']];
+				$siteNames[] = $path;
+			}
 		}
 	}
 
 	$newTab = true ? 'target="_blank" ' : '';
 
 	$networkItems = [];
-	$networkUrls = [];
+	$local = variable('local');
 
 	foreach ($siteNames as $site) {
 		$sheetFile = NETWORKPATH . $site . '/data/site.tsv';
-		if (!sheetExists($sheetFile)) { continue; }
+		if (!sheetExists($sheetFile)) {
+			if (isset($nodeUrls[$site])) $nodeUrls[$site];
+			else if ($local) echo '<!--missing tsv for: ' . $site . '-->' . NEWLINE;
+			continue;
+		}
 
 		$sheet = getSheet($sheetFile, 'key');
 		$val = $sheet->columns['value'];

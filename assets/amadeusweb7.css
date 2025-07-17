@@ -46,9 +46,11 @@ a.icon { padding-left: 35px; background-repeat: no-repeat; background-position: 
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.content-box blockquote { padding: 5px 0 5px 10px; font-size: inherit; background-color: rgba(240, 240, 134, 0.363);
-	border: 1pt solid var(--cnvs-contrast-200, #aaa); border-left-width: 8px; }
+.content-box blockquote, .content-box code { padding: 5px 0 5px 10px; font-size: inherit; background-color: #f0f086; }
+.content-box blockquote { border: 1pt solid var(--cnvs-contrast-200, #aaa); border-left-width: 8px; }
 .content-box blockquote p { margin: 4px 0 4px 0; }
+pre, code { font-size: 110%; line-height: 2.5; border-left: none; }
+code.language-poem { background-color: var(--amadeus-site-h2-bgd, #cce); }
 
 #content ul, #content ol { padding-left: 30px; }
 

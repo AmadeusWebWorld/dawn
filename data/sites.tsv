@@ -1,10 +1,11 @@
-#Type	Network	Name	Path
-|https://docs.google.com/spreadsheets/d/1dsEA395vzHMqRZTlUhPsc34LYFy-TRhbsNZA9L5Xvi8/edit?gid=477366355#gid=477366355			
-Site	core	Amadeus Core v8	amadeus8
-Repo			work.git
-Site	work	Amadeus Web Family	work/web
-Site	work	Amadeub Web for Business	work/business
-Repo			amore.git
-Site	world	Amadeus Web World	amore/world
-Site	world	Amadeus World Network	network/owls
-Site	world	Imran's World	imran
+#Type	Network	Name	Slug	Path	NodeUrl	GitUrl
+|https://docs.google.com/spreadsheets/d/1dsEA395vzHMqRZTlUhPsc34LYFy-TRhbsNZA9L5Xvi8/edit?gid=477366355#gid=477366355						
+Site	core	Amadeus Core v8		amadeus8		
+Repo						work.git
+Site	work	Amadeus Web Family		work/web		
+Repo						all.git
+|Site	work	Amadeub Web for Business		businesses/all		
+Repo				amore.git		amore.git
+Site	world	Amadeus Web World		amore/world		
+Site	world	Amadeus World Network		amore/wisdom		
+Node	world	Imran's World	imran	amore/wisdom/imran-ali-namazi	https://wiseowls.life/imran-ali-namazi/	

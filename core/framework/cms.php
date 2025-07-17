@@ -167,17 +167,26 @@ function did_render_page() {
 	}
 }
 
-function site_humanize($txt, $field = 'title', $how = false) {
-	$pages = variableOr('siteHumanizeReplaces', []);
-	if (array_key_exists($key = strtolower($txt), $pages))
-		return $pages[$key];
+variable('specialHumanizeReplaces', [
+	'with ai' => 'With AI',
+	'2025 02' => 'Feb 2025',
+	'2025 04' => 'Apr 2025',
+	'2025 05' => 'May 2025',
+	'2025 06' => 'Jun 2025',
+	'2025 07' => 'Jul 2025',
+	'2025 08' => 'Aug 2025',
+]);
 
-	$special = [
-		'with ai' => 'With AI',
+function site_humanize($txt, $field = 'title', $how = false) {
+	$arrays = [
+		variableOr('siteHumanizeReplaces', []),
+		variableOr('nodeHumanizeReplaces', []),
+		variableOr('specialHumanizeReplaces', []),
 	];
 
-	if (array_key_exists($key = strtolower($txt), $special))
-		return $special[$key];
+	foreach ($arrays as $list)
+		if (array_key_exists($key = strtolower($txt), $list))
+			return $list[$key];
 
 	return $txt;
 }

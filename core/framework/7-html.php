@@ -6,14 +6,16 @@ function currentUrl() {
 }
 
 function currentLevel($wrap = true) {
+	$nodeIsSection = variable('node') == variable('section');
+	$isPageWhenSHF = !$nodeIsSection && variable('sections-have-files');
 	if (hasVariable('page_parameter3'))
 		$level = 'Sub Sub Page';
 	if (hasVariable('page_parameter2'))
 		$level = 'Sub Page';
-	else if (hasVariable('page_parameter1'))
+	else if (hasVariable('page_parameter1') || $isPageWhenSHF)
 		$level = 'Page';
 	else
-		$level = variable('node') == variable('section') ? 'Section' : 'Site';
+		$level = $nodeIsSection ? 'Section' : 'Site';
 
 	return $wrap ? ' (' . $level . ')' : $level;
 }
@@ -297,6 +299,9 @@ function prepareLinks($output) {
 	$campaign = isset($_GET['utm_campaign']) ? '&utm_campaign=' . $_GET['utm_campaign'] : '';
 	$output = str_replace('#utm', '?utm_source=' . variable('safeName') . $campaign, $output);
 
+	$output = replaceItems($output, ['BTNPHONE' => '~class~btnNBSPbtn-danger~/class~']);
+	$output = replaceItems($output, ['BTNWHATSAPP' => '~class~btnNBSPbtn-warning~/class~']);
+	$output = replaceItems($output, ['BTNEMAIL' => '~class~btnNBSPbtn-info~/class~']);
 	$output = replaceItems($output, ['BTNSITE' => '~class~btnNBSPbtn-successNBSPbtn-site~/class~']);
 	$output = replaceItems($output, ['MORELINK' => '~class~more-link~/class~']);
 	$output = replaceItems($output, ['/class' => '', 'class' => '" class="', ], '~');
