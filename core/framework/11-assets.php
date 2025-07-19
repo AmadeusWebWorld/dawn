@@ -16,7 +16,7 @@ function getPageName($tailOnly = true) {
 }
 
 function title($return = false) {
-	if (variable('custom-title') || variable('node-alias')) {
+	if ($return !== 'params-only' && (variable('custom-title') || variable('node-alias'))) {
 		$r = variableOr('custom-title', humanize(variable('name')) . ' | ' . variable('byline'));
 		if ($return) return $r;
 		echo $r;
@@ -121,7 +121,18 @@ function assetUrl($file, $location) {
 variables([
 	'styles' => [],
 	'scripts' => [],
+	//TODO: This breaks the offline mode...
+	'3pStyles' => [],
+	'3pScripts' => [],
 ]);
+
+function add3pStyle($url) {
+	$array = variable('3pStyles'); $array[] = $url; variable('3pStyles', $array);
+}
+
+function add3pScript($url) {
+	$array = variable('3pScripts'); $array[] = $url; variable('3pScripts', $array);
+}
 
 function addStyle($name, $location = SITEASSETS) {
 	_addAssets($name, $location, 'styles');
@@ -149,6 +160,10 @@ function styles_and_scripts() {
 		cssTag(assetUrl($item['name'] . '.css', $item['location']));
 	foreach (variable('scripts') as $item)
 		scriptTag(assetUrl($item['name'] . '.js', $item['location']));
+
+	foreach (variable('3pStyles') as $url) cssTag($url);
+	foreach (variable('3pScripts') as $url) scriptTag($url);
+
 	if (variable('mediakit'))
 		cssTag(variable('app') . 'assets/mediakit.php' . variable('mediakit'));
 }

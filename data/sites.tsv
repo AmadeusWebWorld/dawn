@@ -4,7 +4,7 @@ Site	core	Amadeus Core v8		amadeus8
 Repo						work.git
 Site	work	Amadeus Web Family		work/web		
 Repo						all.git
-|Site	work	Amadeub Web for Business		businesses/all		
+Site	work	Amadeub Web for Business		businesses/all		
 Repo				amore.git		amore.git
 Site	world	Amadeus Web World		amore/world		
 Site	world	Amadeus World Network		amore/wisdom		

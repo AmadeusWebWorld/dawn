@@ -46,6 +46,36 @@ abbr::after {
 	margin-left: 8px;
 }
 
+.has-gemini-ai .prompt {
+	background-color: var(--cnvs-themecolor, #bbb2f2);
+	color: #fff;
+	font-size: 150% !important;
+}
+
+/* https://stackoverflow.com/a/26849367 */
+.has-prompts {
+	counter-reset: promptscount 0;
+}
+
+.prompt {
+	counter-increment: promptscount 1;
+}
+
+.has-prompts .prompt:before {
+	content: "Prompt #" counter(promptscount);
+}
+
+.prompt::before {
+	font-weight: bold;
+	font-size: 125%;
+	background-color: whitesmoke;
+	color: #666;
+	padding: 8px;
+	border: cadetblue solid 2px;
+	border-radius: 5px;
+	float: right;
+}
+
 .btn-site:not(div.transparent .btn-site) {
 	--bs-btn-bg: var(--cnvs-themecolor, #dcffff);
 	--bs-btn-padding-y: .2rem;
@@ -57,7 +87,7 @@ footer .btn a.more-link:hover {
 }
 
 .is-expanded-menu #header.transparent-header {
-	--cnvs-header-bg: white !important;
+	--cnvs-header-bg: var(--cnvs-header-bg-override, white) !important;
 }
 
 .device-up-md {

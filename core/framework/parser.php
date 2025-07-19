@@ -4,6 +4,14 @@ function getWorkSettings($file) {
 	return disk_file_exists($config) ? disk_file_get_contents($config) : '';
 }
 
+function processAI($raw, $aiName) {
+	$replaces = [
+		'## Prompt:' => '[prompt]',
+		'## Response:' => '[/prompt]' . NEWLINES2,
+	];
+	return replaceItems($raw, $replaces);
+}
+
 function parseCompositeWork($raw, $param1IsPage) {
 	//$called = variableOr('pcw-called', 0) + 1; variable('pcw-called', $called); parameterError('parseCompositeWork - call:', $called, false); if ($called > 3) return 'USELESS IMRAN!';
 

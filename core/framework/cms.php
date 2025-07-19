@@ -139,8 +139,14 @@ function afterSectionSet() {
 	//TODO: include _folder.php on $file if it exists
 	if (function_exists('site_before_render')) site_before_render();
 
-	$leafFolder = variable('file') ? dirname(variable('file')) . '/' : variable('folderGoesUpto');
+	$file = variable('file');
+
+	if ($file && endsWith($file, '.md'))
+		peekAtMainFile($file);
+
+	$leafFolder = $file ? dirname($file) . '/' : variable('folderGoesUpto');
 	variable('leafFolder', $leafFolder);
+
 
 	$fol = $leafFolder;
 	while (startsWith($fol, SITEPATH) && $fol != SITEPATH) {
@@ -169,6 +175,7 @@ function did_render_page() {
 
 variable('specialHumanizeReplaces', [
 	'with ai' => 'With AI',
+	'aop' => 'AO Projects',
 	'2025 02' => 'Feb 2025',
 	'2025 04' => 'Apr 2025',
 	'2025 05' => 'May 2025',

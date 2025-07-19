@@ -44,13 +44,15 @@ function _renderMenu($home, $folder, $where) {
 	variable('seo-handled', false);
 
 
+	$ix = 1;
 	$sectionItems = [];
+
 	if ($breadcrumbs) {
 		$clone = array_merge($breadcrumbs);
 		if (count($clone) > 1)
 			$first = array_shift($clone);
 		$last = end($clone);
-		$sectionItems[] = getFolderMeta($folder, false, '__' . $last);
+		$sectionItems[] = getFolderMeta($folder, false, '__' . $last, $ix++);
 	}
 
 	$files = disk_scandir($folder);
@@ -58,7 +60,7 @@ function _renderMenu($home, $folder, $where) {
 	$nodes = _skipNodeFiles($files);
 
 	foreach ($nodes as $fol) {
-		$sectionItems[] = getFolderMeta($folder, $fol);
+		$sectionItems[] = getFolderMeta($folder, $fol, '', $ix++);
 	}
 
 	$relativeUrl = (variable('node') != variable('section') ? variable('node') . '/' : '') . ($breadcrumbs ? implode('/', $breadcrumbs) . '/' : '');
@@ -76,8 +78,10 @@ function _renderMenu($home, $folder, $where) {
 		echo '</textarea>' . NEWLINE;
 	} else {
 		runFeature('tables');
-		add_table('sections-table', $sectionItems, 'name_urlized, about, tags',
-			'<tr><td><a href="%url%' . $relativeUrl . '%name_urlized%">%name_humanized%</a></td><td>%about%</td><td>%tags%</td></tr>');
+		$template = '<tr><td>%index%</td><td><a href="%url%' . $relativeUrl .
+			'%name_urlized%">%name_humanized%</a></td><td>%about%</td><td>%tags%</td><td>%size%</td></tr>';
+		$params = ['use-datatables' => count($sectionItems) > 5];
+		add_table('sections-table', $sectionItems, 'index, name_urlized, about, tags, size', $template, $params);
 	}
 
 	contentBox('end');

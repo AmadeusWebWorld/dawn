@@ -240,6 +240,12 @@ function _renderImplementation($fileOrRaw, $settings) {
 			$settings['use-content-box'] = false;
 			$output = _renderEngage(getPageName(), $raw . $inProgress, true, false);
 		} else {
+			$ai = contains($raw, FROM_GEMINI_AI);
+			if ($ai) {
+				runFrameworkFile('parser');
+				$raw = processAI($raw, 'gemini');
+			}
+
 			$output = $md || $endsWithMd ? markdown($raw) : wpautop($raw);
 		}
 	}
@@ -289,6 +295,16 @@ function _renderImplementation($fileOrRaw, $settings) {
 	echo $output;
 }
 
+DEFINE('FROM_GEMINI_AI', '<!--exported-from-gemini-ai-->');
+
+function peekAtMainFile($file) {
+	$raw = disk_file_get_contents($file);
+	$ai = contains($raw, FROM_GEMINI_AI);
+	if (!$ai) return;
+	
+	add_body_class('with-ai has-gemini-ai has-prompts');
+}
+
 function renderRichPage($sheetFile, $groupBy = 'section', $templateName = 'home') {
 	variable('home', getSheet($sheetFile, $groupBy));
 	$call = variable('theme_folder') . $templateName . '.php';
@@ -302,10 +318,6 @@ function is_engage($raw) {
 DEFINE('ENGAGESTART', '<!--start-engage-->');
 function engage_until_eof($raw) {
 	return contains($raw, ENGAGESTART);
-}
-
-function is_composite_work($raw) {
-	return contains($raw, '<!--composite-work-->');
 }
 
 function do_md_in_parser($raw) {

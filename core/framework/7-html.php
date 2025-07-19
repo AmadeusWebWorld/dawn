@@ -377,6 +377,14 @@ function getThemeIcon($id, $size = 'normal')  {
 	return '<span class="icofont-1x icofont-' . $id . '"></span>';
 }
 
+DEFINE('BODYCLASSES', 'custom-body-classes');
+
+function add_body_class($name) {
+	$items = variableOr(BODYCLASSES, []);
+	$items[] = $name;
+	variable(BODYCLASSES, $items);
+}
+
 function body_classes($return = false) {
 	$op = [];
 
@@ -390,6 +398,8 @@ function body_classes($return = false) {
 	$op[] = 'mobile-click-to-expand'; //TODO: configurable!
 
 	if (hasVariable('ChatraID')) $op[] = 'has-chatra';
+
+	if (hasVariable(BODYCLASSES)) $op[] = implode(' ', variable(BODYCLASSES));
 
 	$op = implode(' ', $op);
 	if ($return) return $op;

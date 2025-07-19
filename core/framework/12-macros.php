@@ -35,6 +35,9 @@ function runAllMacros($html) {
 	if (contains($html, '[spacer]'))
 		$html = processSpacerShortcode($html);
 
+	if (contains($html, '[prompt]'))
+		$html = processPromptShortcode($html);
+
 	return $html;
 }
 
@@ -192,13 +195,21 @@ function processVideoShortcode($html) {
 	]);
 }
 
-DEFINE('SPACERSTART', '<div class="divider divider-center" style="margin: 0"><h1>');
+DEFINE('SPACERSTART', '<div class="divider m-0"><h1>');
 DEFINE('SPACEREND', '</h1></div>');
 
 function processSpacerShortcode($html) {
 	return replaceItems($html, [
 		'[spacer]' => cbCloseAndOpen('spacer') . SPACERSTART,
 		'[/spacer]' => NEWLINE . SPACEREND, // . cbCloseAndOpen(),
+	]);
+}
+
+//cant do before markdown is come
+function processPromptShortcode($html) {
+	return replaceItems($html, [
+		'[prompt]' => cbCloseAndOpen('prompt'),
+		'[/prompt]' => cbCloseAndOpen(),
 	]);
 }
 

@@ -134,14 +134,22 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	$headings = implode('</th>' . variable('nl') . '			<th>', $headingNames);
 
 	$isInList = variable('is-in-directory');
-	$datatableClass = $isInList ? '' : 'amadeus-table ';
-	$skipItemFn = isset($values['skipItem']) ? $values['skipItem'] : false;
+	$useDatatables = valueIfSetAndNotEmpty($values, 'use-datatables');
+	$allowCards = valueIfSetAndNotEmpty($values, 'allow-cards', false, TYPEBOOLEAN);
 
+	$datatableClass = ($isInList ? '' : 'amadeus-table ') . ($useDatatables ? ' amadeus-data-table ' : '');
+	$datatableParams = '';
+	if ($useDatatables && $rg = valueIfSetAndNotEmpty($values, 'row-group')) $datatableParams .= 'data-row-group="' . $rg . '" ';
+
+	$skipItemFn = isset($values['skipItem']) ? $values['skipItem'] : false;
 	$wantsBSRow = isset($values['use-a-bootstrap-row']) && $values['use-a-bootstrap-row'];
+
+	if ($beforeContent = valueIfSetAndNotEmpty($values, 'before-content')) echo returnLine(pipeToBR($beforeContent));
+	if ($allowCards) echo '<div class="text-center"><button data-table-id="amadeus-table-' . $id . '" class="amadeus-table-' . $id . '-card-view">toggle card view</button></div>' . BRNL;
 
 	if ($wantsBSRow) echo '<div  id="amadeus-bs-row-' . $id . '" class="row">'; else
 	echo '
-	<table id="amadeus-table-' . $id . '" class="' . $datatableClass . 'table table-striped table-bordered" cellspacing="0" width="100%">
+	<table id="amadeus-table-' . $id . '" class="' . $datatableClass . 'table table-striped table-bordered" ' . $datatableParams . 'cellspacing="0" width="100%">
 	<thead>
 		<tr class="align-text-top amadeus-header-row">
 			<th>' . $headings . '</th>
@@ -162,6 +170,8 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 </table>
 ';
 	if (contains($template, '_Embed')) echo NEWLINES2 . '<script async src="//www.instagram.com/embed.js"></script>';
+	if ($useDatatables) _includeDatatables($rg);
+	if ($useDatatables) _includeTableV2($template);
 }
 
 function _tableHeadingsOnLeft($id, $data) {
@@ -183,4 +193,22 @@ function _tableHeadingsOnLeft($id, $data) {
 	}
 
 	echo '</tbody></table>' . variable('2nl');
+}
+
+function _includeDatatables($rg) {
+	//https://datatables.net/download/
+	//DataTables' default styling.
+	add3pStyle ('https://cdn.datatables.net/v/dt/dt-2.3.2/b-3.2.4/b-colvis-3.2.4/b-html5-3.2.4/b-print-3.2.4/r-3.0.5/rg-1.5.2/sp-2.3.4/datatables.css');
+	//
+	add3pScript('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.js');
+	add3pScript('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js');
+	add3pScript('https://cdn.datatables.net/v/dt/dt-2.3.2/b-3.2.4/b-colvis-3.2.4/b-html5-3.2.4/b-print-3.2.4'
+		. ($rg !== false || true ? '/r-3.0.5' : '')
+		. '/rg-1.5.2/sp-2.3.4/datatables.js');
+}
+
+function _includeTableV2($template) {
+	//D:\AmadeusWeb\bhava\amadeus\features\tables\tables-loader.js
+	addScript('tables-v2', COREASSETS);
+	//contains($template, 'data-price')
 }

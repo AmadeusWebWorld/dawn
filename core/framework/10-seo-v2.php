@@ -72,7 +72,7 @@ function print_seo() {
 	$meta = variable('meta_' . $file);
 	if (!$meta) return;
 
-	$show = ['About', 'Description', 'Primary Keyword', 'Date', 'Author', 'Page Custodian', 'Prompted By', 'Published', 'Meta Author', 'Related Keywords', 'Long-Tail Keywords'];
+	$show = ['About', 'Description', 'Primary Keyword', 'Keywords', 'Date', 'Author', 'Page Custodian', 'Prompted By', 'Published', 'Meta Author', 'Related Keywords', 'Long-Tail Keywords'];
 	$info = [];
 
 	foreach ($show as $col) {
@@ -108,7 +108,7 @@ function inlineMeta($meta) {
 	return empty($info) ? '<i>No Inline Info Found</i>' : '<hr>' . implode(' / ', $info);
 }
 
-function getFolderMeta($folder, $fol, $folName = false) {
+function getFolderMeta($folder, $fol, $folName = false, $index = '') {
 	$home = $folder . ($fol ? $fol . '/' : ''). 'home.';
 	$page = $folder . ($fol ? $fol : ''). '.';
 	$about = 'No About Set';
@@ -138,9 +138,10 @@ function getFolderMeta($folder, $fol, $folName = false) {
 	return [
 		'name_urlized' => $folName ? $folName : $fol,
 		'about' => $about . $inline,
-		'tags' => $tags
+		'tags' => $tags,
+		'size' => isset($file) ? size_r(filesize($file)) : '-',
+		'index' => $index,
 	];
-
 }
 
 function seo_info() {
