@@ -22,11 +22,6 @@ function getSiteUrlKey() {
 	$result = ($local ? 'local-' : 'live-') . ($preview ? 'preview-' : '') . 'url';
 	//parameterError('ROUTING', ['key' => $result, 'live' => $live, 'local' => $local, 'preview' => $preview ]);
 
-	if (variable('live-is-under-construction') && $live && !$local) {
-		//feature should set the variable for menu // title to pick up regardless of what inner page is
-		runFeature('under-construction');
-	}
-
 	variable('preview', $preview);
 	variable(SITEURLKEY, $result);
 	return $result;

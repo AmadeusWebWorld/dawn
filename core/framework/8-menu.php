@@ -89,7 +89,6 @@ function pageMenu($file) {
 DEFINE('ABSOLUTEPATHPREFIX', 'ABSOLUTE=');
 
 function menu($folderRelative = false, $settings = []) {
-	if (variable('under-construction')) return;
 	if (variable('menu-settings')) $settings = array_merge(variable('menu-settings'), $settings);
 
 	$useSections = valueIfSetAndNotEmpty($settings, 'sections-not-list');

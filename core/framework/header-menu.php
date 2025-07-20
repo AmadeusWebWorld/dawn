@@ -1,4 +1,6 @@
 <?php
+if (variable('under-construction')) return;
+
 extract(variable('menu-settings'));
 _menuULStart();
 

@@ -131,10 +131,6 @@ function hasPageParameter($param) {
 }
 
 function render() {
-	/*
-	add_foot_hook(featurePath('asset-manager.php')); //NOTE: can this be here?
-	*/
-
 	if (function_exists('before_render')) before_render();
 	ob_start();
 
@@ -147,7 +143,10 @@ function render() {
 	}
 
 	$folder = variable('path') . '/' . (variable('folder') ? variable('folder') : '');
-	if (isset($_GET['share'])) {
+	if (variable('under-construction')) {
+		runFeature('under-construction');
+		$rendered = true;
+	} else if (isset($_GET['share'])) {
 		runFeature('share');
 		$rendered = true;
 	} else {
