@@ -67,10 +67,10 @@ function iframe($url, $wrapContainer = true) {
 	if ($wrapContainer) echo '</div>';
 }
 
-function cbWrapAndReplaceHr($raw) {
+function cbWrapAndReplaceHr($raw, $class = '') {
 	if (variable('no-content-boxes')) return $raw;
 
-	$closeAndOpen = ($end = contentBox('end', '', true)) . ($start = contentBox('', '', true));
+	$closeAndOpen = ($end = contentBox('end', '', true)) . ($start = contentBox('', $class, true));
 	//TODO: asap! if (substr_count($raw, HRTAG) > 3) runFeature('page-menu');
 	return $start . str_replace(HRTAG, $closeAndOpen, $raw) . $end;
 }
@@ -105,6 +105,12 @@ function contentBox($id, $class = '', $return = false) {
 	$result = variable('nl') . '<div' . $attrs . '>' . variable('nl');
 	if ($return) return $result;
 	echo $result;
+}
+
+function standoutH2InCenter($text) {
+	contentBox('', 'container text-center standout');
+	echo returnLine('## ' . $text);
+	contentBox('end');
 }
 
 function div($what = 'start', $h1 = '', $class = 'video-container') {

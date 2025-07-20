@@ -87,9 +87,10 @@ function autoRender($file) {
 		return;
 	}
 
-	sectionId('file', _getCBClassIfWanted('container'));
+	$siteTheme = variable('site-has-theme');
+	if (!$siteTheme) sectionId('file', _getCBClassIfWanted('container'));
 	renderAny($file);
-	section('end');
+	if (!$siteTheme) section('end');
 	pageMenu($file);
 }
 
@@ -190,10 +191,10 @@ function _setupDeck($fwe, $name) {
 }
 
 function renderInPageDeck($section, $node, $name) {
-	$deck = concatSlugs([variable('path'), $section, $node, 'decks', $name . '.md']);
-	$params = [ 'relativeUrl' => concatSlugs([$node, $name, '']),
-		'title' => humanize($node) . ' &raquo; ' . $name]; //todo - bring to 7.1 convention
-	_renderedDeck($deck, $params);
+	$deck = concatSlugs([variable('path'), $section, $node . '.md']);
+	$title = humanize($node) . ' &raquo; ' . $name;
+	variable('embed', true);
+	_renderedDeck($deck, $title, pageUrl($node . '/'));
 }
 
 function renderSheetAsDeck($deck, $link) {
@@ -237,12 +238,12 @@ function renderSheetAsDeck($deck, $link) {
 	_renderedDeck($op, $title);
 }
 
-function _renderedDeck($deck, $title) {
-	function __parseDeck($deck) {
-		$deck = renderMarkdown($deck, [ 'echo' => false ]);
-		return $deck;
-	}
+function __parseDeck($deck) {
+	$deck = renderMarkdown($deck, [ 'echo' => false ]);
+	return $deck;
+}
 
+function _renderedDeck($deck, $title, $goesTo = false) {
 	if (hasPageParameter('embed')) {
 		$deck = __parseDeck($deck);
 		variable('deck', $deck);
@@ -251,7 +252,7 @@ function _renderedDeck($deck, $title) {
 	}
 
 	$expanded = hasPageParameter('expanded');
-	$url = currentUrl();
+	$url = $goesTo ? $goesTo : currentUrl();
 
 	$embedUrl = $url .'?embed=1';
 
@@ -264,7 +265,7 @@ function _renderedDeck($deck, $title) {
 	//TODO: UI FIX: if (!$expanded) $links[] = '<a class="toggle-deck-fullscreen" href="javascript: $(\'.deck-container\').show();"><span class="text">maximize</span> ' . getIconSpan('expand', 'normal') . '</a>';
 	if ($expanded) $links[] = makeLink('open deck page', $url, false);
 	$links[] = makeLink('open deck fully', $embedUrl, false);
-	$links[] = makeLink('print', $embedUrl . '&print=1', false);
+	$links[] = makeLink('print', $embedUrl . '&print=1', false); //TODO: wip - make this on demand
 	$links[] = $expanded ? 'expanded deck below' : makeLink('open deck expanded', $url . '?expanded=1', false);
 	//TODO: get this working and support multi decks
 	//$(this).closest(\'.deck-toolbar\').next(\'.deck-container\').toggle();
@@ -276,10 +277,10 @@ function _renderedDeck($deck, $title) {
 
 	if ($expanded) {
 		$deck = __parseDeck($deck);
-		$deck = cbWrapAndReplaceHr($deck); //in revealjs we will use plain sections
+		$deck = cbWrapAndReplaceHr($deck, 'container'); //in revealjs we will use plain sections
 		echo $deck;
 	} else {
-		echo sprintf('<section class="deck-container">'
+		echo sprintf('<section class="deck-container container">'
 			. '<iframe src="%s&iframe=1"></iframe></section>', $embedUrl);
 		addScript('presentation-toolbar', COREASSETS);
 	}

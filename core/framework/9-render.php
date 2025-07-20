@@ -180,7 +180,7 @@ function _renderImplementation($fileOrRaw, $settings) {
 	$replaces = valueIfSet($settings, 'replaces', []);
 	$echo = valueIfSet($settings, 'echo', true);
 	$excerpt = valueIfSet($settings, 'excerpt', false);
-	$no_processing = valueIfSet($settings, 'raw', false) || do_md_in_parser($raw);
+	$no_processing = valueIfSet($settings, 'raw', false) || contains($raw, '<!--no-processing-->') || do_md_in_parser($raw);
 
 	if ($excerpt) $raw = explode('<!--more-->', $raw)[0];
 

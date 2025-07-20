@@ -46,8 +46,8 @@ abbr::after {
 	margin-left: 8px;
 }
 
-.has-gemini-ai .prompt {
-	background-color: var(--cnvs-themecolor, #bbb2f2);
+.has-gemini-ai .prompt, .standout {
+	background-color: var(--cnvs-themecolor, #bbb2f2)!important;
 	color: #fff;
 	font-size: 150% !important;
 }

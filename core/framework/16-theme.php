@@ -16,6 +16,11 @@ function setSubTheme($name) {
 }
 
 function renderThemeFile($file, $themeName = false) {
+	if (variable('site-has-theme')) {
+		disk_include_once(SITEPATH . '/theme/' . $file . '.php');
+		return;
+	}
+
 	if (!$themeName) $themeName = variable('theme');
 	$variables = [
 		/*
