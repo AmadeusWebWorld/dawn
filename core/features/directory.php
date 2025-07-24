@@ -1,5 +1,11 @@
 <?php
 $where = variableOr('directory_of', variable('section'));
+$folder = SITEPATH . '/' . $where . '/';
+if (disk_file_exists($php = $folder . 'home.php')) {
+	disk_include_once($php);
+	return;
+}
+
 variable('omit-long-keywords', true);
 
 sectionId('directory', 'container');
@@ -19,8 +25,6 @@ function _sections($current) {
 	contentBox('end');
 }
 
-$folder = SITEPATH . '/' . $where . '/';
-
 _renderMenu(variable('file') ? false : $folder . 'home.md', $folder, $where);
 
 function _renderMenu($home, $folder, $where) {
@@ -31,7 +35,7 @@ function _renderMenu($home, $folder, $where) {
 
 	if ($home) {
 		contentBox('home');
-		renderFile($home);
+		renderAny($home);
 		contentBox('end');
 	}
 

@@ -76,7 +76,7 @@ function before_bootstrap() {
 	variable('local', $local = startsWith($_SERVER['HTTP_HOST'], 'localhost'));
 	variable('live', contains(SITEPATH, 'live'));
 
-	variable('app', $local && !$isMobile ? replaceVariables('http://localhost%port%/amadeus8/', 'port') : '//v8.amadeusweb.com/');
+	variable('app', $local && !$isMobile ? replaceVariables('http://localhost%port%/amadeus8/', 'port') : '//dawn.amadeusweb.com/');
 
 	if (DEFINED('AMADEUSURL')) variable('app', AMADEUSURL);
 
@@ -222,10 +222,10 @@ function _copyright($return = false) {
 function _credits($pre = '', $return = false) {
 	if (variable('dont_show_amadeus_credits')) return '';
 
-	$url = variable('world') . '?utm_content=site-credits&utm_referrer=' . variable('safeName');
-	$result = $pre . sprintf('<a href="%s" target="_blank" class="amadeus-credits" title="Built With AmadeusWeb.world" style="display: inline-block;">' .
+	$url = variable('main') . '?utm_content=site-credits&utm_referrer=' . variable('safeName');
+	$result = $pre . sprintf('<a href="%s" target="_blank" class="amadeus-credits" title="Built With AmadeusWeb.com" style="display: inline-block;">' .
 		variable('nl') . '			<img src="%s" height="50" alt="%s" style="border-radius: 12px; vertical-align: middle;"></a>',
-		$url, variable('world') . 'amadeuswebworld-logo.png', 'Amadeus Web World');
+		$url, variable('main') . 'amadeusweb-work-logo.png', 'Amadeus Web World');
 
 	if ($return) return $result; else echo $result;
 }

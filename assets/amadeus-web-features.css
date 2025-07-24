@@ -28,3 +28,33 @@ div.toolbar { background-color: white; padding: 10px 20px 10px 20px!important; w
 
 	/* https://www.h3xed.com/web-development/how-to-make-a-responsive-100-width-youtube-iframe-embed */
 .video-container { position: relative; width: 100%; height: 0; padding-bottom: 56.25%; margin-bottom: 20px; }
+
+/* IVIEWER */
+.content-box blockquote, .content-box code { padding: 5px 0 5px 10px; font-size: inherit; }
+.content-box blockquote { border: 1pt solid var(--cnvs-contrast-200, #aaa); border-left-width: 8px; }
+.content-box blockquote p { margin: 4px 0 4px 0; }
+
+pre, code { font-size: 110%; line-height: 2.5; border-left: none; padding: 10px; }
+code.language-poem { background-color: var(--amadeus-site-h2-bgd, #cce); }
+
+.content-box pre::before {
+	font-weight: bold;
+	font-size: 125%;
+	background-color: white;
+	color: #666;
+	padding: 8px;
+	border: cadetblue solid 2px;
+	border-radius: 5px;
+	float: right;
+}
+
+.content-box pre.language-sanskrit::before { content: "Sanskrit"; }
+.content-box pre.language-sanskrit { background-color: #f9d9ce; }
+
+.content-box pre.language-poetic-translation::before { content: "Poetic Translation"; }
+.content-box pre.language-poetic-translation { background-color: #cef9ed; }
+
+.content-box pre.language-inner-meaning::before { content: "Inner Meaning"; }
+.content-box pre.language-inner-meaning { background-color: #d1f9ce; }
+
+/* IVIEWER Ends */

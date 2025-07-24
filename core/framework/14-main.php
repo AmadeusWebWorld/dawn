@@ -1,5 +1,6 @@
 <?php
 DEFINE('OURNETWORK', 'work, world, core');
+DEFINE('ALLIANCESNETWORK', 'alliances, world');
 
 main::initialize();
 

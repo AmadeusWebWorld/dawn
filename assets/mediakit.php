@@ -1,7 +1,8 @@
 <?php
 header("Content-type: text/css");
-
 include_once '../core/framework/4-array.php';
+
+if ($raw = valueIfSetAndNotEmpty($_GET, 'raw')) { echo $raw; return; }
 
 $palette = $_GET;
 

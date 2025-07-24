@@ -73,20 +73,6 @@ function _renderSingleFile($file, $extension = 'auto') {
 	renderAny($file);
 }
 
-//The below render methods support text / file path
-function renderFile($file, $replacesParams = [], $echo = true, $excerpt = false, $settings = []) {
-	//TODO: remove all params from this method
-	$nonDefaultParams = $replacesParams != [] || $echo != true || $excerpt != false || $settings != [];
-
-	if (variable('local') && $nonDefaultParams) parameterError('DEPRECATED FUNCTION:', 'renderFile()');
-
-	$settings['replaces'] = $replacesParams;
-	$settings['echo'] = $echo;
-	$settings['excerpt'] = $excerpt;
-
-	return renderAny($file, $settings);
-}
-
 function renderPlainHtml($file) {
 	echo disk_file_get_contents($file);
 }
