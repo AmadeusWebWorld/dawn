@@ -65,7 +65,7 @@ abbr::after {
 	content: "Prompt #" counter(promptscount);
 }
 
-.prompt::before {
+.prompt::before, .right-button {
 	font-weight: bold;
 	font-size: 125%;
 	background-color: whitesmoke;

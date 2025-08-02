@@ -5,6 +5,8 @@ function before_render() {
 	addStyle('amadeus-web-features', COREASSETS);
 	addScript('amadeusweb7', COREASSETS);
 
+	if (function_exists('beforeSectionSet') && beforeSectionSet()) return;
+
 	if (hasSpecial()) { afterSectionSet(); return; }
 
 	$canHaveFiles = variable('sections-have-files');
@@ -146,7 +148,6 @@ function afterSectionSet() {
 
 	$leafFolder = $file ? dirname($file) . '/' : variable('folderGoesUpto');
 	variable('leafFolder', $leafFolder);
-
 
 	$fol = $leafFolder;
 	while (startsWith($fol, SITEPATH) && $fol != SITEPATH) {

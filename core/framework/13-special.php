@@ -17,7 +17,7 @@ DEFINE('CONTENTFILES', 'php, md, tsv, txt, html');
 DEFINE('ENGAGEFILES', 'md, tsv');
 DEFINE('FILESWITHMETA', 'md, tsv');
 
-function autoRender($file) {
+function autoRender($file, $type = false) {
 	if (endsWith($file, '.php')) {
 		renderAnyFile($file);
 		pageMenu($file);
@@ -29,20 +29,26 @@ function autoRender($file) {
 	$pageName = title('params-only');
 
 	//cannot use startsWith as edit in vs-code wouldnt work
-	if (contains($raw, '|is-engage') || contains($raw, '<!--is-engage-->')) {
+	$detectedEngage = contains($raw, '|is-engage') || contains($raw, '<!--is-engage-->');
+	if ($type != 'engage' && $detectedEngage) $type = 'engage';
+
+	if ($type == 'engage') {
 		$md = !endsWith($file, '.tsv');
 
 		runFeature('engage');
 
-		sectionId('special-form' . ($ix = variableOr('special-form', 1)), 'container');
+		if ($detectedEngage)
+			sectionId('special-form' . ($ix = variableOr('special-form', 1)), 'container');
 
 		if ($md)
 			_renderEngage($pageName, $raw, true);
 		else
 			_runEngageFromSheet(getPageName(), $file);
 
-		variableOr('special-form', ++$ix);
-		section('end');
+		if ($detectedEngage) {
+			variableOr('special-form', ++$ix);
+			section('end');
+		}
 
 		pageMenu($file);
 		return;

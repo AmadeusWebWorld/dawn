@@ -41,10 +41,12 @@ function first_of_underscore($txt) {
 	return explode('_', $txt, 2)[0];
 }
 
+DEFINE('NOSITEHUMANIZE', 'no-site');
+
 function humanize($txt, $how = false) {
 	$words = ucwords(replaceItems($txt, ['--' => ' &mdash; ', '-' => ' ', '_' => '']));
 	if ($how !== 'no-site' && function_exists('site_humanize')) $words = site_humanize($words, 'title', $how);
-	if (contains($words, ' A ')) $words = str_replace(' A ', ' a ', $words);
+	if (contains($words, ' A ')) $words = replaceItems($words, [' A ' => ' a ', ' &mdash; a' => ' &mdash; A']);
 	if (contains($words, ' And ')) $words = str_replace(' And ', ' and ', $words);
 	if (contains($words, ' Of ')) $words = str_replace(' Of ', ' of ', $words);
 	if (contains($words, ' Version ')) $words = str_replace(' Version ', ' version ', $words);

@@ -118,13 +118,9 @@ function assetUrl($file, $location) {
 	return $meta['location'] . $file . (contains($file, '.') ? $meta['version'] : '');
 }
 
-variables([
-	'styles' => [],
-	'scripts' => [],
-	//TODO: This breaks the offline mode...
-	'3pStyles' => [],
-	'3pScripts' => [],
-]);
+variables(['styles' => [], 'scripts' => []]);
+//NODE: This breaks the offline mode...
+variables(['3pStyles' => [], '3pScripts' => []]);
 
 function add3pStyle($url) {
 	$array = variable('3pStyles'); $array[] = $url; variable('3pStyles', $array);

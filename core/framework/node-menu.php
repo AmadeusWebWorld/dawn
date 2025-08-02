@@ -37,7 +37,7 @@ function renderNodeMenu() {
 		echo '<li class="' . $itemClass . '"><a class="' . $anchorClass . '">' . $page_r . '</a>';
 		if (disk_is_dir(NODEPATH . '/' . $page)) {
 			menu('/' . variable('section') . '/' . variable('node') . '/' . $page . '/', [
-				'link-to-home' => variable('link-to-site-home'),
+				'link-to-home' => variable('link-to-node-sub-section'),
 				'files' => $files, 'this-is-standalone-section' => $tiss,
 				'ul-class' => $ulClass,
 				'li-class' => $itemClass,

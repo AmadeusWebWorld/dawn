@@ -141,12 +141,18 @@ function pipeToBR($raw) {
 }
 
 function csvToHashtags($raw) {
+	if (!contains(',', $raw)) $raw = ', ' . $raw;
+
 	$begin = '<a class="hashtag">#';
 	$end = '</a>';
 	$replaces = [
-		', ' => $end . ' ' . $begin,
+		', ' => $end . NEWLINE . ' ' . $begin,
 	];
-	return $begin . replaceItems($raw, $replaces) . $end;
+
+	$offset = strlen('#">' . $end);
+	$result = substr(replaceItems($raw, $replaces), $offset);
+	if (startsWith($result, $begin . $begin)) $result = substr($result, strlen($begin));
+	return $result;
 }
 
 function replaceSpecialChars($html) {
@@ -291,6 +297,8 @@ function prepareLinks($output) {
 	$output = str_replace(pageUrl(), '%url%', $output); //so site urls dont open in new tab. not sure when this became a problem. maybe a double call to prepareLinks as the render methods got more complex.
 	$output = str_replace('href="http', 'target="_blank" href="http', $output); //yea, baby! no need a js solution!
 	$output = str_replace('href="mailto', 'target="_blank" href="mailto', $output); //if gmail in chrome is the default, it will hijack current window
+	$output = str_replace('~~TARGETNEW', '" target="_blank', $output); //pdf links
+
 	$output = str_replace('%url%', pageUrl(), $output);
 
 	//undo wrongly added blanks
@@ -356,6 +364,10 @@ function makeLink($text, $link, $relative = true, $noLink = false) {
 	if ($relative == EXTERNALLINK) $link .= '" target="_blank'; //hacky - will never 
 	else if ($relative) $link = pageUrl($link);
 	return prepareLinks('<a href="' . $link . '">' . $text . '</a>');
+}
+
+function urlFromSlugs() {
+	return pageUrl(urlize(concatSlugs(func_get_args())));
 }
 
 function getLink($text, $href, $class = '', $target = false) {

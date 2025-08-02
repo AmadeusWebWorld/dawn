@@ -17,6 +17,7 @@ function read_seo($file = false) {
 	if ($meta) {
 		$aboutFields = ['About', 'about'];
 		$descriptionFields = ['Description', 'description'];
+		$titleFields = ['Title', 'title'];
 
 		if (variable('omit-long-keywords'))
 			$keywordsFields = ['Primary Keyword', 'Related Keywords', 'Keywords', 'keywords'];
@@ -25,7 +26,7 @@ function read_seo($file = false) {
 
 		$about = false;
 		$description = false; //if meta exists, this is mandatory (but only single)
-		$customTitle = false;
+		$title = false;
 		$keywords = []; //can be multiple
 
 		foreach ($meta as $key => $value) {
@@ -42,20 +43,20 @@ function read_seo($file = false) {
 			} else if ($key == SINGLEFILECONTENT) {
 				variable(SINGLEFILECONTENT, $value);
 			*/
-			} else if ($key == 'Custom Title') {
-				$customTitle = $value;
+			} else if (in_array($key, $titleFields)) {
+				$title = $value;
 			}
 		}
 
 		$keywords = count($keywords) ? implode(', ', $keywords) : '';
 
 		variable('meta_' . $file, $meta);
-		if ($fileGiven) return compact('about', 'description', 'keywords', 'meta');
+		if ($fileGiven) return compact('about', 'title', 'description', 'keywords', 'meta');
 
 		if ($description) {
 			variable('description', $description);
 			variable('og:description', $description);
-			if ($customTitle) variable('custom-title', $customTitle);
+			if ($title) variable('custom-title', $title);
 			variable('keywords', $keywords);
 			variable('seo-handled', true);
 			variable('meta_' . $file, $meta);
@@ -111,6 +112,8 @@ function inlineMeta($meta) {
 function getFolderMeta($folder, $fol, $folName = false, $index = '') {
 	$home = $folder . ($fol ? $fol . '/' : ''). 'home.';
 	$page = $folder . ($fol ? $fol : ''). '.';
+
+	$name = $folName ? $folName : $fol;
 	$about = 'No About Set';
 	$tags = 'No Tags Set';
 	$inline = '';
@@ -128,6 +131,9 @@ function getFolderMeta($folder, $fol, $folName = false, $index = '') {
 			else if (isset($vars['description']))
 				$about = pipeToBR($meta['description']);
 
+			if (isset($vars['title']) && $vars['title'])
+				$name = $vars['title'];
+
 			if (isset($vars['keywords']))
 				$tags = hasPageParameter('generate-index') ? $vars['keywords'] : csvToHashtags($vars['keywords']);
 
@@ -136,7 +142,7 @@ function getFolderMeta($folder, $fol, $folName = false, $index = '') {
 	}
 
 	return [
-		'name_urlized' => $folName ? $folName : $fol,
+		'name_urlized' => $name,
 		'about' => $about . $inline,
 		'tags' => $tags,
 		'size' => isset($file) ? size_r(filesize($file)) : '-',

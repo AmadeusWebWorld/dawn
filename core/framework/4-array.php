@@ -254,6 +254,15 @@ function getSheet($name, $groupBy = 'section') {
 	return $r;
 }
 
+function rowToObject($item, $sheet) {
+	$result = [];
+
+	foreach ($sheet->columns as $name => $ix)
+		$result[$name] = $sheet->getValue($item, $name);
+
+	return $result;
+}
+
 function siteHumanize() {
 	if (!sheetExists('humanize')) return [];
 

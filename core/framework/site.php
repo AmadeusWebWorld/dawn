@@ -29,6 +29,8 @@ variable(assetKey(SITEASSETS), $url . 'assets/');
 function parseSectionsAndGroups($siteVars, $return = false, $forNetwork = false) {
 	if (variable('sections') && !$forNetwork) return;
 	$sections = isset($siteVars['sections']) ? $siteVars['sections'] : false;
+	if (isset($siteVars['sections_local'])) $sections = $siteVars['sections_local'];
+
 	if (!$sections) {
 		$sections = [];
 		if (!$forNetwork) variable('sections', $sections);
@@ -215,4 +217,5 @@ if (disk_file_exists($cms = SITEPATH . '/cms.php'))
 
 if (hasPageParameter('embed')) variable('embed', true);
 
+if (function_exists('after_framework_config')) after_framework_config();
 render();

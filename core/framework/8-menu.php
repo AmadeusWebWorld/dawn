@@ -183,7 +183,7 @@ function menu($folderRelative = false, $settings = []) {
 
 	if (isset($settings['link-to-home']) && $settings['link-to-home']) {
 		$homeBase = $base;
-		if ($homeBase == '' && isset($settings['parent-slug-for-home-link'])) $homeBase = $settings['parent-slug-for-home-link'];
+		if (isset($settings['parent-slug-for-home-link'])) $homeBase = $settings['parent-slug-for-home-link'];
 
 		$mainNode = ($section == variable('node')) || startsWith($folderRelative, '/' . variable('section'));
 		$result .= replaceItems($indent . '	<li%li-classes%><a href="%url%"%a-classes%><%wrap-in%>%text%</%wrap-in%></a>' . NEWLINE, [

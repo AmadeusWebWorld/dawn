@@ -58,6 +58,8 @@ function renderHeaderMenu($slug, $node = '', $name = false) {
 	else { $name = humanize($parentSlug); }
 
 	extract(variable('menu-settings'));
+	$parentSlugForMenuItem = function_exists('getParentSlugForMenuItem') ? getParentSlugForMenuItem($slug, $node) : ($node ? $node . '/' : '');
+	if (function_exists('getParentSlug')) $parentSlug = getParentSlug($parentSlug);
 
 	$files = false; $tiss = false;
 	$standalones = variableOr('standalone-sections', []);
@@ -82,7 +84,7 @@ function renderHeaderMenu($slug, $node = '', $name = false) {
 		'list-only-files' => variable('sections-have-files'),
 		'link-to-home' => variable('link-to-section-home') && !$homeNA,
 		'parent-slug-for-home-link' => $parentSlug . '/',
-		'parent-slug' => $node ? $node . '/' : '',
+		'parent-slug' => $parentSlugForMenuItem,
 	]);
 	echo '</li>' . NEWLINE;
 }

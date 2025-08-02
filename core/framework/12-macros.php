@@ -195,7 +195,7 @@ function processVideoShortcode($html) {
 	]);
 }
 
-DEFINE('SPACERSTART', '<div class="divider m-0"><h1>');
+DEFINE('SPACERSTART', '<div class="divider divider-center m-0"><h1>');
 DEFINE('SPACEREND', '</h1></div>');
 
 function processSpacerShortcode($html) {
