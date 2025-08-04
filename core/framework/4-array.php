@@ -31,8 +31,8 @@ function valueIfSetAndNotEmpty($array, $key, $default = false, $type = TYPENOCHA
 function parseAnyType($val, $type) {
 	if ($type == TYPENOCHANGE) return $val;
 	if ($type == TYPEBOOLEAN) {
-		$false = in_array($val, [false, 'false', 'no']);
-		return !$false && in_array($val, [true, 'true', 'yes']);
+		$false = in_array($val, [false, 'false', 'no', '0']);
+		return !$false && in_array($val, [true, 'true', 'yes', '1']);
 	} else if ($type == TYPEARRAY) {
 		return explode(', ', $val);
 	}

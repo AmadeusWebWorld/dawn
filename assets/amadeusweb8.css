@@ -3,10 +3,16 @@ div.large-list {
 	background-color: #fdfce3 !important;
 }
 
+.large-list.with-labels { background-color: #defafa!important; }
+
 .large-list li {
 	font-size: 125% !important;
 	margin-bottom: 12px;
 }
+
+.with-labels label { width: 120px; display: inline-block; text-align: right; }
+.with-labels li { list-style-type: none; margin-bottom: 4px; border-bottom: 1px solid lightgray; }
+.with-labels a { font-size: 115%; font-weight: bold; }
 
 .large-list ol,
 .large-list ul {

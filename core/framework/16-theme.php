@@ -120,7 +120,7 @@ function runThemePart($what) {
 		if (!variable('footer-widgets-in-enrich')) {
 			$logo2x = getLogoOrIcon('logo', 'site');
 			$logo = NEWLINE . '			' . concatSlugs(['<a href="', pageUrl(), '">' . NEWLINE .
-				'				<img src="', $logo2x, '" style="border-radius: 20px;" class="img-fluid" alt="', variable('name'), '">' . NEWLINE . '			</a><br>'], '');
+				'				<img src="', $logo2x, '" style="border-radius: 20px;" class="img-fluid img-logo" alt="', variable('name'), '">' . NEWLINE . '			</a><br>'], '');
 
 			$message = !variable('footer-message') ? '' : (NEWLINE . '			<span class="btn btn-secondary mb-2">' . returnLine(variable('footer-message')) . '</span>' . NEWLINE);
 
