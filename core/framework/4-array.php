@@ -131,6 +131,11 @@ function jsonToArray($name) {
 	return json_decode($raw, true);
 }
 
+function getJsonFromUrl($url) {
+	$context = stream_context_create([ 'http' => [ 'header' => "User-Agent: Chrome/126.0.0.0\r\n" ] ]);
+	return json_decode(file_get_contents($url, false, $context), true);
+}
+
 function textToList($data) {
 	$r = array();
 	$lines = explode(variable('safeNL'), $data);
