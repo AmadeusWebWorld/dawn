@@ -34,7 +34,7 @@ div.toolbar { background-color: white; padding: 10px 20px 10px 20px!important; w
 .content-box blockquote { border: 1pt solid var(--cnvs-contrast-200, #aaa); border-left-width: 8px; }
 .content-box blockquote p { margin: 4px 0 4px 0; }
 
-pre, code { font-size: 110%; line-height: 2.5; border-left: none; padding: 10px; }
+pre:not(li pre), code:not(li code) { font-size: 110%; line-height: 2.5; border-left: none; padding: 10px; }
 code.language-poem { background-color: var(--amadeus-site-h2-bgd, #cce); }
 
 .content-box pre::before {

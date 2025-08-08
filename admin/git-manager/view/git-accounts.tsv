@@ -1,6 +1,9 @@
-#Provider	Type	Slug
-GitHub	users	AmadeusWebDawns
-GitHub	orgs	AmadeusWebAlliances
-GitHub	orgs	AmadeusWebFriends
-GitHub	orgs	AmadeusWebMembers
-GitHub	orgs	ImranAliNamazi
+#Provider	Type	Slug	Notes
+|is-table-with-template
+||head-columns: name, url, notes
+||row-template: <tr><td>%Slug%</td><td><a href="https://github.com/%Slug%~~TARGETNEW">%Slug% &nbsp;|&nbsp; <a href="https://github.com/%Slug%?tab=repositories~~TARGETNEW">repos</a></td><td>%Notes%</td></tr>
+GitHub	users	AmadeusWebDawns	Main +CP
+GitHub	orgs	AmadeusWebAlliances	AS++
+GitHub	orgs	AmadeusWebFriends	Friends and CBs
+GitHub	orgs	AmadeusWebMembers	WiseOwls
+GitHub	orgs	ImranAliNamazi	Imran

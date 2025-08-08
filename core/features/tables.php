@@ -129,7 +129,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 		$columnNames = explode(', ', is_string($columnList) ? $columnList : implode(', ', $columnList));
 		$columns = array_map('strtolower', $columnNames);
 
-		$rows = $json ? json_to_array($dataFile) : $dataFile;
+		$rows = $json ? jsonToArray($dataFile) : $dataFile;
 	}
 	$headings = implode('</th>' . variable('nl') . '			<th>', $headingNames);
 
@@ -162,7 +162,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 		if ($more) { if (variable('is-in-directory')) break; else continue; }
 		$row = _table_row_values($item, $columns, $tsv, $values, $template);
 		if ($skipItemFn && $skipItemFn($row)) continue;
-		echo replaceHtml(replaceItems($template, $row, '%'));
+		echo replaceHtml(prepareLinks(replaceItems($template, $row, '%')));
 	}
 	if ($wantsBSRow) echo '</div><!-- end #' . $id . ' -->' . NEWLINES2; else
 	echo '

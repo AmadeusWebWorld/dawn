@@ -2,13 +2,12 @@
 name	Amadeus Web v8 (Dawn)
 byline	A Different sort of Platfom
 safeName	amadeusweb8
-iconName	Dawn v8.2
-footer-message	A Developer Assisted Builder for Intricate Websites
+iconName	Dawn v8.3
+footer-message	A Developer Assisted Builder for Futuristic, Intricate and Interconnected Websites
 siteMenuName	Amadeus Web
 scaffold_no	search
 _next	, sitemap
-sections_no	all
-sections_no	docs
+sections	admin
 local-url	http://localhost/amadeus8/
 live-url	https://dawn.amadeusweb.com/
 year	2019
