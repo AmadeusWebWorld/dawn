@@ -141,7 +141,7 @@ function renderAny($file, $settings = []) {
 //_ denotees its not to be called from outside - see flavours above + remove deprecated
 function _renderImplementation($fileOrRaw, $settings) {
 	if (endsWith($fileOrRaw, 'family-tree.md')) {
-		includeFeature('family-tree');
+		runFeature('family-tree');
 		renderFamilyTree($fileOrRaw); //only echoes for now
 		return;
 	}
@@ -157,7 +157,7 @@ function _renderImplementation($fileOrRaw, $settings) {
 
 	$endsWithMd = false;
 	$raw = $fileOrRaw; $fileName = '[RAW]';
-	if ($wasFile = disk_file_exists($fileOrRaw)) {
+	if ($wasFile = isContentFile($fileOrRaw)) {
 		$fileName = $fileOrRaw;
 		$endsWithMd = endsWith($fileOrRaw, '.md');
 		$raw = disk_file_get_contents($fileOrRaw);

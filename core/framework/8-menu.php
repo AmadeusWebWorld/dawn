@@ -236,7 +236,9 @@ function menu($folderRelative = false, $settings = []) {
 		$indented = '';
 		if (startsWith($file, '~')) {
 			if (variable('thisSection') && !$indented) { $result .= '<hr>'; variable('hadMenuSection', true); }
-			$result .= $indent . '	<' . $itemTag . ' class="menu-section">' . substr($file, 1) . '</' . $itemTag . '>' . NEWLINE;
+			$inner = substr($file, 1);
+			if ($inner[0] == '[') $inner = returnLine($inner);
+			$result .= $indent . '	<' . $itemTag . ' class="menu-section">' . $inner . '</' . $itemTag . '>' . NEWLINE;
 			$indented = 'indented';
 			continue;
 		} else if ($file == '----') {

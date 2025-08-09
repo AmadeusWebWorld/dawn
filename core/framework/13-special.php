@@ -14,8 +14,15 @@ variables([
 ]);
 
 DEFINE('CONTENTFILES', 'php, md, tsv, txt, html');
+DEFINE('CONTENTFILEEXTENSIONS', explode(', ', CONTENTFILES));
 DEFINE('ENGAGEFILES', 'md, tsv');
 DEFINE('FILESWITHMETA', 'md, tsv');
+
+function isContentFile($fileOrRaw) {
+	foreach (CONTENTFILEEXTENSIONS as $extn)
+		if (endsWith($fileOrRaw, '.' . $extn)) return true;
+	return false;
+}
 
 function autoRender($file, $type = false) {
 	if (endsWith($file, '.php')) {
@@ -119,7 +126,7 @@ function renderedSpecial() {
 	$node = variable('node');
 	if ($node == 'search') { echo getSnippet('search', CORESNIPPET); return true; }
 	//share done at top of entry's render()
-	if ($node == 'gallery') { includeFeature('gallery'); return true; }
+	if ($node == 'gallery') { runFeature('gallery'); return true; }
 	if (_renderedLink($node)) return true;
 	if (_renderedScaffold($node)) return true;
 
@@ -159,7 +166,7 @@ function _renderedBlurbs($blurb, $name = false) {
 	if (!$name) $name = variable('special-filename');
 
 	if (hasPageParameter('embed')) {
-		includeFeature('blurbs');
+		runFeature('blurbs');
 		return;
 	}
 
@@ -398,7 +405,7 @@ function did_render_section_or_file() {
 		renderAny($file);
 		return true;
 	} else if ($section || $dir) {
-		includeFeature('blog'); //TODO: merge this with directory and use section type if not blog/wiki/sitemap
+		runFeature('blog'); //TODO: merge this with directory and use section type if not blog/wiki/sitemap
 		return true;
 	}
 
@@ -422,7 +429,7 @@ function _renderedScaffold() {
 	$code = variable('scaffoldCode');
 	if (!$code) return false;
 
-	includeFeature($code, false);
+	runFeature($code, false);
 	return true;
 }
 
@@ -430,5 +437,5 @@ function _renderedScaffold() {
 function do_updates() {
 	if (!sheetExists('updates') || variable('no-updates')) return;
 
-	includeFeature('updates');
+	runFeature('updates');
 }

@@ -114,13 +114,15 @@ function arrayFirst($gp, $key) {
 }
 
 //Moved from SHEET Section
-function arrayGroupBy($array, $index)
+function arrayGroupBy($array, $index, $urlize = false)
 {
 	$r = array();
 	foreach ($array as $i)
 	{
-		if (!isset($r[$i[$index]])) $r[$i[$index]] = array();
-		$r[$i[$index]][] = $i;
+		$key = $i[$index];
+		if ($urlize) $key = urlize($key);
+		if (!isset($r[$key])) $r[$key] = array();
+		$r[$key][] = $i;
 	}
 	return $r;
 }
@@ -228,7 +230,7 @@ function sheetExists($name) {
 	return disk_file_exists(_sheetPath($name));
 }
 
-function getSheet($name, $groupBy = 'section') {
+function getSheet($name, $groupBy = 'section', $urlize = false) {
 	$varName = 'sheet_' . $name . '_' . $groupBy;
 	if ($existing = variable($varName)) return $existing;
 
@@ -240,6 +242,7 @@ function getSheet($name, $groupBy = 'section') {
 		public $rows;
 		public $values;
 		public $group;
+		public $group2; //for taxonomy
 
 		public function getValue($item, $columnName, $default = '') {
 			$result = $item[$this->columns[$columnName]];
@@ -253,7 +256,7 @@ function getSheet($name, $groupBy = 'section') {
 	$r->group = null;
 
 	if($groupBy !== false)
-		$r->group = arrayGroupBy($rows, $columns[$groupBy]);
+		$r->group = arrayGroupBy($rows, $columns[$groupBy], $urlize);
 
 	variable($varName, $r);
 	return $r;
