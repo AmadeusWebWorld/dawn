@@ -12,7 +12,7 @@
 body { cursor: default; }
 
 body.theme-canvas .menu-link { padding-top: 10px; padding-bottom: 10px; } /* menu */
-.menu-section { background-color: var(--amadeus-site-h2-bgd, #E1F2FF); padding: 5px; border-top:  1px solid #999; }
+.menu-section { background-color: var(--amadeus-menu-section-bgd, #E1F2FF); padding: 5px; border-top:  1px solid #999; }
 
 #header { z-index: 1050; }
 .device-down-md #page-menu { --cnvs-page-submenu-sticky-offset: 0px!important; }

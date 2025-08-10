@@ -4,20 +4,15 @@
 renderNodeMenu();
 
 function renderNodeMenu() {
+	if (renderBreadcrumbsMenu()) return;
+
 	extract(variable('menu-settings'));
 
-	//$bc = true;
-	if (isset($bc)) echo $bc ? 'BREADCRUMBS (Messed Up)' : 'WORKING NODE MENU';
-
-	if (!isset($bc) || $bc)
-	renderBreadcrumbsMenu();
-
-	if (isset($bc) && $bc) die('done');
+	$hasFiles = variable('nodes-have-files'); //yay now we support both sections with files & folders in same site
+	$files = _skipNodeFiles(disk_scandir(NODEPATH));
 
 	_menuULStart(NOPAGESTART);
 
-	$files = _skipNodeFiles(disk_scandir(NODEPATH));
-	$hasFiles = variable('sections-have-files');
 	foreach ($files as $page) {
 		//if (cannot_access($slug)) continue;
 		$page_r = humanize($page);
@@ -66,14 +61,10 @@ function renderNodeMenu() {
 }
 
 function renderBreadcrumbsMenu() {
-	if (variable('dont-show-current-menu')) return; //TODO: high - rename setting
-
 	$items = _getBreadcrumbs();
-
 	if (count($items) == 0) return;
 
 	extract(variable('menu-settings'));
-
 	_menuULStart(NOPAGESTART);
 
 	$section = variable('section');

@@ -1,6 +1,7 @@
 <?php
 header("Content-type: text/css");
 include_once '../core/framework/4-array.php';
+DEFINE('NEWLINES2', "\r\n\r\n");
 
 if ($raw = valueIfSetAndNotEmpty($_GET, 'raw')) { echo $raw; return; }
 
@@ -13,12 +14,13 @@ $op = '
 	--cnvs-header-bg-override: %header%;
 	--cnvs-body-bg: %body%;
 	--cnvs-link-color: %link%;
-	--amadeus-site-h2-bgd: %heading%;
+	--amadeus-heading-bgd: %heading%;
 	--after-content-background: %paler%;
-}';
+}' . NEWLINES2;
 
 function _color($palette, $key, $default) {
 	$val = valueIfSetAndNotEmpty($palette, $key, $default);
+	if (is_bool($val)) return $val;
 	return $val == 'no' ? 'transparent' : '#' . $val;
 }
 
@@ -33,4 +35,8 @@ echo replaceItems($op, [
 ], '%');
 
 if (valueIfSetAndNotEmpty($palette, 'dont-round-logo', false, TYPEBOOLEAN))
-	echo '.img-logo { border-radius: 0px!important; }';
+	echo '.img-logo { border-radius: 0px!important; }' . NEWLINES2;
+
+if ($node = _color($palette, 'node', false))
+	echo '#page-menu { background-color: ' . $node . ' }' . NEWLINES2;
+

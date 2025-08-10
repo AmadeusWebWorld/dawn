@@ -1,5 +1,5 @@
 /* Feature Headings */
-.amadeus-icon { text-align: center; margin: 4px 0 4px 0; background-color: var(--cnvs-footer-bg, #cecece);
+.amadeus-icon { text-align: center; margin: 4px 0 4px 0; background-color: var(--amadeus-heading-bgd, #cecece);
 	width: fit-content; margin: 20px auto; padding: 8px 15px 8px 15px!important; }
 #statistics .amadeus-icon { background-color: whitesmoke; }
 h2.amadeus-icon { font-size: 120%; padding: 5px; }
@@ -35,7 +35,7 @@ div.toolbar { background-color: white; padding: 10px 20px 10px 20px!important; w
 .content-box blockquote p { margin: 4px 0 4px 0; }
 
 pre:not(li pre), code:not(li code) { font-size: 110%; line-height: 2.5; border-left: none; padding: 10px; }
-code.language-poem { background-color: var(--amadeus-site-h2-bgd, #cce); }
+code.language-poem { background-color: var(--amadeus-poem-bgd, #cce); }
 
 .content-box pre::before {
 	font-weight: bold;
