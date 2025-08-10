@@ -283,7 +283,7 @@ function siteWidgets() {
 
 	if ($showNetwork) {
 		$op[] = str_replace('[WHAT]', 'network', $start);
-		$op[] = '<h4>' . makeLink('Our Network', subVariableOr('networkHome', 'url', '#todo/') . 'our-network/') . '</h4>';
+		$op[] = '<h4>' . networkLink() . '</h4>';
 		foreach ($sites as $site)
 			$op[] =  $site['icon-link'] . BRNL;
 		$op[] = '</div>'; $op[] = '';
@@ -297,6 +297,11 @@ function siteWidgets() {
 	}
 
 	return implode(variable('nl'), $op);
+}
+
+function networkLink($class= '', $prefix = '') {
+	if (!variable('network')) return '';
+	return $prefix . getLink('Our Network', subVariableOr('networkHome', 'url', '#todo/') . 'our-network/', $class, true);
 }
 
 function appendSocial($social, &$op) {

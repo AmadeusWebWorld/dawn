@@ -1,9 +1,9 @@
-## %siteName%
+%countdown-corecodesnippet%
 
-This page is <a class="icon site-core" href="%world-url%">"Under Construction"</a><br /><br />
+---
 
-Do check the countdown to Aug 10th / be in touch.
+# %siteName%
 
-<hr />
+Welcomes you!
 
-%contact-coresnippet%
+%network-link%

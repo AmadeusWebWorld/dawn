@@ -209,6 +209,7 @@ function replaceHtml($html) {
 			'%address2%' => variableOr('address2', '[no-address2]'),
 			'%address-url%' => variableOr('address-url', '#no-link'),
 
+			'%network-link%' => networkLink('btn btn-success', '<hr class="mt-5" />'),
 			'%siteName%' => $sn = variable('name'),
 			'%safeName%' =>  variable('safeName'),
 			'%section%' => $section, //let archives break!
