@@ -77,7 +77,7 @@ function _visane($siteVars) {
 		['link-to-site-home', true, 'bool'],
 		['link-to-section-home', false, 'bool'],
 		['ChatraID', '--use-amadeusweb'],
-		['google-analytics', '--use-amadeusweb'],
+		['google-analytics', 'none', 'bool'], //'--use-amadeusweb'
 
 		['email', 'imran@amadeusweb.com'],
 		['phone', '+91-9841223313'],
@@ -140,48 +140,58 @@ variables($op = [
 
 __testSiteVars($op);
 
-//TODO: add_foot_hook(AMADEUSTHEMEFOLDER . 'media-kit.php');
+if ($network) setupNetwork($network, $url);
 
-if ($network) setupNetwork($network);
-
-function setupNetwork($network) {
+function setupNetwork($network, $thisUrl) {
 	$networkUrls = [];
+	$networkHome = false;
 
 	if (DEFINED('NETWORKPATH')) {
 		if (disk_file_exists($nw = NETWORKPATH . 'network.php'))
 			disk_include_once($nw);
 
 		$siteNames = textToList(disk_file_get_contents(NETWORKPATH . 'sites.txt'));
-		peDie('149', $siteNames);
+		peDie('154', $siteNames, true);
 	} else {
 		if (!($at = variable('network-at')))
 			peDie('Setup', 'Expected Variable: "network-at" is missing', true);
 
 		DEFINE('NETWORKPATH', ALLSITESROOT);
-		$sites = getSheet($at . '/data/sites.tsv', 'Network');
+		$sites = getSheet($at . '/data/sites.tsv', false);
 
-		$siteNames = [];
-		foreach(explode(', ', $network) as $slug) {
-			$items = $sites->group[$slug];
-			foreach ($items as $row) {
-				$path = $row[$sites->columns['Path']];
-				if ($row[$sites->columns['Type']] == 'Node')
-					$networkUrls[$row[$sites->columns['Slug']] . '-url'] = $row[$sites->columns['NodeUrl']];
-				$siteNames[] = $path;
+		$sitePaths = [];
+		$networks = explode(', ', $network);
+		$mainNetwork = $networks[0];
+
+		foreach ($sites->rows as $siteRow) {
+			$showIn = explode(', ', $sites->getValue($siteRow, 'Network'));
+
+			$matched = false;
+			foreach ($showIn as $allow) {
+				if (in_array($allow, $networks)) {
+					$matched = true;
+					break;
+				}
 			}
+			if (!$matched) continue;
+
+			$thisPath = $sites->getValue($siteRow, 'Path');
+			$siteObj = rowToObject($siteRow, $sites);
+
+			if ($siteObj['HomeOf'] == $mainNetwork)
+				$networkHome = $thisPath;
+
+			$sitePaths[$thisPath] = $siteObj;
 		}
 	}
-
-	$newTab = true ? 'target="_blank" ' : '';
 
 	$networkItems = [];
 	$local = variable('local');
 
-	foreach ($siteNames as $site) {
-		$sheetFile = NETWORKPATH . $site . '/data/site.tsv';
+	foreach ($sitePaths as $siteAt => $siteObj) {
+		$sheetFile = NETWORKPATH . $siteAt . '/data/site.tsv';
 		if (!sheetExists($sheetFile)) {
-			if (isset($nodeUrls[$site])) $nodeUrls[$site];
-			else if ($local) echo '<!--missing tsv for: ' . $site . '-->' . NEWLINE;
+			if ($local) echo '<!--missing tsv for: ' . $siteAt . '-->' . NEWLINE;
 			continue;
 		}
 
@@ -194,15 +204,39 @@ function setupNetwork($network) {
 		if (contains($url = $item[variable(SITEURLKEY)][0][$val], 'localhost'))
 			$url = replaceItems($url, ['localhost' => 'localhost' . variable('port')]);
 
-		$site = str_replace('/', '--', $site); //NOTE: escape char
-		$link = sprintf('<a class="site-icon" href="%s" %stitle="%s &mdash; %s"><img src="'
-				. $url . $item['safeName'][0][$val] . '-icon.png" height="30px" />  %s</a>', $url, $newTab,
-			$name = $item['name'][0][$val],
-			$byline = $item['byline'][0][$val],
-			$item['iconName'][0][$val]);
+		$site = str_replace('/', '--', $siteAt); //NOTE: escape char
+		$status = variable('local') ? "\r\n\r\nstatus: " . $siteObj['Status'] : '';
+		$imgPrefix = $url . ($slug = $item['safeName'][0][$val]);
+
+		$link = replaceItems('<a class="site-icon" href="%href%" target="_blank" title="%name% &mdash; %byline%">' .
+				'<img src="%src%" height="30px" />  %text%</a>', [
+			'href' => $url,
+			'name' => $name = $item['name'][0][$val],
+			'byline' => ($byline = $item['byline'][0][$val]) . $status,
+			'src' => $imgPrefix . '-icon.png',
+			'text' => $item['iconName'][0][$val],
+			], '%');
 
 		$networkUrls[$site . '-url'] = $url;
-		$networkItems[] = ['url' => $url, 'name' => $name, 'icon-link' => $link];
+		$networkItems[] = $thisItem = [
+			'url' => $url,
+			'name' => $name,
+			'byline' => $byline,
+			'description' => $item['footer-message'][0][$val],
+			'icon-link' => $link,
+			'img-prefix' => $imgPrefix,
+			'status' => $siteObj['Status'],
+			'category' => $siteObj['Category'],
+		];
+
+		if ($networkHome == $siteAt) {
+			variable('networkHome', $thisItem);
+			if ($thisUrl == $url) {
+				$scaffold = variableOr('scaffold', []);
+				$scaffold[] = 'our-network';
+				variable('scaffold', $scaffold);
+			}
+		}
 	}
 
 	$networkUrls['network-assets'] = variable(assetKey(NETWORKASSETS));

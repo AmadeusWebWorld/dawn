@@ -108,6 +108,7 @@ function autoRender($file, $type = false) {
 }
 
 function hasSpecial() {
+	if (_isScaffold()) return true;
 	$node = variable('node');
 	if (_isLinks($node) || $node == 'search') return true;
 
@@ -421,7 +422,7 @@ function _isScaffold() {
 		return false;
 
 	if (hasPageParameter('embed')) variable('embed', true);
-	variable('scaffoldCode', 'scaffold/' . $node);
+	variable('scaffoldCode', $node);
 	return true;
 }
 

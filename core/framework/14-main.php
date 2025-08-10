@@ -1,6 +1,7 @@
 <?php
-DEFINE('OURNETWORK', 'work, world, core');
-DEFINE('ALLIANCESNETWORK', 'alliances, world');
+DEFINE('OURNETWORK', 'world, work, core');
+DEFINE('ALLIANCESNETWORK', 'alliances');
+DEFINE('PLANETNETWORK', 'planet');
 
 main::initialize();
 
@@ -9,8 +10,8 @@ class main {
 
 	static function initialize() {
 		variables([
-			'assistantEmail' => 'assistant@amadeusweb.world',
-			'systemEmail' => 'team@amadeusweb.com',
+			'assistantEmail' => 'imran+assistant@amadeusweb.world',
+			'systemEmail' => 'imran@amadeusweb.world',
 		]);
 	}
 

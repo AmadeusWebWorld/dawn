@@ -283,7 +283,7 @@ function siteWidgets() {
 
 	if ($showNetwork) {
 		$op[] = str_replace('[WHAT]', 'network', $start);
-		$op[] = '<h4>Network</h4>';
+		$op[] = '<h4>' . makeLink('Our Network', subVariableOr('networkHome', 'url', '#todo/') . 'our-network/') . '</h4>';
 		foreach ($sites as $site)
 			$op[] =  $site['icon-link'] . BRNL;
 		$op[] = '</div>'; $op[] = '';
