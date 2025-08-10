@@ -17,6 +17,7 @@ function renderNodeMenu() {
 	_menuULStart(NOPAGESTART);
 
 	$files = _skipNodeFiles(disk_scandir(NODEPATH));
+	$hasFiles = variable('sections-have-files');
 	foreach ($files as $page) {
 		//if (cannot_access($slug)) continue;
 		$page_r = humanize($page);
@@ -34,8 +35,8 @@ function renderNodeMenu() {
 				$page_r = $tsmn;
 		}
 
-		echo '<li class="' . $itemClass . '"><a class="' . $anchorClass . '">' . $page_r . '</a>';
 		if (disk_is_dir(NODEPATH . '/' . $page)) {
+			echo '<li class="' . $itemClass . '"><a class="' . $anchorClass . '">' . $page_r . '</a>';
 			menu('/' . variable('section') . '/' . variable('node') . '/' . $page . '/', [
 				'link-to-home' => variable('link-to-node-sub-section'),
 				'files' => $files, 'this-is-standalone-section' => $tiss,
@@ -44,6 +45,8 @@ function renderNodeMenu() {
 				'a-class' => $anchorClass,
 				'parent-slug' => $tiss ? '' : variable('node') . '/' . $page . '/',
 			]);
+		} else if ($hasFiles) {
+			echo '<li class="' . $itemClass . '"><a href="' . pageUrl(variable('node') . '/' . $page) . '" class="' . $anchorClass . '">' . $page_r . '</a>';
 		}
 		echo '</li>' . NEWLINES2;
 	}

@@ -8,22 +8,28 @@ $palette = $_GET;
 
 $op = '
 :root {
-	--cnvs-themecolor: #%theme%;
-		--cnvs-footer-bg: #%theme%;
-	--cnvs-header-bg-override: #%header%;
-	--cnvs-body-bg: #%body%;
-	--cnvs-link-color: #%link%;
-	--amadeus-site-h2-bgd: #%heading%;
-	--after-content-background: #%paler%;
+	--cnvs-themecolor: %theme%;
+		--cnvs-footer-bg: %footer%;
+	--cnvs-header-bg-override: %header%;
+	--cnvs-body-bg: %body%;
+	--cnvs-link-color: %link%;
+	--amadeus-site-h2-bgd: %heading%;
+	--after-content-background: %paler%;
 }';
 
+function _color($palette, $key, $default) {
+	$val = valueIfSetAndNotEmpty($palette, $key, $default);
+	return $val == 'no' ? 'transparent' : '#' . $val;
+}
+
 echo replaceItems($op, [
-	'theme' => valueIfSetAndNotEmpty($palette, 'theme', '9FC7DA'),
-	'header' => valueIfSetAndNotEmpty($palette, 'header', 'fff'),
-	'body' => valueIfSetAndNotEmpty($palette, 'body', 'bee6f9'),
-	'link' => valueIfSetAndNotEmpty($palette, 'link', '5BDCFF'),
-	'heading' => valueIfSetAndNotEmpty($palette, 'heading', 'E1F2FF'),
-	'paler' => valueIfSetAndNotEmpty($palette, 'paler', 'C8D9F8'),
+	'theme' => _color($palette, 'theme', '9FC7DA'),
+	'header' => _color($palette, 'header', 'fff'),
+	'footer' => _color($palette, 'footer', valueIfSetAndNotEmpty($palette, 'theme', '9FC7DA')),
+	'body' => _color($palette, 'body', 'bee6f9'),
+	'link' => _color($palette, 'link', '5BDCFF'),
+	'heading' => _color($palette, 'heading', 'E1F2FF'),
+	'paler' => _color($palette, 'paler', 'C8D9F8'),
 ], '%');
 
 if (valueIfSetAndNotEmpty($palette, 'dont-round-logo', false, TYPEBOOLEAN))
