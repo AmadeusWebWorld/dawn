@@ -33,7 +33,7 @@ function autoRender($file, $type = false) {
 
 	$raw = disk_file_exists($file) ? disk_file_get_contents($file) : '[RAW]';
 	$embed = hasPageParameter('embed');
-	$pageName = title('params-only');
+	$pageName = title(FORHEADING);
 
 	//cannot use startsWith as edit in vs-code wouldnt work
 	$detectedEngage = contains($raw, '|is-engage') || contains($raw, '<!--is-engage-->');
@@ -77,7 +77,7 @@ function autoRender($file, $type = false) {
 
 	if (endsWith($file, '.tsv')) {
 		$istwt = contains($raw, '|is-table-with-template') && $meta = getSheet($file, false);
-		if ($istwt) h2(title('params-only') . currentLevel(), 'amadeus-icon');
+		if ($istwt) h2(title(FORHEADING) . currentLevel(), 'amadeus-icon');
 
 		$isDeck = contains($raw, '|is-deck');
 		$notRendering = !hasPageParameter('embed') && !hasPageParameter('expanded');
@@ -212,7 +212,7 @@ function renderInPageDeck($section, $node, $name) {
 }
 
 function renderSheetAsDeck($deck, $link) {
-	$title = title('params-only');
+	$title = title(FORHEADING);
 	if (!hasPageParameter('embed') && !hasPageParameter('expanded')) {
 		_renderedDeck($deck, $title);
 		return;
@@ -236,6 +236,9 @@ function renderSheetAsDeck($deck, $link) {
 			$op[] = '';
 		} else if ($type == 'paragraph') {
 			$op[] = $text;
+			$op[] = '';
+		} else if ($type == 'image') {
+			$op[] = replaceHtml($text);
 			$op[] = '';
 		} else if ($type == 'style-file') {
 			variable('style-file', replaceHtml($text));

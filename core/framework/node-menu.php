@@ -71,12 +71,12 @@ function renderBreadcrumbsMenu() {
 
 	$ix = 0;
 	foreach ($items as $relativeFol => $nodeSlug) {
-		$menuName = '<abbr title="level ' . ++$ix . '">' . $ix . '</abbr>: ' . humanize($nodeSlug);
+		$menuName = '<abbr title="level ' . ++$ix . '">' . $ix . '</abbr> ' . humanize($nodeSlug);
 		if ($wrapTextInADiv) $menuName = '<div>' . $menuName . $topLevelAngle . '</div>';
 
 		//echo NEWLINE . '<ul class="' . $ulClass . '">';
 
-		echo MENUPADLEFT . '		  <li class="' . $itemClass . '"><a class="' . $anchorClass . '">' . $menuName . '</a>';
+		echo MENUPADLEFT . '		  <li class="' . $itemClass . '"><a class="' . $anchorClass . ' breadcrumb-item">' . $menuName . '</a>';
 
 		menu('/' . $section . '/' . $relativeFol, [
 			'ul-class' => $ulClass . (false ? ' of-node node-' . $nodeSlug : ''),

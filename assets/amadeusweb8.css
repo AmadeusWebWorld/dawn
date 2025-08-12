@@ -1,6 +1,6 @@
 /* MISC */
 div.large-list {
-	background-color: #fdfce3 !important;
+	background-color: #fffeea !important;
 }
 
 .large-list.with-labels { background-color: #defafa!important; }
@@ -43,15 +43,21 @@ textarea.full {
 	--bs-table-bg: mistyrose;
 }
 
-abbr::after {
-	content: ' ? ';
-	background-color: #fcc3f9;
+.breadcrumb-item {
+	border: #333 1px solid;
+	border-radius: 2ex;
+}
+
+.breadcrumb-item abbr {
+	background-color: #737cf8;
+	color: #f7e5e5;
+	font-weight: bolder;
 	border-radius: 50%;
-	height: 1.5ex;
+	height: 3ex;
 	display: inline-block;
-	padding: .35ex;
+	padding: .6ex 1ex .6ex 1ex;
 	line-height: .7;
-	margin-left: 8px;
+	margin-left: 3px;
 }
 
 .has-gemini-ai .prompt, .standout {

@@ -15,32 +15,35 @@ function getPageName($tailOnly = true) {
 	//todo - alternatives??
 }
 
-function title($return = false) {
-	if ($return !== 'params-only' && (variable('custom-title') || variable('node-alias'))) {
-		$r = variableOr('custom-title', humanize(variable('name')) . ' | ' . variable('byline'));
-		if ($return) return $r;
-		echo $r;
-		return;
+DEFINE('TITLEONLY', 'title-only');
+DEFINE('FORHEADING', 'for-heading');
+
+function title($what = 'default') {
+	if (hasVariable('custom-title')) {
+		return variable('custom-title') . ' | ' . variable('name');
 	}
 
-	$page = variableOr('page-name', variable('node'));
-	$siteRoot = $page == 'index' || variable('under-construction');
+	$node = variable('node');
+	if ($what === TITLEONLY) return humanize($node);
 
-	if ($return === 'title-only') return $page;
-	$r = [];
+	$siteRoot = $node == 'index' || variable('under-construction');
 
-	if ($return !== 'params-only')
-		$r[] = (!$siteRoot ? humanize($page) . ' - ' : '') . variable('name') . ($siteRoot ? ' | ' . variable('byline') : '');
+	if ($siteRoot)
+		return variable('name') . ' | ' . variable('byline');
 
-	if ($return !== true) {
-		$exclude = ['print', 'embed'];
-		foreach(array_merge([variable('node')], variableOr('page_parameters', [])) as $slug)
-			if (!in_array($slug, $exclude)) $r[] = humanize($slug);
-	}
+	$forHeading = $what == FORHEADING;
+	$result = $forHeading ? [humanize($node)] : [];
 
-	$r = implode(' &mdash;&gt; ', $r);
-	if ($return) return $r;
-	echo $r;
+	$exclude = ['print', 'embed'];
+	$items = variableOr('page_parameters', []);
+	if (!$forHeading) $items = array_reverse($items);
+
+	foreach($items as $slug)
+		if (!in_array($slug, $exclude)) $result[] = humanize($slug);
+
+	if (!$forHeading) $result[] = humanize($node);
+
+	return implode($forHeading ? ' &mdash;&gt; ' : ' &lt; ', $result) . ($forHeading ? '' : ' | ' . variable('name'));
 }
 
 //locations

@@ -191,6 +191,7 @@ function replaceHtml($html) {
 			'%cdn%' => variable('assets-url') . 'cdn/',
 
 			'%nodeName%' => humanize($node),
+			'%nodeUrl%' => pageUrl($node),
 			'%nodeItem%' => getPageParameterAt(1, ''),
 			'%nodeItem2%' => getPageParameterAt(2, ''),
 
@@ -216,10 +217,7 @@ function replaceHtml($html) {
 			'%section_r%' => humanize($section),
 			'%site-engage-btn%' => engageButton('Engage With Us', 'inline'),
 
-			'%page-url%' => variable('page_parameter1') ? $safeUrl . $node . '/' . variable('page_parameter1') . '/' : '##not-in-a-page',
-			'%sub-page-url%' => variable('page_parameter2') ? $safeUrl . $node . '/' . variable('page_parameter1') . '/'  . variable('page_parameter2') . '/' : '##not-in-a-sub-page',
-			'%page-location%' => $loc = title('params-only'),
-
+			'%nodeUrlUptoLeaf%' => $loc = variable('all_page_parameters'), //experimental
 			'%enquiry%' => str_replace(' ', '+', 'enquiry (for) ' . $sn . ' (at) ' . $loc),
 			'%optional-content-box-class%' => _getCBClassIfWanted(''),
 			'<marquee>' => variable('_marqueeStart'),

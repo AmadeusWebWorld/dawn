@@ -29,6 +29,8 @@ div.toolbar { background-color: white; padding: 10px 20px 10px 20px!important; w
 	/* https://www.h3xed.com/web-development/how-to-make-a-responsive-100-width-youtube-iframe-embed */
 .video-container { position: relative; width: 100%; height: 0; padding-bottom: 56.25%; margin-bottom: 20px; }
 
+blockquote.answer { background-color: #e2ffe0; }
+
 /* IVIEWER */
 .content-box blockquote, .content-box code { padding: 5px 0 5px 10px; font-size: inherit; }
 .content-box blockquote { border: 1pt solid var(--cnvs-contrast-200, #aaa); border-left-width: 8px; }

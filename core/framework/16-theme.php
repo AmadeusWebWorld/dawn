@@ -91,7 +91,7 @@ function runThemePart($what) {
 
 		$icon = '<link rel="icon" href="' . $nodeIcon . '" sizes="192x192">';
 
-		$vars['head-includes'] = '<title>' . title(true) . '</title>' . NEWLINE . '	' . $icon . NEWLINE . main::runAndReturn();
+		$vars['head-includes'] = '<title>' . title() . '</title>' . NEWLINE . '	' . $icon . NEWLINE . main::runAndReturn();
 		$vars['seo'] = seo_tags(true);
 		$vars['body-classes'] = body_classes(true);
 
