@@ -189,6 +189,7 @@ function site_humanize($txt, $field = 'title', $how = false) {
 	$arrays = [
 		variableOr('siteHumanizeReplaces', []),
 		variableOr('nodeHumanizeReplaces', []),
+		variableOr('nodeItemHumanizeReplaces', []),
 		variableOr('specialHumanizeReplaces', []),
 	];
 

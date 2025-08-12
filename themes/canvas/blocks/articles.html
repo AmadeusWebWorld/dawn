@@ -1,0 +1,38 @@
+<div class="container content-box">
+	<div class="heading-block border-bottom-0 my-4 text-center">
+		<h3>%block-title%</h3>
+	</div>
+	<div class="grid-filter-wrap">
+		<!-- Articles Filter
+		============================================= -->
+		<ul class="grid-filter" data-container="#articles">
+			<li class="activeFilter"><a href="#" data-filter="*">Show All</a></li>
+			%filterButtons%
+		</ul><!-- .grid-filter end -->
+
+		<div class="grid-shuffle rounded" data-container="#articles">
+			<i class="uil uil-sync"></i>
+		</div>
+
+	</div>
+</div>
+
+<div class="container">
+<div id="articles" class="portfolio row grid-container gutter-30">
+<!--part-separator-->
+<article class="portfolio-item col-md-4 col-sm-6 col-12 article-%type%">
+	<div class="grid-inner content-box">
+		<div class="portfolio-image">
+			<b class="float-right"><i>%type_r%</i></b><br><br>
+			<a class="art-img" href="%link%">
+				<img src="%image%" alt="%title%">
+			</a>
+		</div>
+		<div class="portfolio-desc">
+			<h3><a href="%link%">%title%</a></h3>
+			%content%
+		</div>
+	</div>
+</article>
+<!--part-separator-->
+</div></div><!-- #portfolio -->

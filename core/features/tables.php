@@ -53,7 +53,8 @@ function _table_row_values($item, $cols, $tsv, $values, $template) {
 		if (endsWith($key, '_urlized')) {
 			$wrap = $start ? ['<b>', '</b>'] : ['', ''];
 			if ($start) $value = substr($value, 2);
-			$r[str_replace('_urlized', '', $key) . '_humanized'] = $wrap[0] . humanize($value) . $wrap[1];
+			$hzeKey = str_replace('_urlized', '', $key) . '_humanized';
+			$r[$hzeKey] = $wrap[0] . ((isset($item[$hzeKey])) ? $item[$hzeKey] : humanize($value)) . $wrap[1];
 		}
 	}
 
@@ -97,8 +98,11 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	variable('allow-internal', variable('local') || isset($_GET['internal']));
 	$tsv = is_string($dataFile) && endsWith($dataFile, '.tsv');
 	$json = is_string($dataFile) && endsWith($dataFile, '.json');
+	$dontTreat = valueIfSetAndNotEmpty($values, 'dont-treat-array', false);
 
-	if (is_array($dataFile)) {
+	if ($dontTreat) {
+		$rows = $dataFile;
+	} else if (is_array($dataFile)) {
 		$tsv = 'array';
 		$rows = $dataFile;
 		if (is_string($columnList)) $columnList = [$columnList];
@@ -131,7 +135,9 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 
 		$rows = $json ? jsonToArray($dataFile) : $dataFile;
 	}
-	$headings = implode('</th>' . variable('nl') . '			<th>', $headingNames);
+
+	if (!$dontTreat)
+		$headings = implode('</th>' . variable('nl') . '			<th>', $headingNames);
 
 	$isInList = variable('is-in-directory');
 	$useDatatables = valueIfSetAndNotEmpty($values, 'use-datatables');
@@ -158,10 +164,14 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	<tbody>
 ';
 	foreach ($rows as $item) {
-		$more = isset($item[0]) && $item[0] == '<!--more-->';
-		if ($more) { if (variable('is-in-directory')) break; else continue; }
-		$row = _table_row_values($item, $columns, $tsv, $values, $template);
-		if ($skipItemFn && $skipItemFn($row)) continue;
+		if ($dontTreat) {
+			$row = $item;
+		} else {
+			$more = isset($item[0]) && $item[0] == '<!--more-->';
+			if ($more) { if (variable('is-in-directory')) break; else continue; }
+			$row = _table_row_values($item, $columns, $tsv, $values, $template);
+			if ($skipItemFn && $skipItemFn($row)) continue;
+		}
 		echo replaceHtml(prepareLinks(replaceItems($template, $row, '%')));
 	}
 	if ($wantsBSRow) echo '</div><!-- end #' . $id . ' -->' . NEWLINES2; else

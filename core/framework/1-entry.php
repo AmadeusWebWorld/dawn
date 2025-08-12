@@ -30,8 +30,8 @@ function runModule($name) {
 	disk_include_once(AMADEUSMODULES . $name . '.php');
 }
 
-function runFeature($name) {
-	disk_include_once(AMADEUSFEATURES . $name . '.php');
+function runFeature($name, $variables = []) {
+	disk_include_once(AMADEUSFEATURES . $name . '.php', $variables);
 }
 
 function runExtension($name) {

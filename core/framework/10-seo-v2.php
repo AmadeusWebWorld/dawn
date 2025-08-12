@@ -73,7 +73,11 @@ function print_seo() {
 	$meta = variable('meta_' . $file);
 	if (!$meta) return;
 
-	$show = ['About', 'Description', 'Primary Keyword', 'Keywords', 'Date', 'Author', 'Page Custodian', 'Prompted By', 'Published', 'Meta Author', 'Related Keywords', 'Long-Tail Keywords'];
+	$show = ['Title', 'About', 'Description', 'Primary Keyword', 'Keywords', 'Related Keywords', 'Long-Tail Keywords',
+		'Date', 'Author', 'Page Custodian', 'Prompted By', 'Published', 'Meta Author',
+		'Born', 'Died',
+	];
+
 	$info = [];
 
 	foreach ($show as $col) {
@@ -117,6 +121,7 @@ function getFolderMeta($folder, $fol, $folName = false, $index = '') {
 	$about = 'No About Set';
 	$tags = 'No Tags Set';
 	$inline = '';
+	$title = humanize($name);
 
 	$homeExtension = disk_one_of_files_exist($home, FILESWITHMETA);
 	$pageExtension = !$homeExtension ? disk_one_of_files_exist($page, FILESWITHMETA) : false;
@@ -129,10 +134,10 @@ function getFolderMeta($folder, $fol, $folName = false, $index = '') {
 			if (isset($vars['about']))
 				$about = pipeToBR($vars['about']);
 			else if (isset($vars['description']))
-				$about = pipeToBR($meta['description']);
+				$about = pipeToBR($vars['description']);
 
 			if (isset($vars['title']) && $vars['title'])
-				$name = $vars['title'];
+				$title = $vars['title'];
 
 			if (isset($vars['keywords']))
 				$tags = hasPageParameter('generate-index') ? $vars['keywords'] : csvToHashtags($vars['keywords']);
@@ -143,6 +148,7 @@ function getFolderMeta($folder, $fol, $folName = false, $index = '') {
 
 	return [
 		'name_urlized' => $name,
+		'name_humanized' => $title,
 		'about' => $about . $inline,
 		'tags' => $tags,
 		'size' => isset($file) ? size_r(filesize($file)) : '-',

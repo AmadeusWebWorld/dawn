@@ -271,10 +271,17 @@ function rowToObject($item, $sheet) {
 	return $result;
 }
 
-function siteHumanize() {
-	if (!sheetExists('humanize')) return [];
+DEFINE('ATNODE', 'node');
+DEFINE('ATNODEITEM', 'node-item');
 
-	$sheet = getSheet('humanize', false);
+function siteHumanize($where = '') {
+	if ($where == ATNODE || $where == ATNODEITEM)
+		$where = NODEPATH . '/' . ($where == ATNODEITEM ? getPageParameterAt(1, '') . '/' : '') . 'data/node-';
+
+	$file = $where . 'humanize' . ($where == '' ? '' : '.tsv');
+	if (!sheetExists($file)) return [];
+
+	$sheet = getSheet($file, false);
 	$cols = $sheet->columns;
 	$result = [];
 
