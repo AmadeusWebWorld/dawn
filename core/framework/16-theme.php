@@ -131,7 +131,7 @@ function runThemePart($what) {
 
 			$fwVars = [
 				'footer-logo' => $logo . NEWLINE . '			<div class="text-center">'
-					. NEWLINE . '			<h4 class="mt-sm-4 mb-0">' . variable('name') . '</h4>' . $nodeName .'</div>',
+					. NEWLINE . '			<h4 class="mt-sm-4 mb-0">' . variableOr('footer-name', variable('name')) . '</h4>' . $nodeName .'</div>',
 				'site-widgets' => siteWidgets(),
 				'footer-message' => '<p class="text-align-center p-3 pt-4">' . $message . '</p>',
 				'footer-contact' => $contact,
@@ -176,8 +176,15 @@ function site_and_node_icons($siteIcon = null, $nodeIcon = null, $nodeSuffix = '
 	if (!$siteIcon) $siteIcon = getLogoOrIcon('icon', 'site');
 	if (!$nodeIcon) $nodeIcon = getLogoOrIcon('icon', 'node' . $nodeSuffix);
 
+	if ($nodeParent1 = variableOr('nodeParent1', '')) {
+		$p1Icon = getLogoOrIcon('icon', 'nodeParent1');
+		$nodeParent1 = '<a href="' . pageUrl(subVariable('nodeParent1', 'nodeSlug')) . '">' . NEWLINE . '		<img height="40" src="' . $p1Icon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE;
+	}
+
+	$nodeSlugOrNode = variableOr('nodeSlug', variable('node'));
 	return '<a href="' . pageUrl() . '">' . NEWLINE . '		<img height="40" src="' . $siteIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE
-	. '<a href="' . pageUrl(variable('node')) . '">' . NEWLINE . '		<img height="40" src="' . $nodeIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE;
+		. $nodeParent1
+		. '<a href="' . pageUrl($nodeSlugOrNode) . '">' . NEWLINE . '		<img height="40" src="' . $nodeIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE;
 }
 
 function _page_menu($siteIcon, $nodeIcon) {

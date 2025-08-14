@@ -17,14 +17,13 @@ function renderNodeMenu() {
 		//if (cannot_access($slug)) continue;
 		$page_r = humanize($page);
 		$page_r = $wrapTextInADiv ? '<div>' . $page_r . '</div>' : $page_r;
-		//href="' . pageUrl(variable('node') . '/' . $page) . '" 
 
 		$files = []; $tiss = false;
 		$standalones = variableOr('standalone-pages', []);
 		if (in_array($page, $standalones)) {
 			variable('page_parameter1_safe', $page);
 			$tiss = true;
-			$menuFile = concatSlugs([variable('path'), variable('section'), variable('node'), $page, 'menu.php']);
+			$menuFile = concatSlugs([variable('path'), variable('section'), variable(SAFENODEVAR), $page, 'menu.php']);
 			$files = disk_include($menuFile, ['callingFrom' => 'header-page-menu', 'limit' => 5]);
 			if ($tsmn = variable(getSectionKey($page, MENUNAME)))
 				$page_r = $tsmn;
@@ -32,16 +31,16 @@ function renderNodeMenu() {
 
 		if (disk_is_dir(NODEPATH . '/' . $page)) {
 			echo '<li class="' . $itemClass . '"><a class="' . $anchorClass . '">' . $page_r . '</a>';
-			menu('/' . variable('section') . '/' . variable('node') . '/' . $page . '/', [
+			menu('/' . variable('section') . '/' . variable(SAFENODEVAR) . '/' . $page . '/', [
 				'link-to-home' => variable('link-to-node-sub-section'),
 				'files' => $files, 'this-is-standalone-section' => $tiss,
 				'ul-class' => $ulClass,
 				'li-class' => $itemClass,
 				'a-class' => $anchorClass,
-				'parent-slug' => $tiss ? '' : variable('node') . '/' . $page . '/',
+				'parent-slug' => $tiss ? '' : variable(SAFENODEVAR) . '/' . $page . '/',
 			]);
 		} else if ($hasFiles) {
-			echo '<li class="' . $itemClass . '"><a href="' . pageUrl(variable('node') . '/' . $page) . '" class="' . $anchorClass . '">' . $page_r . '</a>';
+			echo '<li class="' . $itemClass . '"><a href="' . pageUrl(variable(SAFENODEVAR) . '/' . $page) . '" class="' . $anchorClass . '">' . $page_r . '</a>';
 		}
 		echo '</li>' . NEWLINES2;
 	}
@@ -101,8 +100,7 @@ function _getBreadcrumbs() {
 	if (empty($breadcrumbs)) return [];
 
 	$result = [];
-	$section = variable('section');
-	$node = variable('node');
+	$node = variable('node'); //not safe - starts at 1
 
 	$base = $node . '/';
 

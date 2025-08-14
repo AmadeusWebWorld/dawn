@@ -433,7 +433,7 @@ function _renderedScaffold() {
 	$code = variable('scaffoldCode');
 	if (!$code) return false;
 
-	runFeature($code, false);
+	runFeature($code);
 	return true;
 }
 

@@ -178,7 +178,6 @@ function replaceHtml($html) {
 	if (!$replaces) {
 		$section = variable('section');
 		$node = variable('node');
-		$safeUrl = variable('page-url');
 		variable($key, $replaces = [
 			//Also, we should incorporate dev tools like w3c & broken link checkers
 			'%url%' => variable('page-url'),

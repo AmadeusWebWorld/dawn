@@ -47,6 +47,7 @@ function title($what = 'default') {
 }
 
 //locations
+DEFINE('PARENTNODEASSETS', 'PARENTNODE');
 DEFINE('NODEASSETS', 'NODE');
 DEFINE('NETWORKASSETS', 'NETWORK');
 DEFINE('SITEASSETS', 'SITE');
@@ -90,23 +91,31 @@ function assetMeta($location = SITEASSETS, $setValueOr = false) {
 function getLogoOrIcon($what, $which = 'site') {
 	$suffix = ($what == 'icon' ? '-icon' : '-logo') . '.png';
 
-	$inNode = $which == 'node' && hasVariable('nodeSafeName') && DEFINED('NODEPATH');
-	$name = variable($inNode ? 'nodeSafeName' : 'safeName') . $suffix;
-
 	$netWorkManaged = variable('network-manages-site-assets');
 	$prefix = $netWorkManaged && DEFINED('SITENAME') ? SITENAME . '/' : '';
-	$where = $inNode ? STARTATNODE : ($netWorkManaged ? STARTATNETWORK : STARTATSITE);
+
+	if ($which == 'nodeParent1') {
+		$inNode = true;
+		$name = subVariable('nodeParent1', 'nodeSafeName') . $suffix;
+		$where = STARTATPARENTNODE;
+	} else {
+		$inNode = $which == 'node' && hasVariable('nodeSafeName') && DEFINED('NODEPATH');
+		$name = variable($inNode ? 'nodeSafeName' : 'safeName') . $suffix;
+
+		$where = $inNode ? STARTATNODE : ($netWorkManaged ? STARTATNETWORK : STARTATSITE);
+	}
 
 	return _resolveFile($prefix . $name, $where, $inNode);
 }
 
-DEFINE('STARTATNODE', 0);
-DEFINE('STARTATNETWORK', 1);
-DEFINE('STARTATSITE', 2);
-DEFINE('STARTATCORE', 3);
+DEFINE('STARTATPARENTNODE', 0);
+DEFINE('STARTATNODE', 1);
+DEFINE('STARTATNETWORK', 2);
+DEFINE('STARTATSITE', 3);
+DEFINE('STARTATCORE', 4);
 
 function _resolveFile($file, $where = 0, $includeAssets = true) {
-	$hierarchy = [NODEASSETS, NETWORKASSETS, SITEASSETS, COREASSETS];
+	$hierarchy = [PARENTNODEASSETS, NODEASSETS, NETWORKASSETS, SITEASSETS, COREASSETS];
 	while (true) { if (hasVariable( assetKey($hierarchy[$where]))) break; else $where++; }
 	$result = assetUrl($file, $hierarchy[$where]);
 	if (!$includeAssets) $result = str_replace('/assets/', '/', $result);

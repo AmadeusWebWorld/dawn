@@ -74,6 +74,7 @@ parseSectionsAndGroups($siteVars);
 function _visane($siteVars) {
 	//defaults are given, hence guaranteed and site is the only way
 	$guarantees = [
+		['footer-name', null], //needs null as uses !== in variableOr
 		['link-to-site-home', true, 'bool'],
 		['link-to-section-home', false, 'bool'],
 		['ChatraID', '--use-amadeusweb'],
