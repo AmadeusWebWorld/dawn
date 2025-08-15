@@ -1,10 +1,13 @@
 <?php
+DEFINE('SCRIPTTAG', NEWLINE . '	<script src="%s" type="text/javascript"></script>');
+
 function scriptTag($url) {
-	echo PHP_EOL . '	<script src="' . $url . '" type="text/javascript"></script>';
+	echo sprintf(SCRIPTTAG, $url);
 }
 
+DEFINE('CSSTAG', NEWLINE . '	<link href="%s" rel="stylesheet" type="text/css">');
 function cssTag($url) {
-	echo PHP_EOL . '	<link href="' . $url . '" rel="stylesheet" type="text/css"> ';
+	echo sprintf(CSSTAG, $url);
 }
 
 function getPageName($tailOnly = true) {

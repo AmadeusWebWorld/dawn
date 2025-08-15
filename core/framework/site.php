@@ -87,6 +87,7 @@ function _visane($siteVars) {
 		//['address-url', '#address'], //not here as needed for social too
 
 		['mediakit', '?palette=default'],
+		['fonts', []], //used in mediakit.php
 		['description', false],
 	];
 
@@ -101,6 +102,9 @@ function _visane($siteVars) {
 		$op[$cfg[0]] = valueIfSetAndNotEmpty($siteVars, $cfg[0], $cfg[1], isset($cfg[2]) ? $cfg[2] : 'no-change');
 	}
 
+	if (!empty($op['fonts']))
+		$op['mediakit'] .= '&' . $op['fonts'];
+
 	__testSiteVars($op);
 	variables($op);
 }
@@ -111,6 +115,7 @@ function _always($siteVars) {
 		'name',
 		'byline',
 		'safeName',
+		'iconName',
 		'footer-message',
 		'siteMenuName',
 	];

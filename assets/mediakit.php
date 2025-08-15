@@ -1,11 +1,17 @@
 <?php
 header("Content-type: text/css");
 include_once '../core/framework/4-array.php';
-DEFINE('NEWLINES2', "\r\n\r\n");
+DEFINE('NEWLINE', "\r\n");
+DEFINE('NEWLINES2', NEWLINE . NEWLINE);
 
 if ($raw = valueIfSetAndNotEmpty($_GET, 'raw')) { echo $raw; return; }
 
-$palette = $_GET;
+$palette = $fonts = $_GET;
+
+if ($cursive = valueIfSetAndNotEmpty($fonts, 'cursive')) {
+	//remember to support multiple in same url
+	echo '@import url(\'https://fonts.googleapis.com/css2?family=' . str_replace(' ', '+', $cursive) . '&display=swap\');' . NEWLINES2;
+}
 
 $op = '
 :root {
@@ -40,3 +46,7 @@ if (valueIfSetAndNotEmpty($palette, 'dont-round-logo', false, TYPEBOOLEAN))
 if ($node = _color($palette, 'node', false))
 	echo '#page-menu { background-color: ' . $node . ' }' . NEWLINES2;
 
+if ($content = _color($palette, 'content', false))
+	echo '#content { background-color: ' . $content . '; }' . NEWLINES2;
+
+if ($cursive) echo '.cursive { font-family: "' . $cursive . '", serif; }' . NEWLINES2;

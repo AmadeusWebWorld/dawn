@@ -226,6 +226,9 @@ function replaceHtml($html) {
 		variable('whatsapp-txt-start', $wame);
 	}
 
+	if ($hr = variable('htmlReplaces'))
+		$html = replaceItems($html, $hr, '%');
+
 	if ($nw = variable('networkUrls'))
 		$html = replaceItems($html, $nw, '%');
 	return replaceItems($html, $replaces);

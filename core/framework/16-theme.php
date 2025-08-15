@@ -64,6 +64,11 @@ function getThemeSnippet($name, $location = false) {
 	return NEWLINES2 . replaceItems($html, $vars) . NEWLINE;
 }
 
+function includeThemeManager() {
+	$mgr = getThemeFile('manager.php');
+	disk_include_once($mgr);
+}
+
 function runThemePart($what) {
 
 	if (!($content = variable('theme-template'))) {
@@ -103,6 +108,7 @@ function runThemePart($what) {
 			variableOr('footer-logo-max-width', '500'), '" alt="', variableOr('nodeSiteName', variable('name')), '">' . NEWLINE
 			. '							</a><br>'], '');
 
+		$vars['optional-page-css'] = [];
 		$vars['optional-page-menu'] = _page_menu($siteIcon, $nodeIcon);
 
 		$header = _substituteThemeVars($content, 'header', $vars);
@@ -176,15 +182,14 @@ function site_and_node_icons($siteIcon = null, $nodeIcon = null, $nodeSuffix = '
 	if (!$siteIcon) $siteIcon = getLogoOrIcon('icon', 'site');
 	if (!$nodeIcon) $nodeIcon = getLogoOrIcon('icon', 'node' . $nodeSuffix);
 
-	if ($nodeParent1 = variableOr('nodeParent1', '')) {
-		$p1Icon = getLogoOrIcon('icon', 'nodeParent1');
-		$nodeParent1 = '<a href="' . pageUrl(subVariable('nodeParent1', 'nodeSlug')) . '">' . NEWLINE . '		<img height="40" src="' . $p1Icon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE;
-	}
+	if ($nodeParent1 = variableOr('nodeParent1', ''))
+		$nodeParent1 = _iconLink(getLogoOrIcon('icon', 'nodeParent1'), subVariable('nodeParent1', 'nodeSlug'));
 
-	$nodeSlugOrNode = variableOr('nodeSlug', variable('node'));
-	return '<a href="' . pageUrl() . '">' . NEWLINE . '		<img height="40" src="' . $siteIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE
-		. $nodeParent1
-		. '<a href="' . pageUrl($nodeSlugOrNode) . '">' . NEWLINE . '		<img height="40" src="' . $nodeIcon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE;
+	return _iconLink($siteIcon) . $nodeParent1 . _iconLink($nodeIcon, variable(SAFENODEVAR));
+}
+
+function _iconLink($icon, $slug = '') {
+	return '<a href="' . pageUrl($slug) . '">' . NEWLINE . '		<img height="40" src="' . $icon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE;
 }
 
 function _page_menu($siteIcon, $nodeIcon) {
@@ -218,6 +223,7 @@ function _substituteThemeVars($content, $what, $vars) {
 		$vars = enrichThemeVars($vars, $what);
 
 	if ($what == 'header') {
+		$vars['optional-page-css'] = implode($vars['optional-page-css']);
 		if ($vars['optional-slider'] == '')
 			$vars['body-classes'] = $vars['body-classes'] . ' no-slider';
 	}
