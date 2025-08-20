@@ -50,6 +50,9 @@ function _table_row_values($item, $cols, $tsv, $values, $template) {
 		if (contains($template, $key . '_slug'))
 			$r[$key . '_slug'] = urlize($value);
 
+		if (contains($template, $key . '_sluggized'))
+			$r[$key . '_sluggized'] = sluggize($value);
+
 		if (endsWith($key, '_urlized')) {
 			$wrap = $start ? ['<b>', '</b>'] : ['', ''];
 			if ($start) $value = substr($value, 2);
@@ -149,6 +152,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 
 	$skipItemFn = isset($values['skipItem']) ? $values['skipItem'] : false;
 	$wantsBSRow = isset($values['use-a-bootstrap-row']) && $values['use-a-bootstrap-row'];
+	//NOTE: treat-row-as-markdown: cannot happen as cebe will autodetect that a td is in process
 
 	if ($beforeContent = valueIfSetAndNotEmpty($values, 'before-content')) echo returnLine(pipeToBR($beforeContent));
 	if ($allowCards) echo '<div class="text-center"><button data-table-id="amadeus-table-' . $id . '" class="amadeus-table-' . $id . '-card-view">toggle card view</button></div>' . BRNL;

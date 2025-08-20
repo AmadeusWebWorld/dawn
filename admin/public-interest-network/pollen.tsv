@@ -1,0 +1,16 @@
+#site	where	text	goesTo	business
+|where == icons	text	embed
+
+|is-table-with-template
+||treat-row-as-markdown: yes
+||pipe-to-newline: yes
+
+||head-columns: Site_md, CTA, Link
+||row-template: <tr><td><a href="%%site_sluggized%-url%">%site%</a></td><td>%text%</td><td>%goesTo_link%</td></tr>
+
+amadeus8	icons	Let's Save the planet	%amadeus8-url%/act-now	
+amadeus8	icons	Let's Save the planet 2	%amadeus8-url%/act-now/#h2=2	
+amadeus8	icons	Let's Save the planet 3	%amadeus8-url%/act-now/#h2=3	
+amadeus8	icons	Let's Save the planet 4	%amadeus8-url%/act-now/#h2=4	
+work/sites	text	Sign up for Biz Consulting	%work-sites-url%	yes
+friends/vidyantara	embed	==nothing==	%vidyantara-url%/relief-foundation/	

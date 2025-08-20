@@ -4,10 +4,10 @@
  * It is licensed for distribution at the sole discretion of it's owner Imran.
  * Copyright Oct 2019 -> 2025, AmadeusWeb.com, All Rights Reserved!
  * Author: Imran Ali Namazi <imran@amadeusweb.com>
- * Website: https://v8.amadeusweb.com/
+ * Website: https://dawn.amadeusweb.com/
  * Source:  https://github.com/AmadeusWebInAction/amadeus8
- * Note: AmadeusWeb v8.2 is based on 25 years of Imran's programming experience:
- * https://imran.yieldmore.org/career-past/
+ * Note: AmadeusWeb v8.3 is based on 25 years of Imran's programming experience:
+ * https://imran.wiseowls.life/about-me/amadeusweb-dawns/
  */
 
 DEFINE('AMADEUSROOT', dirname(__DIR__, 2) . DIRECTORY_SEPARATOR);
@@ -63,6 +63,9 @@ runFrameworkFile('15-routing');
 
 //v8.1
 runFrameworkFile('16-theme');
+
+//v8.3
+runFrameworkFile('17-pollinator');
 
 function before_bootstrap() {
 	$port = $_SERVER['SERVER_PORT'];

@@ -146,18 +146,14 @@ function _renderImplementation($fileOrRaw, $settings) {
 		return;
 	}
 
-	if (isset($settings['markdown'])) {
-		//$settings['strip-paragraph-tag'] = true;
-		$settings['clear-markdown-start'] = true;
-		$fileOrRaw = (disk_file_exists($fileOrRaw) ? '' : variable('markdownStartTag')) . $fileOrRaw;
-	}
-
 	//TODO: Consider an explicit-load so file exists can be avoided?
 	//debug('render.php - _renderImplementation', ['verbose params!', $fileOrRaw]);
 
 	$endsWithMd = false;
 	$raw = $fileOrRaw; $fileName = '[RAW]';
-	if ($wasFile = isContentFile($fileOrRaw)) {
+	$treatAsMarkdown = valueIfSet($settings, 'markdown');
+
+	if ($wasFile = !$treatAsMarkdown && isContentFile($fileOrRaw)) {
 		$fileName = $fileOrRaw;
 		$endsWithMd = endsWith($fileOrRaw, '.md');
 		$raw = disk_file_get_contents($fileOrRaw);
@@ -232,12 +228,9 @@ function _renderImplementation($fileOrRaw, $settings) {
 				$raw = processAI($raw, 'gemini');
 			}
 
-			$output = $md || $endsWithMd ? markdown($raw) : wpautop($raw);
+			$output = $md || $endsWithMd || $treatAsMarkdown ? markdown($raw) : wpautop($raw);
 		}
 	}
-
-	if (contains($output, '%menu-for-this'))
-		$output = _renderAllInPageMenus($output);
 
 	$output = runAllMacros($output);
 
@@ -255,9 +248,6 @@ function _renderImplementation($fileOrRaw, $settings) {
 
 	if (isset($settings['strip-paragraph-tag']))
 		$output = strip_paragraph($output);
-
-	if (isset($settings['clear-markdown-start']))
-		$output = str_replace(variable('markdownStart'), '', $output);
 
 	if (contains($output, '%fileName%'))
 		$output = replaceItems($output, ['%fileName%' => '<u>EDIT FILE:</u> ' .

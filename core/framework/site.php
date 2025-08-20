@@ -202,33 +202,35 @@ function setupNetwork($network, $thisUrl) {
 		}
 
 		$sheet = getSheet($sheetFile, 'key');
-		$val = $sheet->columns['value'];
+		$valueIndex = $sheet->columns['value'];
 
 		$item = $sheet->group;
 
 		//expects all to follow the same principle
-		if (contains($url = $item[variable(SITEURLKEY)][0][$val], 'localhost'))
+		if (contains($url = $item[variable(SITEURLKEY)][0][$valueIndex], 'localhost'))
 			$url = replaceItems($url, ['localhost' => 'localhost' . variable('port')]);
 
-		$site = str_replace('/', '--', $siteAt); //NOTE: escape char
+		$site = sluggize($siteAt);
 		$status = variable('local') ? "\r\n\r\nstatus: " . $siteObj['Status'] : '';
-		$imgPrefix = $url . ($slug = $item['safeName'][0][$val]);
+		$imgPrefix = $url . ($slug = $item['safeName'][0][$valueIndex]);
 
 		$link = replaceItems('<a class="site-icon" href="%href%" target="_blank" title="%name% &mdash; %byline%">' .
 				'<img src="%src%" height="30px" />  %text%</a>', [
 			'href' => $url,
-			'name' => $name = $item['name'][0][$val],
-			'byline' => ($byline = $item['byline'][0][$val]) . $status,
+			'name' => $name = $item['name'][0][$valueIndex],
+			'byline' => ($byline = $item['byline'][0][$valueIndex]) . $status,
 			'src' => $imgPrefix . '-icon.png',
-			'text' => $item['iconName'][0][$val],
+			'text' => $item['iconName'][0][$valueIndex],
 			], '%');
 
 		$networkUrls[$site . '-url'] = $url;
-		$networkItems[] = $thisItem = [
+		$networkItems[$siteAt] = $thisItem = [
 			'url' => $url,
+			'siteAt' => $siteAt,
+			'safeName' => $slug,
 			'name' => $name,
 			'byline' => $byline,
-			'description' => $item['footer-message'][0][$val],
+			'description' => $item['footer-message'][0][$valueIndex],
 			'icon-link' => $link,
 			'img-prefix' => $imgPrefix,
 			'status' => $siteObj['Status'],

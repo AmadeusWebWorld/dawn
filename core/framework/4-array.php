@@ -230,29 +230,35 @@ function sheetExists($name) {
 	return disk_file_exists(_sheetPath($name));
 }
 
-function getSheet($name, $groupBy = 'section', $urlize = false) {
+class sheet {
+	public array $columns;
+	public array $rows;
+	public array $values;
+	public array | null $group;
+
+	public function getValue($item, $columnName, $default = '') {
+		$result = $item[$this->columns[$columnName]];
+		return $result ? $result : $default;
+	}
+
+	public function asObject($item) {
+		return rowToObject($item, $this);
+	}
+}
+
+function getSheet($name, $groupBy = 'section', $urlize = false) : sheet {
+
 	$varName = 'sheet_' . $name . '_' . $groupBy;
 	if ($existing = variable($varName)) return $existing;
 
 	$file = _sheetPath($name);
 	extract(tsvToSheet(disk_file_get_contents($file)));
 
-	$r = new class {
-		public $columns;
-		public $rows;
-		public $values;
-		public $group;
-		public $group2; //for taxonomy
+	$r = new sheet;
 
-		public function getValue($item, $columnName, $default = '') {
-			$result = $item[$this->columns[$columnName]];
-			return $result ? $result : $default;
-		}
-	};
-
-	$r->columns = $columns;
-	$r->rows = $rows;
-	$r->values = $values;
+	$r->columns = (array)$columns;
+	$r->rows = (array)$rows;
+	$r->values = (array)$values;
 	$r->group = null;
 
 	if($groupBy !== false)
@@ -301,7 +307,7 @@ function getPageValue($sectionName, $key, $default = false) {
 		$valueIndex = $sheet->columns['value'];
 		$values = [];
 
-		$keys = array_group_by($section, $sheet->columns['key']);
+		$keys = arrayGroupBy($section, $sheet->columns['key']);
 		foreach ($keys as $k => $v)
 			$values[$k] = $v[0][$valueIndex];
 

@@ -53,6 +53,10 @@ function humanize($txt, $how = false) {
 	return $words;
 }
 
+function sluggize($relPath) {
+	return str_replace('/', '--', $relPath);
+}
+
 function blog_heading($name, $fol) {
 	if (contains($fol, 'by') || in_array($fol, variableOr('flat-blogs', []))) return humanize($name);
 

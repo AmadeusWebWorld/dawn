@@ -45,6 +45,7 @@ if ($groups = variable('section-groups')) {
 	}
 }
 
+if (function_exists('pollenAt')) pollenAt(PINICONS);
 if (function_exists('after_menu')) after_menu();
 if (function_exists('network_after_menu')) network_after_menu();
 if (!$noOuterUl) _menuULStart('site');
