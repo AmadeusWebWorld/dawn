@@ -192,6 +192,10 @@ function _iconLink($icon, $slug = '') {
 	return '<a href="' . pageUrl($slug) . '">' . NEWLINE . '		<img height="40" src="' . $icon . '" /></a>&nbsp;&nbsp;&nbsp;' . NEWLINE;
 }
 
+function _iconImage($src) {
+	return NEWLINE . '		<img height="90" src="' . $icon . '" /></a></li>' . NEWLINE;
+}
+
 function _page_menu($siteIcon, $nodeIcon) {
 	if (!variable('submenu-at-node')) return '<!--no-page-menu-->';
 

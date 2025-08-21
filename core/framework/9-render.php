@@ -153,7 +153,7 @@ function _renderImplementation($fileOrRaw, $settings) {
 	$raw = $fileOrRaw; $fileName = '[RAW]';
 	$treatAsMarkdown = valueIfSet($settings, 'markdown');
 
-	if ($wasFile = !$treatAsMarkdown && isContentFile($fileOrRaw)) {
+	if ($wasFile = isContentFile($fileOrRaw)) {
 		$fileName = $fileOrRaw;
 		$endsWithMd = endsWith($fileOrRaw, '.md');
 		$raw = disk_file_get_contents($fileOrRaw);

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="x-ua-compatible" content="IE=edge">
+	##seo##
+
+	<!-- Font Imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800;900&family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+	<!-- Core Style -->
+	<link rel="stylesheet" href="##theme##style.css">
+
+	<!-- Font Icons -->
+	<link rel="stylesheet" href="##theme##css/font-icons.css">
+	<link rel="stylesheet" href="##theme##one-page/css/et-line.css">
+
+	<!-- Plugins/Components CSS -->
+	<link rel="stylesheet" href="##theme##css/swiper.css">
+
+	<!-- Niche Demos -->
+	<link rel="stylesheet" href="##theme##demos/business/business.css">
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="##theme##css/custom.css">
+	##optional-page-css##
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	##head-includes##
+</head>
+
+<body class="stretched ##body-classes##">
+
+	<!-- Document Wrapper
+	============================================= -->
+	<div id="wrapper">
+
+		##optional-slider##
+		##content##
+	</div><!-- #wrapper end -->
+
+	<!-- Go To Top
+	============================================= -->
+	<div id="gotoTop" class="uil uil-angle-up"></div>
+
+	<!-- JavaScripts
+	============================================= -->
+	<script src="##theme##js/plugins.min.js"></script>
+	<script src="##theme##js/functions.bundle.js"></script>
+
+	<script>
+		jQuery(window).on( 'load', function(){
+			jQuery('#oc-features').owlCarousel({
+				items: 1,
+				margin: 60,
+			    nav: true,
+			    navText: ['<i class="bi-arrow-left"></i>','<i class="bi-arrow-right"></i>'],
+			    dots: false,
+			    stagePadding: 30,
+			    responsive:{
+					768: { items: 2 },
+					1200: { stagePadding: 200 }
+				},
+			});
+		});
+	</script>
+
+</body>
+</html>

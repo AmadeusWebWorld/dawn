@@ -3,8 +3,9 @@ DEFINE('PINICONS', 'icons');
 DEFINE('PINTEXT',  'text');
 DEFINE('PINEMBED', 'embed');
 
-function pollenAt($where, $exclude = 'me-only, business') {
-	if (true || variable('dont-pollinate')) return;
+function pollenAt($where, $exclude = 'me, business') {
+	if (variable('live') || variable('dont-pollinate')) return;
+	if (hasPageParameter('slider') || hasPageParameter('content')) return;
 
 	$sheet = getSheet(AMADEUSROOT . 'admin/public-interest-network/pollen.tsv', 'where');
 
@@ -17,6 +18,7 @@ function pollenAt($where, $exclude = 'me-only, business') {
 		$thisIsBiz = parseAnyType($sheet->getValue($row, 'business'), TYPEBOOLEAN);
 		$thisSite = subVariable('networkItems', sluggize($site = $sheet->getValue($row, 'site')));
 
+		if (!$thisSite) continue;
 		if ($noBusiness && $thisIsBiz) continue;
 		if ($noMe && $thisSite['safeName'] == variable('safeName')) continue;
 
@@ -25,13 +27,33 @@ function pollenAt($where, $exclude = 'me-only, business') {
 			continue;
 		}
 
-		$items[] = $sheet->asObject($row);
+		$obj = $sheet->asObject($row);
+		$obj['url'] = $thisSite['url'];
+		$obj['safeName'] = $thisSite['safeName'];
+
+		$items[] = $obj;
 	}
 
+//	parameterError('36', $items, false);
 	if (count($items) == 0) return;
-
 	shuffle($items);
-	$items = array_splice($items, 0, 5);
-	$item = $items[0];
-	parameterError('30 @' . $where, $items, false);
+
+	$counts = [
+		PINICONS => 5,
+		PINTEXT => 3,
+		PINEMBED => 1,
+	];
+
+	$items = array_splice($items, 0, $counts[$where]);
+	renderPollen($where, $items);
+}
+
+function renderPollen($where, $items) {
+	$op = [];
+	
+	if ($where == PINICONS) {
+		foreach ($items as $item)
+			$op[] = NEWLINE . '		<li>' . getLink(_iconImage($item['url'] . $item['safeName'] . '-icon.png'), $item['goesTo']) . '</li>';
+		echo implode(NEWLINE, $op);
+	}
 }

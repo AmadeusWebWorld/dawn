@@ -152,6 +152,8 @@ function render() {
 	} else if (isset($_GET['share'])) {
 		runFeature('share');
 		$rendered = true;
+	} else if (hasPageParameter('slider')) {
+		$rendered = true; //dont want to render content. and needed here as it shouldnt support "content" menu pages
 	} else {
 		$fwe =  $folder . variable('node');
 		$rendered = renderAnyFile($fwe . '.', ['extensions' => 'core', 'return-on-first' => true]);
@@ -193,6 +195,7 @@ function render() {
 	ob_end_flush();
 
 	if (!$embed) {
+		if (function_exists('pollenAt')) pollenAt('embed');
 		if (function_exists('after_file')) after_file();
 		renderThemeFile('footer', $theme); //theme.php is now responsible for calling stats before styles+scipts as the table feature requires its usage and it will be before </body>
 	}

@@ -44,7 +44,7 @@ if (valueIfSetAndNotEmpty($palette, 'dont-round-logo', false, TYPEBOOLEAN))
 	echo '.img-logo { border-radius: 0px!important; }' . NEWLINES2;
 
 if ($node = _color($palette, 'node', false))
-	echo '#page-menu { background-color: ' . $node . ' }' . NEWLINES2;
+	echo '#page-menu-wrap { background-color: ' . $node . ' }' . NEWLINES2;
 
 if ($content = _color($palette, 'content', false))
 	echo '#content { background-color: ' . $content . '; }' . NEWLINES2;
