@@ -59,7 +59,7 @@ a.icon { padding-left: 35px; background-repeat: no-repeat; background-position: 
 .hide-h2 h2 { display: none; } /* articles page... */
 
 /* after content */
-.after-content { background-color: var(--after-content-background, #f0f0f0)!important; }
+.after-content { background-color: var(--amadeus-after-content-bgd, #f0f0f0)!important; }
 #statistics .after-content { background-color: rgb(255, 229, 195)!important; }
 .after-content table, .after-content .block-links { background-color: white; }
 .after-content .block-links { padding: 15px; border: 1px solid #666; }

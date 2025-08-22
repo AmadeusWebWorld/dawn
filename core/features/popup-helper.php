@@ -53,7 +53,7 @@ function getPopupTabs($tabs = DEFAULTTABS, $startsWith = []) {
 
 function getEngageTab($what) {
 	if ($what == SITEWIDETAB || $what == CONTACTTAB) {
-		$file = SITEPATH . '/data/' . ($what == CONTACTTAB ? 'contact' : 'engage') . '.';
+		$file = SITEPATH . '/data/engage/' . ($what == CONTACTTAB ? 'contact' : 'sitewide') . '.';
 		$extension = disk_one_of_files_exist($file, ENGAGEFILES);
 		if (!$extension) return false;
 		$file .= $extension;
@@ -66,7 +66,7 @@ function getEngageTab($what) {
 
 	doToBuffering(1);
 
-	autoRender($file);
+	autoRender($file, false, false);
 
 	$result = doToBuffering(2);
 	doToBuffering(3);

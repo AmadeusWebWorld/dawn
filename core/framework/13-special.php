@@ -24,7 +24,7 @@ function isContentFile($fileOrRaw) {
 	return false;
 }
 
-function autoRender($file, $type = false) {
+function autoRender($file, $type = false, $useHeading = true) {
 	if (endsWith($file, '.php')) {
 		renderAnyFile($file);
 		pageMenu($file);
@@ -67,8 +67,10 @@ function autoRender($file, $type = false) {
 			_renderedBlurbs($file);
 		else if (startsWith($raw, '<!--is-deck-->'))
 			_renderedDeck($file, $pageName);
-		else
+		else if ($useHeading)
 			renderAny($file, ['use-content-box' => true, 'heading' => $pageName]);
+		else
+			renderAny($file, ['use-content-box' => true]);
 
 		section('end');
 		pageMenu($file);
@@ -100,7 +102,7 @@ function autoRender($file, $type = false) {
 		return;
 	}
 
-	$siteTheme = variable('site-has-theme');
+	$siteTheme = variable('site-has-theme') || variable('skip-container-for-this-page');
 	if (!$siteTheme) sectionId('file', _getCBClassIfWanted('container'));
 	renderAny($file);
 	if (!$siteTheme) section('end');

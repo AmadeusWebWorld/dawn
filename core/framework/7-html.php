@@ -6,6 +6,7 @@ function currentUrl() {
 }
 
 function currentLevel($wrap = true) {
+	return '';
 	$nodeIsSection = variable('node') == variable('section');
 	$isPageWhenSHF = !$nodeIsSection && variable('sections-have-files');
 	if (hasVariable('page_parameter3'))
@@ -134,10 +135,7 @@ function listItem($html) {
 ///Internal Variables & its replacements
 
 function pipeToBR($raw) {
-	$replaces = [
-		'|' => BRNL,
-	];
-	return replaceItems($raw, $replaces);
+	return replaceItems($raw, [ '|' => BRNL ]);
 }
 
 function csvToHashtags($raw) {

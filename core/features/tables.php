@@ -176,7 +176,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 			$row = _table_row_values($item, $columns, $tsv, $values, $template);
 			if ($skipItemFn && $skipItemFn($row)) continue;
 		}
-		echo replaceHtml(prepareLinks(replaceItems($template, $row, '%')));
+		echo NEWLINE . replaceHtml(prepareLinks(replaceItems($template, $row, '%')));
 	}
 	if ($wantsBSRow) echo '</div><!-- end #' . $id . ' -->' . NEWLINES2; else
 	echo '

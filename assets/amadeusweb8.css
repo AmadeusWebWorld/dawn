@@ -100,10 +100,6 @@ footer .btn a.more-link:hover {
 	animation: blinker 1s linear infinite;
 }
 
-.is-expanded-menu #header.transparent-header {
-	--cnvs-header-bg: var(--cnvs-header-bg-override, white) !important;
-}
-
 .device-up-md {
 	--cnvs-floating-btn-box-width: 700px;
 }
