@@ -193,7 +193,7 @@ function _iconLink($icon, $slug = '') {
 }
 
 function _iconImage($src) {
-	return NEWLINE . '		<img height="90" src="' . $icon . '" /></a></li>' . NEWLINE;
+	return NEWLINE . '		<img height="90" src="' . $src . '" /></a></li>' . NEWLINE;
 }
 
 function _page_menu($siteIcon, $nodeIcon) {

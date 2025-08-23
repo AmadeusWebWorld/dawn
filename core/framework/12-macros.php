@@ -198,6 +198,11 @@ function processVideoShortcode($html) {
 DEFINE('SPACERSTART', '<div class="divider divider-center m-0"><h1>');
 DEFINE('SPACEREND', '</h1></div>');
 
+function printSpacer($heading, $ix = 1) {
+	sectionId('spacer' . $ix, 'spacer');
+	echo SPACERSTART . $heading . SPACEREND;
+}
+
 function processSpacerShortcode($html) {
 	return replaceItems($html, [
 		'[spacer]' => cbCloseAndOpen('spacer') . SPACERSTART,

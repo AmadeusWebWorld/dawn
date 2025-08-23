@@ -1,7 +1,6 @@
 if (typeof ($) === 'undefined') $ = jQuery.noConflict();
 
 $(document).ready(function () {
-	debugger;
 	if ($('.amadeus-data-table').length == 0) return;
 
 	function thisTable(el) {

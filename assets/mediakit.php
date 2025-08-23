@@ -33,12 +33,12 @@ function _color($palette, $key, $default) {
 	return $val == 'no' ? 'transparent' : '#' . $val;
 }
 
-$content = _color($palette, 'content', false);
+$content = _color($palette, 'content', 'FFE9F4');
 
 echo replaceItems($op, [
 	'header' => _color($palette, 'header', 'no'),
 	'sticky-header' => $content ? $content : '#fff',
-	'footer' => _color($palette, 'footer', valueIfSetAndNotEmpty($palette, 'theme', 'no')),
+	'footer' => _color($palette, 'footer', '999'),
 	'body' => _color($palette, 'body', 'bee6f9'),
 	'link' => _color($palette, 'link', '5BDCFF'),
 	'heading' => _color($palette, 'heading', 'E1F2FF'),
