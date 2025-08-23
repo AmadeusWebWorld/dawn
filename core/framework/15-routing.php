@@ -37,3 +37,19 @@ function getSectionKey($slug, $for) {
 function getSectionFrom($dir) {
 	return pathinfo($dir, PATHINFO_FILENAME);
 }
+
+function autoSetNode($level = 1) {
+	$section = variable('section');
+	$node = variable('node');
+
+	if ($node == 'index' OR $section == $node) return;
+
+	DEFINE('NODEPATH', SITEPATH . '/' . variable('section') . '/' . $node);
+	variables([
+		assetKey(NODEASSETS) => fileUrl(variable('section') . '/' . variable('node') . '/assets/'),
+		'nodeSiteName' => humanize($node),
+		'nodeSafeName' => $node,
+		'submenu-at-node' => true,
+		'nodes-have-files' => true,
+	]);
+}

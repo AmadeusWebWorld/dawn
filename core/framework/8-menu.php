@@ -29,8 +29,8 @@ function _handleSlashes($file, $handle, $useMDash) {
 	return $useMDash ? join(' &mdash; ', $bits) : array_pop($bits);
 }
 
-function _skipNodeFiles($files) {
-	return _skipExcludedFiles($files, variable('exclude-folders'), '', true);
+function _skipNodeFiles($files, $excludeExtensions = 'pdf') {
+	return _skipExcludedFiles($files, variable('exclude-folders'), $excludeExtensions, true);
 }
 
 function _skipExcludedFiles($files, $excludeNames = 'home', $excludeExtensions = 'jpg, png', $stripExtension = false) {

@@ -24,6 +24,20 @@ foreach ($sheet->rows as $item) {
 	echo '<hr />' . NEWLINE;
 }
 
+$op = [];
+foreach ($sources as $repos) {
+	foreach ($repos as $repo) {
+		if (count($op) == 0)
+			$op[] = '#' . implode('	', array_keys($repo))
+				. NEWLINE . '|is-table-with-template'
+				. NEWLINE . '||use-template: for-repositories';
+		$op[] = implode('	', array_values($repo));
+	}
+}
+$op[] = '';
+file_put_contents(__DIR__ . '/repo-list.tsv', implode(NEWLINE, $op));
+echo 'Written ' . (count($op) - 2) . ' lines to ' . getLink('repo list', '../repo-list/');
+
 contentBox('end');
 
 function _urlOf($item, $forAPI = false) {

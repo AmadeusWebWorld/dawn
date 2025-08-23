@@ -91,11 +91,12 @@ function contains($haystack, $needle)
 
 function simplify_encoding($txt) {
 	$replace = [
-		'Â½' => '&frac12',
-		'â€œ' => '"', 'â€' => '"',
-		'â€˜' => "'", 'â€™' => "'",
-		'â€”' => '-', 'â€“' => '-', 'Ã¢â‚¬"' => '-',
-		'â€¦' => '&hellip;'];
+		'½' => '&frac12',
+		'“' => '"', '”' => '"',
+		'‘' => "'", '’' => "'",
+		'—' => '-', '–' => '-', 'â€"' => '-',
+		'…' => '&hellip;',
+	];
 	foreach ($replace as $search=>$replace)
  		$txt = str_replace($search, $replace, $txt);
 	return $txt;

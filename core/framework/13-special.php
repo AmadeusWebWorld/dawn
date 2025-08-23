@@ -78,13 +78,20 @@ function autoRender($file, $type = false, $useHeading = true) {
 	}
 
 	if (endsWith($file, '.tsv')) {
+		runFeature('tables');
+
 		$istwt = contains($raw, '|is-table-with-template') && $meta = getSheet($file, false);
+		if ($meta && isset($meta->values['use-template']))
+			$meta->values = array_merge($meta->values, getSheet(getTableTemplate($meta), false)->values);
+
+		$noCB = $istwt && $meta ? valueIfSet($meta->values, 'no-content-box') : false;
 		if ($istwt) h2(title(FORHEADING) . currentLevel(), 'amadeus-icon');
 
 		$isDeck = contains($raw, '|is-deck');
 		$notRendering = !hasPageParameter('embed') && !hasPageParameter('expanded');
+
+		if ($noCB) sectionId('special-table', 'container'); else
 		if (!$embed) sectionId('special-table', _getCBClassIfWanted('container' . ($isDeck && !$notRendering ? ' deck deck-from-sheet' : '')));
-		runFeature('tables');
 
 		if ($isDeck)
 			renderSheetAsDeck($file, variableOr('all_page_parameters', variable('node')) . '/');

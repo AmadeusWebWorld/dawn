@@ -15,8 +15,10 @@ variable('calendar-cells', explode(',', '1-1,1-2,1-3,1-4,1-5,1-6,1-7,2-1,'
 DEFINE('IGPOSTFORMAT', '<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/%Instagram%/" data-instgrm-version="14"></blockquote>');
 DEFINE('IGREELFORMAT', '<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/%Instagram%/" data-instgrm-version="14" style="max-width:540px; min-width:326px;"></blockquote>');
 
-function getTableTemplate($name) {
-	//return disk_file_get_contents(featurePath('tables/' . $name . '.html'));
+function getTableTemplate($nameOrMeta) {
+	if (is_object($nameOrMeta))
+		$nameOrMeta = $nameOrMeta->values['use-template'];
+	return AMADEUSCORE . 'data/table-templates/' . $nameOrMeta . '.tsv';
 }
 
 function _table_row_values($item, $cols, $tsv, $values, $template) {
@@ -102,6 +104,8 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	$tsv = is_string($dataFile) && endsWith($dataFile, '.tsv');
 	$json = is_string($dataFile) && endsWith($dataFile, '.json');
 	$dontTreat = valueIfSetAndNotEmpty($values, 'dont-treat-array', false);
+	$wantsBSRow = isset($values['use-a-bootstrap-row']) && $values['use-a-bootstrap-row'];
+	$lineTemplateForBS = isset($values['bs-template']) ? $values['bs-template'] : 'not set';
 
 	if ($dontTreat) {
 		$rows = $dataFile;
@@ -128,7 +132,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 
 		$rows = $sheet->rows;
 		$columns = $sheet->columns;
-	} else {
+	} else if (!$wantsBSRow) {
 		//NOTE: Magic columnList can be array of csvs where 2nd is additional cols needed, but not the headers
 		$headingNames = is_string($columnList) ? $columnList : $columnList[0];
 		$headingNames = explode(', ', $headingNames);
@@ -137,9 +141,12 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 		$columns = array_map('strtolower', $columnNames);
 
 		$rows = $json ? jsonToArray($dataFile) : $dataFile;
+	} else {
+		$sheet = getSheet($dataFile, false);
+		$rows = $sheet->rows;
 	}
 
-	if (!$dontTreat)
+	if (!$dontTreat AND !$wantsBSRow)
 		$headings = implode('</th>' . variable('nl') . '			<th>', $headingNames);
 
 	$isInList = variable('is-in-directory');
@@ -151,13 +158,11 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	if ($useDatatables && $rg = valueIfSetAndNotEmpty($values, 'row-group')) $datatableParams .= 'data-row-group="' . $rg . '" ';
 
 	$skipItemFn = isset($values['skipItem']) ? $values['skipItem'] : false;
-	$wantsBSRow = isset($values['use-a-bootstrap-row']) && $values['use-a-bootstrap-row'];
-	//NOTE: treat-row-as-markdown: cannot happen as cebe will autodetect that a td is in process
 
 	if ($beforeContent = valueIfSetAndNotEmpty($values, 'before-content')) echo returnLine(pipeToBR($beforeContent));
 	if ($allowCards) echo '<div class="text-center"><button data-table-id="amadeus-table-' . $id . '" class="amadeus-table-' . $id . '-card-view">toggle card view</button></div>' . BRNL;
 
-	if ($wantsBSRow) echo '<div  id="amadeus-bs-row-' . $id . '" class="row">'; else
+	if ($wantsBSRow) echo '<div id="amadeus-bs-row-' . $id . '" class="row">'; else
 	echo '
 	<table id="amadeus-table-' . $id . '" class="' . $datatableClass . 'table table-striped table-bordered" ' . $datatableParams . 'cellspacing="0" width="100%">
 	<thead>
@@ -170,13 +175,18 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	foreach ($rows as $item) {
 		if ($dontTreat) {
 			$row = $item;
+		} else if($wantsBSRow) {
+			$row = $sheet->asObject($item);
 		} else {
 			$more = isset($item[0]) && $item[0] == '<!--more-->';
 			if ($more) { if (variable('is-in-directory')) break; else continue; }
 			$row = _table_row_values($item, $columns, $tsv, $values, $template);
 			if ($skipItemFn && $skipItemFn($row)) continue;
 		}
-		echo NEWLINE . replaceHtml(prepareLinks(replaceItems($template, $row, '%')));
+		$line = replaceHtml(prepareLinks(replaceItems($template, $row, '%')));
+		if ($wantsBSRow) //NOTE: treat-row-as-markdown: cannot happen unless using bootstrap as cebe will autodetect that a td is in process
+			$line = replaceItems($lineTemplateForBS, ['line' => returnLine(pipeToBR($line))], '%');
+		echo NEWLINE . $line;
 	}
 	if ($wantsBSRow) echo '</div><!-- end #' . $id . ' -->' . NEWLINES2; else
 	echo '

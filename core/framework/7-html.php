@@ -138,6 +138,10 @@ function pipeToBR($raw) {
 	return replaceItems($raw, [ '|' => BRNL ]);
 }
 
+function pipeToNL($raw) {
+	return replaceItems($raw, [ '|' => NEWLINE ]);
+}
+
 function csvToHashtags($raw) {
 	if (!contains(',', $raw)) $raw = ', ' . $raw;
 

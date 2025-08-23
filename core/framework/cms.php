@@ -160,6 +160,7 @@ function afterSectionSet() {
 
 	if (DEFINED('PARENTNODEPATH') && !DEFINED('NODEPATH'))
 		DEFINE('NODEPATH', PARENTNODEPATH);
+	if (variable('auto-set-node')) autoSetNode();
 	variable(SAFENODEVAR, variableOr('nodeSlug', variable('node')));
 
 	read_seo();

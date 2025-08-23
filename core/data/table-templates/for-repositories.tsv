@@ -1,0 +1,6 @@
+#values
+||use-a-bootstrap-row: yes
+||no-content-box: yes
+||head-columns: none
+||row-template: <span class="float-right">[%owner%](%owner_url%/repositories)</span>|[%repo_name%](%repo_url%) &mdash;> [website](%website%)|%description%|
+||bs-template: <div class="col-md-4 col-sm-12 p-3"><div class="content-box">%line%</div></div>

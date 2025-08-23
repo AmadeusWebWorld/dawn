@@ -181,7 +181,7 @@ function _renderImplementation($fileOrRaw, $settings) {
 	$raw = replaceItems($raw, $plainReplaces, '');
 	$raw = replaceItems($raw, $builtinReplaces, '##');
 
-	if ($wasFile && variable('autofix-encoding')) $raw = simplify_encoding($raw);
+	if ($wasFile && !variable('dont-autofix-encoding')) $raw = simplify_encoding($raw);
 
 	/**** rethink this
 	if (variable('node') && variable('section')) {
