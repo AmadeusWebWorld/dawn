@@ -56,7 +56,6 @@ function renderNodeMenu() {
 	}
 
 	_menuULStart('page');
-	if (isset($bc)) die('');
 }
 
 function renderBreadcrumbsMenu() {

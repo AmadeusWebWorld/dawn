@@ -180,12 +180,15 @@ function runThemePart($what) {
 
 function site_and_node_icons($siteIcon = null, $nodeIcon = null, $nodeSuffix = '') {
 	if (!$siteIcon) $siteIcon = getLogoOrIcon('icon', 'site');
-	if (!$nodeIcon) $nodeIcon = getLogoOrIcon('icon', 'node' . $nodeSuffix);
+	if (!$nodeIcon) $nodeIcon = getLogoOrIcon('icon', 'node' . $nodeSuffix); //todo - remove!
 
-	if ($nodeParent1 = variableOr('nodeParent1', ''))
-		$nodeParent1 = _iconLink(getLogoOrIcon('icon', 'nodeParent1'), subVariable('nodeParent1', 'nodeSlug'));
+	$breadcrumbs = [_iconLink($siteIcon)];
+	foreach (nodeVarsInUse() as $index) {
+		$vars = variable('NodeVarsAt' . $index);
+		$breadcrumbs[] = _iconLink(getLogoOrIcon('icon', $vars), $vars['nodeSlug']);
+	}
 
-	return _iconLink($siteIcon) . $nodeParent1 . _iconLink($nodeIcon, variable(SAFENODEVAR));
+	return implode(NEWLINE, $breadcrumbs);
 }
 
 function _iconLink($icon, $slug = '') {

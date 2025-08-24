@@ -137,8 +137,6 @@ function setFileIfExists($section, $fwe, $breadcrumbs, $itemToAdd) {
 	return true;
 }
 
-DEFINE('SAFENODEVAR', 'safeNode');
-
 function afterSectionSet() {
 	//TODO: include _folder.php on $file if it exists
 	if (function_exists('site_before_render')) site_before_render();
@@ -158,11 +156,9 @@ function afterSectionSet() {
 		$fol = dirname($fol);
 	}
 
-	if (DEFINED('PARENTNODEPATH') && !DEFINED('NODEPATH'))
-		DEFINE('NODEPATH', PARENTNODEPATH);
-	if (variable('auto-set-node')) autoSetNode();
-	variable(SAFENODEVAR, variableOr('nodeSlug', variable('node')));
+	if (variable('auto-set-node')) autoSetNode(0, SITEPATH);
 
+	ensureNodeVar();
 	read_seo();
 }
 

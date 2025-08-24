@@ -42,27 +42,50 @@ function getSectionFrom($dir) {
 	return pathinfo($dir, PATHINFO_FILENAME);
 }
 
-function autoSetNode($level = 0, $where = null, $overrides = []) {
+DEFINE('SAFENODEVAR', 'safeNode');
+
+DEFINE('USEDNODEVAR', 'usedNodeVars');
+variable(USEDNODEVAR, []);
+function nodeVarsInUse($append = false) {
+	$vars = variable(USEDNODEVAR);
+	if (!$append) return $vars;
+
+	$vars[] = $append;
+	sort($vars);
+	variable(USEDNODEVAR, $vars);
+}
+
+function autoSetNode($level, $where, $overrides = []) {
 	$section = variable('section');
 	$node = variable('node');
+	nodeVarsInUse($level);
+	if ($node == 'index' OR $section == $node) return;
 
-	$bc = array_merge([
-		assetKey(NODEASSETS) => fileUrl($section . '/' . $node . '/assets/'),
+	$relPath = $level == 0 ? $node : str_replace('\\', '/', 
+		substr($where, strlen(SITEPATH . '/' . $section) + 1));
+	if ($level > 1) { $bits = explode('/', $relPath); $node = array_pop($bits); }
+
+	$vars = array_merge([
+		'nodeSlug' => $relPath,
+		assetKey(NODEASSETS) => fileUrl($section . '/' . $relPath . '/assets/'),
 		'nodeSiteName' => humanize($node),
 		'nodeSafeName' => $node,
 		'submenu-at-node' => true,
 		'nodes-have-files' => true,
+		'nodepath' => $where,
 	], $overrides);
 
-	if ($level == 1) {
-		$slugs = explode(DIRECTORY_SEPARATOR, $where);
-		$bc['nodeSlug'] = $relPath = end($slugs);
-		$bc[assetKey(PARENTNODEASSETS)] = fileUrl($section . '/' . $relPath . '/assets/');
-		DEFINE('PARENTNODEPATH', $where);
-		variable('sectionBC1', $bc);
-	}
+	variable('NodeVarsAt' . $level, $vars);
+	variables($vars);
+}
 
-	if ($node == 'index' OR $section == $node) return;
-	variables($bc);
-	DEFINE('NODEPATH', $where);
+function ensureNodeVar() {
+	if (count($indices = nodeVarsInUse())) {
+		$vars = variable('NodeVarsAt' . end($indices));
+		$slug = $vars['nodeSlug'];
+		DEFINE('NODEPATH', $vars['nodepath']);
+	} else {
+		$slug = variable('node');
+	}
+	variable(SAFENODEVAR, $slug);
 }
