@@ -42,18 +42,27 @@ function getSectionFrom($dir) {
 	return pathinfo($dir, PATHINFO_FILENAME);
 }
 
-function autoSetNode($level = 1) {
+function autoSetNode($level = 0, $where = null, $overrides = []) {
 	$section = variable('section');
 	$node = variable('node');
 
-	if ($node == 'index' OR $section == $node) return;
-
-	DEFINE('NODEPATH', SITEPATH . '/' . variable('section') . '/' . $node);
-	variables([
-		assetKey(NODEASSETS) => fileUrl(variable('section') . '/' . variable('node') . '/assets/'),
+	$bc = array_merge([
+		assetKey(NODEASSETS) => fileUrl($section . '/' . $node . '/assets/'),
 		'nodeSiteName' => humanize($node),
 		'nodeSafeName' => $node,
 		'submenu-at-node' => true,
 		'nodes-have-files' => true,
-	]);
+	], $overrides);
+
+	if ($level == 1) {
+		$slugs = explode(DIRECTORY_SEPARATOR, $where);
+		$bc['nodeSlug'] = $relPath = end($slugs);
+		$bc[assetKey(PARENTNODEASSETS)] = fileUrl($section . '/' . $relPath . '/assets/');
+		DEFINE('PARENTNODEPATH', $where);
+		variable('sectionBC1', $bc);
+	}
+
+	if ($node == 'index' OR $section == $node) return;
+	variables($bc);
+	DEFINE('NODEPATH', $where);
 }

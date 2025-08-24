@@ -1,8 +1,5 @@
 <?php
-DEFINE('NODEPATH', SITEPATH . '/' . variable('section') . '/' . variable('node'));
-variables([
-	assetKey(NODEASSETS) => fileUrl(variable('section') . '/' . variable('node') . '/assets/'),
+autoSetNode(1, __DIR__, [
 	'nodeSiteName' => 'Git Tools @ ' . variable('name'),
 	'nodeSafeName' => variable('safeName') . '-git-admin',
-	'submenu-at-node' => true,
 ]);
