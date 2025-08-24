@@ -54,7 +54,7 @@ function textToArray($line) {
 	$r = [];
 	$items = explode(', ', $line);
 	foreach ($items as $item) {
-		$bits = explode(': ', $item);
+		$bits = explode(': ', $item, 2);
 		$r[$bits[0]] = $bits[1];
 	}
 	return $r;
@@ -163,7 +163,7 @@ function parseMeta($raw) {
 		$line = trimCrLf($line);
 		if ($line == '') continue;
 
-		$kv = explode(': ', $line);
+		$kv = explode(': ', $line, 2);
 		if (count($kv) > 1) {
 			$r[$kv[0]] = $kv[1];
 		}
@@ -195,7 +195,7 @@ function tsvToSheet($data) {
 		if ($line[0] == '|')
 		{
 			if (substr($line, 0, 2) == VALUESTART) {
-				$bits = explode(': ', substr($line, strlen(VALUESTART)));
+				$bits = explode(': ', substr($line, strlen(VALUESTART)), 2);
 				$value = str_replace('||',variable('brnl'), $bits[1]);
 				$values[$bits[0]] = $value; //dbc - let it throw
 			}

@@ -1,6 +1,10 @@
 <?php
 DEFINE('SITEURLKEY', 'site-url-key'); //typo proof
 
+function _getUrlKeySansPreview() {
+	return (variable('local') ? 'local' : 'live') . '-url';
+}
+
 function getSiteUrlKey() {
 	$usePreview = variableOr('use-preview', false);
 	$local = variable('local'); //this is now in before_bootstrap

@@ -105,7 +105,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	$json = is_string($dataFile) && endsWith($dataFile, '.json');
 	$dontTreat = valueIfSetAndNotEmpty($values, 'dont-treat-array', false);
 	$wantsBSRow = isset($values['use-a-bootstrap-row']) && $values['use-a-bootstrap-row'];
-	$lineTemplateForBS = isset($values['bs-template']) ? $values['bs-template'] : 'not set';
+	$lineTemplateForBS = isset($values['bs-template']) ? $values['bs-template'] : false;
 
 	if ($dontTreat) {
 		$rows = $dataFile;
@@ -175,7 +175,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	foreach ($rows as $item) {
 		if ($dontTreat) {
 			$row = $item;
-		} else if($wantsBSRow) {
+		} else if($wantsBSRow && $lineTemplateForBS) {
 			$row = $sheet->asObject($item);
 		} else {
 			$more = isset($item[0]) && $item[0] == '<!--more-->';
@@ -184,8 +184,10 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 			if ($skipItemFn && $skipItemFn($row)) continue;
 		}
 		$line = replaceHtml(prepareLinks(replaceItems($template, $row, '%')));
-		if ($wantsBSRow) //NOTE: treat-row-as-markdown: cannot happen unless using bootstrap as cebe will autodetect that a td is in process
+
+		if ($wantsBSRow && $lineTemplateForBS)
 			$line = replaceItems($lineTemplateForBS, ['line' => returnLine(pipeToBR($line))], '%');
+
 		echo NEWLINE . $line;
 	}
 	if ($wantsBSRow) echo '</div><!-- end #' . $id . ' -->' . NEWLINES2; else

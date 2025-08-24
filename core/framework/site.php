@@ -132,7 +132,6 @@ _visane($siteVars);
 _always($siteVars);
 
 $safeName = $siteVars['safeName'];
-$network = variable('network');
 
 variables($op = [
 	'folder' => 'content/',
@@ -146,56 +145,45 @@ variables($op = [
 
 __testSiteVars($op);
 
-if ($network) setupNetwork($network, $url);
+setupNetwork($url);
 
-function setupNetwork($network, $thisUrl) {
+function setupNetwork($thisUrl) {
 	$networkUrls = [];
 	$networkHome = false;
 
-	if (DEFINED('NETWORKPATH')) {
-		if (disk_file_exists($nw = NETWORKPATH . 'network.php'))
-			disk_include_once($nw);
+	$sites = getSheet(AMADEUSROOT . '/data/sites.tsv', false);
 
-		$siteNames = textToList(disk_file_get_contents(NETWORKPATH . 'sites.txt'));
-		peDie('154', $siteNames, true);
-	} else {
-		if (!($at = variable('network-at')))
-			peDie('Setup', 'Expected Variable: "network-at" is missing', true);
+	$sitePaths = [];
+	$networks = explode(', ', DEFINED('SITENETWORK') ? SITENETWORK : '');
+	$mainNetwork = !empty($networks) ? $networks[0] : false;
 
-		DEFINE('NETWORKPATH', ALLSITESROOT);
-		$sites = getSheet($at . '/data/sites.tsv', false);
+	foreach ($sites->rows as $siteRow) {
+		$showIn = explode(', ', $sites->getValue($siteRow, 'Network'));
 
-		$sitePaths = [];
-		$networks = explode(', ', $network);
-		$mainNetwork = $networks[0];
-
-		foreach ($sites->rows as $siteRow) {
-			$showIn = explode(', ', $sites->getValue($siteRow, 'Network'));
-
-			$matched = false;
-			foreach ($showIn as $allow) {
-				if (in_array($allow, $networks)) {
-					$matched = true;
-					break;
-				}
+		$matched = false;
+		foreach ($showIn as $allow) {
+			if (in_array($allow, $networks)) {
+				$matched = true;
+				break;
 			}
-			if (!$matched) continue;
-
-			$thisPath = $sites->getValue($siteRow, 'Path');
-			$siteObj = rowToObject($siteRow, $sites);
-
-			if ($siteObj['HomeOf'] == $mainNetwork)
-				$networkHome = $thisPath;
-
-			$sitePaths[$thisPath] = $siteObj;
 		}
+
+		$thisPath = $sites->getValue($siteRow, 'Path');
+		$siteObj = $sites->asObject($siteRow);
+		$siteObj['Matched'] = $matched;
+
+		if ($siteObj['HomeOf'] == $mainNetwork)
+			$networkHome = $thisPath;
+
+		$sitePaths[$thisPath] = $siteObj;
 	}
 
 	$networkItems = [];
 	$local = variable('local');
+	$sansPreview = _getUrlKeySansPreview();
 
 	foreach ($sitePaths as $siteAt => $siteObj) {
-		$sheetFile = NETWORKPATH . $siteAt . '/data/site.tsv';
+		$sheetFile = ALLSITESROOT . $siteAt . '/data/site.tsv';
 		if (!sheetExists($sheetFile)) {
 			if ($local) echo '<!--missing tsv for: ' . $siteAt . '-->' . NEWLINE;
 			continue;
@@ -206,11 +194,15 @@ function setupNetwork($network, $thisUrl) {
 
 		$item = $sheet->group;
 
-		//expects all to follow the same principle
-		if (contains($url = $item[variable(SITEURLKEY)][0][$valueIndex], 'localhost'))
+		$urlRows = isset($item[variable(SITEURLKEY)]) ? $item[variable(SITEURLKEY)] : $item[$sansPreview];
+		if (contains($url = $urlRows[0][$valueIndex], 'localhost'))
 			$url = replaceItems($url, ['localhost' => 'localhost' . variable('port')]);
 
 		$site = sluggize($siteAt);
+		$networkUrls[$site . '-url'] = $url;
+
+		if (!$siteObj['Matched']) continue;
+
 		$status = variable('local') ? "\r\n\r\nstatus: " . $siteObj['Status'] : '';
 		$imgPrefix = $url . ($slug = $item['safeName'][0][$valueIndex]);
 
@@ -223,7 +215,6 @@ function setupNetwork($network, $thisUrl) {
 			'text' => $item['iconName'][0][$valueIndex],
 			], '%');
 
-		$networkUrls[$site . '-url'] = $url;
 		$networkItems[$siteAt] = $thisItem = [
 			'url' => $url,
 			'siteAt' => $siteAt,

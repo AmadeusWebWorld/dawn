@@ -3,6 +3,6 @@ define('SITEPATH', __DIR__);
 
 include_once 'entry.php';
 
-variables(['network-at' => ALLSITESROOT . '/amadeus8', 'network' => OURNETWORK]);
+DEFINE('SITENETWORK', OURNETWORK);
 
 runFrameworkFile('site');

@@ -317,7 +317,7 @@ function siteWidgets() {
 }
 
 function networkLink($class= '', $prefix = '') {
-	if (!variable('network')) return '';
+	if (!DEFINED('SITENETWORK')) return '';
 	return $prefix . getLink('Our Network', subVariableOr('networkHome', 'url', '#todo/') . 'our-network/', $class, true);
 }
 

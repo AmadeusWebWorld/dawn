@@ -1,18 +1,18 @@
 #Network	Category	Name	Path	HomeOf	Status
 |https://docs.google.com/spreadsheets/d/1dsEA395vzHMqRZTlUhPsc34LYFy-TRhbsNZA9L5Xvi8/edit?gid=0#gid=0					
-world	Community	Amadeus Web World	amore/world		Hold: Needs sample
-world	Community	Wisdom from You	amore/wisdom		Hold: Needs student
-world	Personal	Imran's World	imran		Cut1: Ready for UX
+world	Community	Amadeus Web World	amore/world		Started: AOPs for Mental Health, Nature & Women
+world	Community	Wisdom from You	amore/wisdom		Started: Aspire to Thrive
+world	Personal	Imran's World	imran		Coded, Waits Deep Dives
 world	Futurism	AmadeusWeb How	amore/wiki	world	Slowly: Articulation Ongoing
-world	Futurism	GH Spaces	amore/spaces		Later: By Oct
-world	Futurism	Curations of YM Days	amore/curations		Later: Content Reorg
-|alliances, world	Community	Auro Spaces	alliances/aurospaces	alliances	Hold: Demo by Sep
-alliances	Wisdom	Satyam Yoga Trust	alliances/satyamyogatrust		Hold: Permission
-alliances	Wisdom	Aeon Centre	alliances/aeoncentre		Active: Discussing
-alliances	Wisdom	Sri Aurobindo's Action	alliances/sriaurobindosaction		Hold: After Traction
-alliances	Wisdom	Auro Indian	alliances/auroindian		Hold: Waits Clarity
+|world	Futurism	GH Spaces	amore/spaces		Later: By Oct
+|world	Futurism	Curations of YM Days	amore/curations		Later: Content Reorg
+alliances, world	Community	Auro Spaces	alliances/aurospaces	alliances	Started: SA, Integral Metrics, Members
+|alliances	Wisdom	Satyam Yoga Trust	alliances/satyamyogatrust		Hold: Permission
+alliances	Wisdom	Aeon Centre	alliances/aeoncentre		Active: Demo Being Planned
+|alliances	Wisdom	Sri Aurobindo's Action	alliances/sriaurobindosaction		Hold: After Traction
+|alliances	Wisdom	Auro Indian	alliances/auroindian		Hold: Waits Clarity
 planet, world	Community	Common Planet	planet/web	planet	Active: Prio 1
 planet	Personal	Remzi	planet/remzi		Hold: Scheduling Needed
 work	Work	AmadeusWeb Consulting	work/web		Active: Prio 3
-work	Work	Amadeub Web for Business	work/sites		Hold: Strategy Needed
+|work	Work	Amadeub Web for Business	work/sites		Hold: Strategy Needed
 core	Technology	AmadeusWeb Dawns	amadeus8		Next: Biblios / Social / AI
