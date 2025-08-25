@@ -1,8 +1,8 @@
 <?php
 
-if (variable('node') == 'index')
+if (nodeIs(SITEHOME))
 	variable('sub-theme', 'go');
 
-if (variable('node') == 'tests') {
+if (nodeIs('tests')) {
 	addScript('tests', SITEASSETS);
 }

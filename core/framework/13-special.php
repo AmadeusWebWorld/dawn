@@ -94,7 +94,7 @@ function autoRender($file, $type = false, $useHeading = true) {
 		if (!$embed) sectionId('special-table', _getCBClassIfWanted('container' . ($isDeck && !$notRendering ? ' deck deck-from-sheet' : '')));
 
 		if ($isDeck)
-			renderSheetAsDeck($file, variableOr('all_page_parameters', variable('node')) . '/');
+			renderSheetAsDeck($file, variableOr('all_page_parameters', nodeValue()) . '/');
 		else if (startsWith($raw, '|is-rich-page'))
 			renderRichPage($file);
 		else if (startsWith($raw, '|is-table'))
@@ -118,8 +118,7 @@ function autoRender($file, $type = false, $useHeading = true) {
 
 function hasSpecial() {
 	if (_isScaffold()) return true;
-	$node = variable('node');
-	if (_isLinks($node) || $node == 'search') return true;
+	if (_isLinks() || nodeIs('search')) return true;
 
 	if (isset($_GET['share'])) return _setAndReturn(['sub-theme' => 'go']);
 
@@ -133,12 +132,12 @@ function _setAndReturn($vars) {
 
 function renderedSpecial() {
 	if (variable('site-lock')) { doSiteLock(); return true; }
-	$node = variable('node');
-	if ($node == 'search') { echo getSnippet('search', CORESNIPPET); return true; }
+
+	if (nodeIs('search')) { echo getSnippet('search', CORESNIPPET); return true; }
 	//share done at top of entry's render()
-	if ($node == 'gallery') { runFeature('gallery'); return true; }
-	if (_renderedLink($node)) return true;
-	if (_renderedScaffold($node)) return true;
+	if (nodeIs('gallery')) { runFeature('gallery'); return true; }
+	if (_renderedLink()) return true;
+	if (_renderedScaffold()) return true;
 
 	return false;
 
@@ -319,7 +318,7 @@ function _setupDossiers($fwe, $name) {
 	$data = dirname($fwe) . '/' . $name . '.tsv';
 
 	$folder = SITEPATH . '/data/dossier-templates/';
-	$node = variable('node');
+	$node = nodeValue();
 
 	$templates = [
 		'node-item' => $folder . $node . '-' . $name . '.html',
@@ -355,7 +354,7 @@ function _renderedDossiers($data) {
 	//later this can be resolved from multiple filenames as needed
 	echo replaceItems(getSnippet('dossier'), [
 		'pageName' => humanize($page),
-		'nodeName' => humanize(variable('node')),
+		'nodeName' => humanize(nodeValue()),
 		'sectionName' => humanize(variable('section')),
 		'siteName' => variable('name'),
 	], '%');
@@ -365,76 +364,29 @@ function _renderedDossiers($data) {
 	add_table($page, false, $data, 'auto', disk_file_get_contents($html));
 }
 
-function _isLinks($node) {
-	if ($node == 'go')
+function _isLinks() {
+	if (nodeIs('go'))
 		runFeature('links'); //will just do a redirect
 
-	return $node == 'links';
+	return nodeIs('links');
 }
 
-function _renderedLink($node) {
-	if ($node != 'links') return false;
+function _renderedLink() {
+	if (nodeIsNot('links')) return false;
 
 	runFeature('links'); //will list them
 	return true;
 }
 
-function before_section_or_file($section) {
-	$node = variable('node');
-
-	if ($node == $section) {
-		variable('section', $section);
-		return true;
-	}
-
-	$fol = SITEPATH . '/' . $section . '/';
-	$files = disk_scandir($fol);
-
-	foreach ($files as $fil) {
-		if ($fil[0] == '.') continue;
-		if ($node == $fil) {
-			variable('fwk-section', $section);
-			return true;
-		} else if (disk_is_dir($fol . $node . '/')) {
-			variable('fwk-section', $section);
-			variable('fwk-folder', $section . '/' . $node . '/');
-			return true;
-		} else if ($ext = disk_one_of_files_exist($fwe = $fol . $fil . '.','txt, md')) {
-			variable('fwk-section', $section);
-			variable('fwk-file', $fwe . $ext);
-			return true;
-		}
-	}
-
-	return false;
-}
-
-function did_render_section_or_file() {
-	$section = variable('fwk-section');
-	$dir = variable('fwk-folder');
-	$file = variable('fwk-file');
-
-	if ($file) {
-		renderAny($file);
-		return true;
-	} else if ($section || $dir) {
-		runFeature('blog'); //TODO: merge this with directory and use section type if not blog/wiki/sitemap
-		return true;
-	}
-
-	return false;
-}
-
 function _isScaffold() {
-	$node = variable('node');
 	$scaffold = variableOr('scaffold', []);
 	//NOTE: sitemap always needed
-	$always = variable('local') && $node == 'sitemap';
-	if (!$always && !in_array($node, $scaffold))
+	$always = variable('local') && nodeIs('sitemap');
+	if (!$always && !nodeIsOneOf($scaffold))
 		return false;
 
 	if (hasPageParameter('embed')) variable('embed', true);
-	variable('scaffoldCode', $node);
+	variable('scaffoldCode', nodeValue());
 	return true;
 }
 

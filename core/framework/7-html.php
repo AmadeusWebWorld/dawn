@@ -7,7 +7,7 @@ function currentUrl() {
 
 function currentLevel($wrap = true) {
 	return '';
-	$nodeIsSection = variable('node') == variable('section');
+	$nodeIsSection = nodeIsSection();
 	$isPageWhenSHF = !$nodeIsSection && variable('sections-have-files');
 	if (hasVariable('page_parameter3'))
 		$level = 'Sub Sub Page';
@@ -38,9 +38,7 @@ function fileUrl($relative = '') {
 	return variable('assets-url') . $relative;
 }
 
-function searchUrl($all = false) {
-	if (contains(variable('node'), 'search'))
-		return variable('page-url') . ($relative = $all ? variable('all_page_parameters') : variable('node')) . '/';
+function searchUrl() {
 	return variable('page-url') . 'search/';
 }
 
@@ -190,7 +188,7 @@ function replaceHtml($html) {
 	$replaces = variable($key);
 	if (!$replaces) {
 		$section = variable('section');
-		$node = variable('node');
+		$node = nodeValue();
 		variable($key, $replaces = [
 			//Also, we should incorporate dev tools like w3c & broken link checkers
 			'%url%' => variable('page-url'),
@@ -274,7 +272,7 @@ function featureHeading($id, $return = 'full', $text = false) {
 		case 'share-form': $text = 'Share Link (with Google tracking)'; break;
 		case 'assistant': $text = ''; break;
 		case 'assistant-voice': $text = 'Voice Controls'; break;
-		case 'tree': $text = 'Family Tree of ' . humanize(variable('node')); break;
+		case 'tree': $text = 'Family Tree of ' . humanize(nodeValue()); break;
 		case 'links': $text = 'Quick Links'; break;
 		case 'site': if (!$text) $text = $bits[1]; break;
 		case 'statistics': $text = 'Statistics ' . humanize($bits[1]); break;
@@ -434,7 +432,7 @@ function body_classes($return = false) {
 	$op[] = 'theme-' . variable('theme');
 	if (hasVariable('sub-theme')) $op[] =  'sub-theme-' . variable('sub-theme');
 
-	$op[] = 'node-' . variable('node');
+	$op[] = 'node-' . nodeValue();
 	$op[] = 'page-' . (isset($_GET['share']) ? 'share' : str_replace('/', '_', variable('all_page_parameters')));
 
 	$op[] = 'mobile-click-to-expand'; //TODO: configurable!

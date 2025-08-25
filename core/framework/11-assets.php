@@ -12,7 +12,7 @@ function cssTag($url) {
 
 function getPageName($tailOnly = true) {
 	if ($tailOnly) {
-		$tail = explode('/', variableOr('all_page_parameters', variable('node')));
+		$tail = explode('/', variableOr('all_page_parameters', nodeValue()));
 		return end($tail);
 	}
 	//todo - alternatives??
@@ -26,7 +26,7 @@ function title($what = 'default') {
 		return variable('custom-title') . ' | ' . variable('name');
 	}
 
-	$node = variable('node');
+	$node = nodeValue();
 	if ($what === TITLEONLY) return humanize($node);
 
 	$siteRoot = $node == 'index' || variable('under-construction');

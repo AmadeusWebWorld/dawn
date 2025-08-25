@@ -85,7 +85,7 @@ function runThemePart($what) {
 		'optional-slider' => '', //this could be a page title too
 		'optional-right-button' => '',
 		'header-align' => '', //an addon class needed if video page title has an image and wants content on right
-		'search-url' => searchUrl(contains(variable('node'), 'search')),
+		'search-url' => searchUrl(),
 		'app-static' => assetMeta(COREASSETS)['location'],
 	];
 
@@ -101,7 +101,7 @@ function runThemePart($what) {
 		$vars['body-classes'] = body_classes(true);
 
 		//TODO: icon link to node home, should have 2nd menu & back to home
-		$baseUrl = hasVariable('nodeSafeName') ? pageUrl(variable('node')) : pageUrl();
+		$baseUrl = hasVariable('nodeSafeName') ? pageUrl(nodeValue()) : pageUrl();
 		$logo2x = getLogoOrIcon('logo', 'node');
 		$vars['logo'] = concatSlugs(['<a href="', $baseUrl . variableOr('nodeChildSlug', ''), '">' . NEWLINE
 			. '								<img src="', $logo2x, '" class="img-fluid img-max-',

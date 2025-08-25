@@ -62,27 +62,27 @@ function _skipExcludedFiles($files, $excludeNames = 'home', $excludeExtensions =
 	return $op;
 }
 
-function pageMenu($file) {
+function pageMenu() {
 	print_seo();
 
-	if (variable('no-page-menu') || !variable('section') || hasPageParameter('embed')) return;
+	if (variable('no-page-menu') || !sectionValue() || hasPageParameter('embed')) return;
 
 	$breadcrumbs = variable('breadcrumbs');
 
 	if (!$breadcrumbs) {
-		if (variable('section') == variable('node')) return;
+		if (nodeIsSection()) return;
 
 		//happens when: 'sections-have-files' (Ag)
-		if (!disk_is_dir(concatSlugs([variable('path'), variable('section'), variable('node')]))) return;
+		if (!disk_is_dir(concatSlugs([variable('path'), sectionValue(), nodeValue()]))) return;
 
 		variable('in-node', true);
 
-		variable('directory_of', variable('section') . '/' . variable('node'));
+		variable('directory_of', sectionValue() . '/' . nodeValue());
 		runFeature('directory');
 		return;
 	}
 
-	variable('directory_of', variable('section') . '/' . variable('node') . '/' . concatSlugs($breadcrumbs));
+	variable('directory_of', sectionValue() . '/' . nodeValue() . '/' . concatSlugs($breadcrumbs));
 	runFeature('directory');
 }
 
@@ -185,7 +185,7 @@ function menu($folderRelative = false, $settings = []) {
 		$homeBase = $base;
 		if (isset($settings['parent-slug-for-home-link'])) $homeBase = $settings['parent-slug-for-home-link'];
 
-		$mainNode = ($section == variable('node')) || startsWith($folderRelative, '/' . variable('section'));
+		$mainNode = nodeIsSection() || startsWith($folderRelative, '/' . sectionValue());
 		$result .= replaceItems($indent . '	<li%li-classes%><a href="%url%"%a-classes%><%wrap-in%>%text%</%wrap-in%></a>' . NEWLINE, [
 			'li-classes' => cssClass(array_merge($class_li, $mainNode ? ['selected'] : [], ['home-link'])),
 			'a-classes' => cssClass($class_link),
@@ -276,7 +276,7 @@ function menu($folderRelative = false, $settings = []) {
 			$innerHtml = getLink($text, $url, cssClass(array_merge($class_link)));
 		}
 
-		if ($blogHeading) $innerHtml = blog_heading($file, variable('node'));
+		if ($blogHeading) $innerHtml = blog_heading($file, nodeValue());
 
 		if ($noLinks) {
 			$result .= $indent . '	<' . $itemTag . cssClass($class_li) . '>' . $innerHtml . '</' . $itemTag . '>' . NEWLINE;
@@ -284,14 +284,14 @@ function menu($folderRelative = false, $settings = []) {
 			if ($inHeader) {
 				$result .= $indent . '<hr>' . variable('2nl') . '<h2 class="' . variable('toggle-list') . '">' . humanize($file) .'</h2>' . NEWLINE;
 				$result .= menu($folderRelative . $file . '/', [
-					'parent-slug' => variable('node') . '/',
+					'parent-slug' => nodeValue() . '/',
 					'menu-level' => $menuLevel + 1,
 					'return' => true,
 					'indent' => $indentGiven . '	',
 				]) . variable('2nl');
 			} else {
 				$thisClass = array_merge($class_li);
-				if ($file == variable('node') || in_array($file, variableOr('page_parameters', [])))
+				if (nodeIs($file) || in_array($file, variableOr('page_parameters', [])))
 					$thisClass = array_merge($thisClass, $class_active);
 
 				if ($indented) $thisClass[] = $indented;

@@ -10,7 +10,7 @@ variable('omit-long-keywords', true);
 
 sectionId('directory', 'container');
 function _sections($current) {
-	if (variable('node') != variable('section')) return;
+	if (nodeIsNot(variable('section'))) return;
 
 	contentBox('', 'toolbar text-align-left');
 	echo 'Section: ' . variable('nl');
@@ -67,7 +67,7 @@ function _renderMenu($home, $folder, $where) {
 		$sectionItems[] = getFolderMeta($folder, $fol, '', $ix++);
 	}
 
-	$relativeUrl = (variable('node') != variable('section') ? variable('node') . '/' : '') . ($breadcrumbs ? implode('/', $breadcrumbs) . '/' : '');
+	$relativeUrl = (nodeIsNot(variable('section')) ? nodeValue() . '/' : '') . ($breadcrumbs ? implode('/', $breadcrumbs) . '/' : '');
 
 	if (hasPageParameter('generate-index')) {
 		addScript('engage', 'app-static--common-assets'); //TODO: better way than against DRY?	

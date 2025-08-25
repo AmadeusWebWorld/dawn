@@ -112,7 +112,7 @@ function bootstrap($config) {
 	if (endsWith($node, '/')) $node = substr($node, 0, strlen($node) - 1);
 	if (startsWith($node, '/')) $node = substr($node, 1);
 
-	if ($node == '') $node = 'index';
+	if ($node == '') $node = SITEHOME;
 	variable('all_page_parameters', $node); //let it always be available
 
 	if (strpos($node, '/') !== false) {
@@ -122,7 +122,7 @@ function bootstrap($config) {
 		foreach ($slugs as $ix => $slug) variable('page_parameter' . ($ix + 1), $slugs[$ix]);
 	}
 
-	variable('node', variableOr('node-alias', $node));
+	variable(NODEVAR, variableOr('node-alias', $node));
 }
 
 function getPageParameterAt($index = 1, $or = false) {
@@ -155,7 +155,7 @@ function render() {
 	} else if (hasPageParameter('slider')) {
 		$rendered = true; //dont want to render content. and needed here as it shouldnt support "content" menu pages
 	} else {
-		$fwe =  $folder . variable('node');
+		$fwe =  $folder . nodeValue();
 		$rendered = renderAnyFile($fwe . '.', ['extensions' => 'core', 'return-on-first' => true]);
 	}
 
@@ -182,7 +182,7 @@ function render() {
 			}
 
 			$breadcrumbs = variable('breadcrumbs');
-			$file = variable('node'); $message = 'at level 1 (content / section / node)';
+			$file = nodeValue(); $message = 'at level 1 (content / section / node)';
 			if ($breadcrumbs) {
 				$file = BRNL . variableOr('all_page_parameters', 'node/section missing?');
 				$message = 'found only these valid params:' . BRNL . BRNL . '<strong>' . implode(' &mdash; ', $breadcrumbs) . '</strong>';

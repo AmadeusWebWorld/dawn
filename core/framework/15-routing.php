@@ -42,6 +42,18 @@ function getSectionFrom($dir) {
 	return pathinfo($dir, PATHINFO_FILENAME);
 }
 
+DEFINE('NODEVAR', 'node');
+DEFINE('SITEHOME', 'index');
+function nodeValue() { return variable(NODEVAR); }
+function nodeIs($what) { return nodeValue() == $what; }
+function nodeIsNot($what) { return nodeValue() != $what; }
+function nodeIsOneOf($whatAll) { return in_array(nodeValue(), $whatAll); }
+
+DEFINE('SECTIONVAR', 'section');
+function sectionValue() { return variable(SECTIONVAR); }
+function nodeIsSection() { return nodeValue() == sectionValue(); }
+
+
 DEFINE('SAFENODEVAR', 'safeNode');
 
 DEFINE('USEDNODEVAR', 'usedNodeVars');
@@ -57,19 +69,24 @@ function nodeVarsInUse($append = false) {
 
 function autoSetNode($level, $where, $overrides = []) {
 	$section = variable('section');
-	$node = variable('node');
-	nodeVarsInUse($level);
-	if ($node == 'index' OR $section == $node) return;
 
-	$relPath = $level == 0 ? $node : str_replace('\\', '/', 
+	nodeVarsInUse($level);
+	if (nodeIs(SITEHOME) OR nodeIsSection()) return;
+
+	$relPath = $level == 0 ? nodeValue() : str_replace('\\', '/', 
 		substr($where, strlen(SITEPATH . '/' . $section) + 1));
-	if ($level > 1) { $bits = explode('/', $relPath); $node = array_pop($bits); }
+	$endSlug = nodeValue();
+	if ($level > 1) { $bits = explode('/', $relPath); $endSlug = array_pop($bits); }
+
+	$prefix = valueIfSet($overrides, 'prefix-safeName') ? variable('safeName') . '-' : '';
+	if ($prefix && isset($overrides['nodeSafeName']))
+		$overrides['nodeSafeName'] = $prefix . $overrides['nodeSafeName'];
 
 	$vars = array_merge([
 		'nodeSlug' => $relPath,
 		assetKey(NODEASSETS) => fileUrl($section . '/' . $relPath . '/assets/'),
-		'nodeSiteName' => humanize($node),
-		'nodeSafeName' => $node,
+		'nodeSiteName' => humanize($endSlug),
+		'nodeSafeName' => $prefix . $endSlug,
 		'submenu-at-node' => true,
 		'nodes-have-files' => true,
 		'nodepath' => $where,
@@ -85,7 +102,7 @@ function ensureNodeVar() {
 		$slug = $vars['nodeSlug'];
 		DEFINE('NODEPATH', $vars['nodepath']);
 	} else {
-		$slug = variable('node');
+		$slug = nodeValue();
 	}
 	variable(SAFENODEVAR, $slug);
 }

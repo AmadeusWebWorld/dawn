@@ -100,7 +100,7 @@ function _getBreadcrumbs() {
 	if (empty($breadcrumbs)) return [];
 
 	$result = [];
-	$node = variable('node'); //not safe - starts at 1
+	$node = nodeValue();
 
 	$base = $node . '/';
 
