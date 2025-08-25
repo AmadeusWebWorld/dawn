@@ -76,12 +76,12 @@ function autoSetNode($level, $where, $overrides = []) {
 	], $overrides);
 
 	variable('NodeVarsAt' . $level, $vars);
-	variables($vars);
 }
 
 function ensureNodeVar() {
 	if (count($indices = nodeVarsInUse())) {
 		$vars = variable('NodeVarsAt' . end($indices));
+		variables($vars);
 		$slug = $vars['nodeSlug'];
 		DEFINE('NODEPATH', $vars['nodepath']);
 	} else {

@@ -4,7 +4,8 @@
 renderNodeMenu();
 
 function renderNodeMenu() {
-	if (renderBreadcrumbsMenu()) return;
+	renderBreadcrumbsMenu();
+	if (variable('skip-node-folders')) return;
 
 	extract(variable('menu-settings'));
 

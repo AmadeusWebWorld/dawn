@@ -159,6 +159,7 @@ function afterSectionSet() {
 	if (variable('auto-set-node')) autoSetNode(0, SITEPATH);
 
 	ensureNodeVar();
+	if (function_exists('node_before_render')) node_before_render();
 	read_seo();
 }
 

@@ -114,6 +114,17 @@ function standoutH2InCenter($text) {
 	contentBox('end');
 }
 
+function startDiv($id, $class = '') {
+	$attrs = '';
+	if ($id) $attrs .= ' id="' . $id . '"';
+	if ($class) $attrs .= ' class="' . $class . '"';
+	echo variable('nl') . '<div' . $attrs . '>' . variable('nl');
+}
+
+function endDiv() {
+	echo '</div>';
+}
+
 function div($what = 'start', $h1 = '', $class = 'video-container') {
 	if ($h1) $h1 = '<h1>' . $h1 . '</h1>';
 	echo $what == 'start' ? '<div class="' . $class . '">' . $h1 . variable('nl') : '</div>' . variable('2nl');
@@ -189,12 +200,13 @@ function replaceHtml($html) {
 			'%core-assets%' => _resolveFile('', STARTATCORE),
 			'##theme##' => getThemeBaseUrl(),
 
-			'%cdn%' => variable('assets-url') . 'cdn/',
+			'%cdn%' => variableOr('cdn', variable('assets-url') . 'assets/cdn/'),
 
 			'%nodeName%' => humanize($node),
 			'%nodeUrl%' => pageUrl($node),
 			'%nodeItem%' => getPageParameterAt(1, ''),
 			'%nodeItem2%' => getPageParameterAt(2, ''),
+			'%nodeFullUrl%' => pageUrl(variableOr('nodeSlug', '##no-nodeSlug')),
 
 			//NOTE: cannot let this come from network...
 			'%core-url%' => scriptSafeUrl(variable('app')),
@@ -209,6 +221,7 @@ function replaceHtml($html) {
 
 			'%address%' => variableOr('address', '[no-address]'),
 			'%address2%' => variableOr('address2', '[no-address2]'),
+			'%timings%' => variableOr('timings', '[no-timings]'),
 			'%address-url%' => variableOr('address-url', '#no-link'),
 
 			'%network-link%' => networkLink('btn btn-success', '<hr class="mt-5" />'),

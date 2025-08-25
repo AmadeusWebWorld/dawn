@@ -23,6 +23,8 @@ if (contains($url = $siteVars[variable(SITEURLKEY)], 'localhost')) {
 	__testSiteVars(['url-for-localhost' => $url]);
 }
 
+if (hasPageParameter('health')) die('<span style="background-color: #cbfecb; padding: 10px;">Works!: ' . $url . '</span>');
+
 variable(assetKey(SITEASSETS, ASSETFOLDER), SITEPATH . '/assets/');
 variable(assetKey(SITEASSETS), $url . 'assets/');
 
@@ -84,6 +86,7 @@ function _visane($siteVars) {
 		['phone', '+91-9841223313'],
 		['whatsapp', '919841223313'],
 		['address', 'Chennai, India'],
+		['timings', 'Mon - Sat 11am to 7pm'],
 		//['address-url', '#address'], //not here as needed for social too
 
 		['mediakit', '?palette=default'],
@@ -107,6 +110,8 @@ function _visane($siteVars) {
 
 	__testSiteVars($op);
 	variables($op);
+
+	variable(assetKey(THEMEASSETS), getThemeBaseUrl());
 }
 
 function _always($siteVars) {
@@ -179,6 +184,7 @@ function setupNetwork($thisUrl) {
 	}
 
 	$networkItems = [];
+	$allSiteItems = [];
 	$local = variable('local');
 	$sansPreview = _getUrlKeySansPreview();
 
@@ -201,8 +207,6 @@ function setupNetwork($thisUrl) {
 		$site = sluggize($siteAt);
 		$networkUrls[$site . '-url'] = $url;
 
-		if (!$siteObj['Matched']) continue;
-
 		$status = variable('local') ? "\r\n\r\nstatus: " . $siteObj['Status'] : '';
 		$imgPrefix = $url . ($slug = $item['safeName'][0][$valueIndex]);
 
@@ -215,7 +219,7 @@ function setupNetwork($thisUrl) {
 			'text' => $item['iconName'][0][$valueIndex],
 			], '%');
 
-		$networkItems[$siteAt] = $thisItem = [
+		$allSiteItems[] = $thisItem = [
 			'url' => $url,
 			'siteAt' => $siteAt,
 			'safeName' => $slug,
@@ -227,6 +231,10 @@ function setupNetwork($thisUrl) {
 			'status' => $siteObj['Status'],
 			'category' => $siteObj['Category'],
 		];
+
+		if (!$siteObj['Matched']) continue;
+
+		$networkItems[$siteAt] = $thisItem;
 
 		if ($networkHome == $siteAt) {
 			variable('networkHome', $thisItem);
@@ -240,6 +248,7 @@ function setupNetwork($thisUrl) {
 
 	$networkUrls['network-assets'] = variable(assetKey(NETWORKASSETS));
 	variable('networkItems', $networkItems);
+	variable('allSiteItems', $allSiteItems);
 	variable('networkUrls', $networkUrls);
 }
 

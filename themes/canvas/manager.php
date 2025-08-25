@@ -10,4 +10,10 @@ class CanvasTheme {
 		}
 		return $css;
 	}
+
+	static function IconsFor($page) {
+		$demo = 'demos/' . $page . '/';
+		if ($page == 'spa')
+			return $demo . 'css/fonts/spa-icons';
+	}
 }
