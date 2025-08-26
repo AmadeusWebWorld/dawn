@@ -6,7 +6,7 @@
  * Author: Imran Ali Namazi <imran@amadeusweb.com>
  * Website: https://dawn.amadeusweb.com/
  * Source:  https://github.com/AmadeusWebInAction/amadeus8
- * Note: AmadeusWeb v8.3 is based on 25 years of Imran's programming experience:
+ * Note: AmadeusWeb v8.4 is based on 25 years of Imran's programming experience:
  * https://imran.wiseowls.life/about-me/amadeusweb-dawns/
  */
 
@@ -79,14 +79,11 @@ function before_bootstrap() {
 	variable('local', $local = startsWith($_SERVER['HTTP_HOST'], 'localhost'));
 	variable('live', contains(SITEPATH, 'live'));
 
-	variable('app', $local && !$isMobile ? replaceVariables('http://localhost%port%/amadeus8/', 'port') : '//dawn.amadeusweb.com/');
+	variable('app', $url = ($local && !$isMobile ? replaceVariables('http://localhost%port%/dawn/', 'port') : '//dawn.amadeusweb.com/'));
 
 	if (DEFINED('AMADEUSURL')) variable('app', AMADEUSURL);
 
-	variable('main', $local ? replaceVariables('http://localhost%port%/work/web/', 'port') : '//amadeusweb.com/');
-	variable('world', $local ? replaceVariables('http://localhost%port%/amore/world/', 'port') : '//amadeusweb.world/');
-
-	variable('app-themes', $local && !$isMobile ? replaceVariables('http://localhost%port%/amadeus8/themes/', 'port') : '//v8.amadeusweb.com/themes/');
+	variable('app-themes', $url . 'themes/');
 
 	variable(assetKey(COREASSETS, ASSETFOLDER), AMADEUSROOT . 'assets/');
 	variable(assetKey(COREASSETS), variable('app') . 'assets/');
@@ -227,11 +224,12 @@ function _copyright($return = false) {
 
 function _credits($pre = '', $return = false) {
 	if (variable('dont_show_amadeus_credits')) return '';
+	$world = replaceHtml('%urlOf-world%');
 
-	$url = variable('main') . '?utm_content=site-credits&utm_referrer=' . variable('safeName');
+	$url = $world . '?utm_content=site-credits&utm_referrer=' . variable('safeName');
 	$result = $pre . sprintf('<a href="%s" target="_blank" class="amadeus-credits" title="Built With AmadeusWeb.com" style="display: inline-block;">' .
-		variable('nl') . '			<img src="%s" height="50" alt="%s" style="border-radius: 12px; vertical-align: middle;"></a>',
-		$url, variable('main') . 'amadeusweb-work-logo.png', 'Amadeus Web World');
+		NEWLINE . '			<img src="%s" height="50" alt="%s" style="border-radius: 12px; vertical-align: middle;"></a>',
+		$url, $world . 'amadeusweb-world-logo.png', 'Amadeus Web World');
 
 	if ($return) return $result; else echo $result;
 }

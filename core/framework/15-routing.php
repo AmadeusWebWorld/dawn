@@ -1,4 +1,11 @@
 <?php
+DEFINE('OTHERSITEPREFIX', 'urlOf-');
+function sluggize($relPath) {
+	if (!contains($relPath, '/')) return $relPath;
+	$slugs = explode('/', $relPath);
+	return end($slugs);
+}
+
 DEFINE('SITEURLKEY', 'site-url-key'); //typo proof
 
 function _getUrlKeySansPreview() {

@@ -205,7 +205,7 @@ function setupNetwork($thisUrl) {
 			$url = replaceItems($url, ['localhost' => 'localhost' . variable('port')]);
 
 		$site = sluggize($siteAt);
-		$networkUrls[$site . '-url'] = $url;
+		$networkUrls[OTHERSITEPREFIX . $site] = $url;
 
 		$status = variable('local') ? "\r\n\r\nstatus: " . $siteObj['Status'] : '';
 		$imgPrefix = $url . ($slug = $item['safeName'][0][$valueIndex]);

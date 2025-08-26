@@ -206,11 +206,6 @@ function replaceHtml($html) {
 			'%nodeItem2%' => getPageParameterAt(2, ''),
 			'%nodeFullUrl%' => pageUrl(variableOr('nodeSlug', '##no-nodeSlug')),
 
-			//NOTE: cannot let this come from network...
-			'%core-url%' => scriptSafeUrl(variable('app')),
-			'%main-url%' => scriptSafeUrl(variable('main')),
-			'%world-url%' => scriptSafeUrl(variable('world')),
-
 			'%phone%' => variableOr('phone', ''),
 			'%phone2%' => variableOr('phone2', ''),
 			'%email%' => variableOr('email', ''),

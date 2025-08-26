@@ -4,6 +4,7 @@ DEFINE('PINTEXT',  'text');
 DEFINE('PINEMBED', 'embed');
 
 function pollenAt($where, $exclude = 'me, business') {
+	return;
 	if (variable('live') || variable('dont-pollinate')) return;
 	if (hasPageParameter('slider') || hasPageParameter('content')) return;
 
