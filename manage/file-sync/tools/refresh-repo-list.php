@@ -7,7 +7,9 @@ echo '<h1>Searching In Repos:</h1>';
 $sheet = getSheet(NODEPATH . '/view/git-accounts.tsv', false);
 $sources = [];
 
-DEFINE('CARDTEMPLATE', '<span class="float-right">%owner_link_md%</span>|%repo_link_md% &mdash;> %website_link_md%|%description%|');
+DEFINE('LOCATIONPREFIX', 'location: ./');
+
+DEFINE('CARDTEMPLATE', '%repo_link_md% &mdash;> %website_link_md%|%description%');
 DEFINE('GITHUBORGLINK',  '[%name%](https://github.com/orgs/%name%/repositories)');
 DEFINE('GITHUBUSERLINK', '[%name%](https://github.com/%name%?tab=repositories)');
 
@@ -20,8 +22,8 @@ foreach ($sheet->rows as $item) {
 		$repos = _gitHubToOurs(_urlOf($item, true));
 
 	$sources[] = $repos;
-	echo 'Found: ' . count($repos) . ' repos with names:';
-	echo implode(NEWLINE . '<hr style="margin: 6px" />', array_map(function ($repo) { return BRNL . returnLine(pipeToBR(replaceItems(CARDTEMPLATE, $repo, '%'))); }, $repos));
+	echo 'Found: ' . count($repos) . ' repos with names:' . BRNL . BRNL;
+	echo implode(NEWLINE . '<hr style="margin: 6px" />', array_map(function ($repo) { return NEWLINE . returnLine(pipeToBR(replaceItems(CARDTEMPLATE, $repo, '%'))); }, $repos));
 
 	echo cbCloseAndOpen('container') . NEWLINE;
 }
@@ -53,24 +55,42 @@ function _gitHubToOurs($url) {
 	$raw = getJsonFromUrl($url);
 	$op = [];
 	$skip = hasPageParameter('skip');
+	$excludeContaining = ['non-amadeus, ', 'amadeus-util, ', 'is-inactive, '];
 
 	foreach ($raw as $item) {
 		if ($skip && !$item['homepage']) continue;
 
+		$name = $item['name'];
 		$owner = $item['owner'];
 		$org = $owner['type'] == 'Organization';
 		$ownerLink = replaceItems($org ? GITHUBORGLINK : GITHUBUSERLINK, [ 'name' => $owner['login'] ], '%');
 
-		$op[$item['name']] = [
-			//'key' => $item['full_name'],
+		$location = '--not-set--';
+		$description = $item['description'];
+		if (startsWith($description, LOCATIONPREFIX)) {
+			$bits = explode(', ', $description, 2);
+			$location = substr($bits[0], strlen(LOCATIONPREFIX));
+			$location .= ($location ? '/' : '') . $name;
+			$description = $bits[1];
+		}
+
+		$exclude = false;
+		foreach ($excludeContaining as $toMatch)
+			if (contains($description, $toMatch)) $exclude = true;
+		if ($exclude) continue;
+
+		$op[$name] = [
 			'id' => $item['id'],
+			'name' => $name,
 
 			'owner_link_md' => $ownerLink,
-			'repo_link_md' => '[' . $item['name'] . '](' . $item['html_url'] . ')',
+			'repo_link_md' => '[' . $name . '](' . $item['html_url'] . ')',
 
-			'description' => $item['description'],
+			'location' => $location,
+			'clone_url' => $item['clone_url'],
+			'description' => $description,
 
-			'website_link_md' => !!$item['homepage'] ? '--empty--' : '[' . $item['homepage'] . '](' . $item['homepage'] . ')',
+			'website_link_md' => !$item['homepage'] ? '--empty--' : '[' . $item['homepage'] . '](' . $item['homepage'] . ')',
 
 			'created' => $item['created_at'],
 			'updated' => $item['updated_at'],

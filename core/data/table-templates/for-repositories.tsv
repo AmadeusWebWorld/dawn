@@ -2,5 +2,5 @@
 ||use-a-bootstrap-row: yes
 ||no-content-box: yes
 ||head-columns: none
-||row-template: <span class="float-right">%owner_link_md%</span>|%repo_link_md%|<u>Website</u>: %website_link_md%|<u>Description</u>: %description%|
+||row-template: <span class="float-right">%owner_link_md%</span>|%repo_link_md%|<u>CloneAt</u>: "%location%"|<u>Website</u>: %website_link_md%|<u>Description</u>: %description%|
 ||bs-template: <div class="col-md-4 col-sm-12 p-3"><div class="content-box">%line%</div></div>
