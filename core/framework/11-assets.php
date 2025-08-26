@@ -50,6 +50,7 @@ function title($what = 'default') {
 }
 
 //locations
+DEFINE('LEAFNODEASSETS', 'LEAFNODE');
 DEFINE('NODEASSETS', 'NODE');
 DEFINE('NETWORKASSETS', 'NETWORK');
 DEFINE('SITEASSETS', 'SITE');

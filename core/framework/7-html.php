@@ -205,6 +205,7 @@ function replaceHtml($html) {
 			'%nodeItem%' => getPageParameterAt(1, ''),
 			'%nodeItem2%' => getPageParameterAt(2, ''),
 			'%nodeFullUrl%' => pageUrl(variableOr('nodeSlug', '##no-nodeSlug')),
+			'%leafNodeAssets%' => variableOr(assetKey(LEAFNODEASSETS), ''),
 
 			'%phone%' => variableOr('phone', ''),
 			'%phone2%' => variableOr('phone2', ''),

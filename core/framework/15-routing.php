@@ -109,6 +109,7 @@ function ensureNodeVar() {
 		$vars = variable('NodeVarsAt' . end($indices));
 		variables($vars);
 		$slug = $vars['nodeSlug'];
+		variable(assetKey(LEAFNODEASSETS), $vars[assetKey(NODEASSETS)]); //assume required as its always set above
 		DEFINE('NODEPATH', $vars['nodepath']);
 	} else {
 		$slug = nodeValue();
