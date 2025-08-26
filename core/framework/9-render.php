@@ -138,6 +138,9 @@ function renderAny($file, $settings = []) {
 	return _renderImplementation($file, $settings);
 }
 
+DEFINE('FIRSTSECTIONONLY', 'FirstSectionOnly');
+DEFINE('FULLACCESSNOTICE', 'FullAccessNotice');
+
 //_ denotees its not to be called from outside - see flavours above + remove deprecated
 function _renderImplementation($fileOrRaw, $settings) {
 	if (endsWith($fileOrRaw, 'family-tree.md')) {
@@ -157,6 +160,11 @@ function _renderImplementation($fileOrRaw, $settings) {
 		$fileName = $fileOrRaw;
 		$endsWithMd = endsWith($fileOrRaw, '.md');
 		$raw = disk_file_get_contents($fileOrRaw);
+	}
+	if (valueIfSet($settings, FIRSTSECTIONONLY)) {
+		$raw = explode('---', $raw, 2)[0];
+		if ($fan = variable(FULLACCESSNOTICE))
+			$raw .= '---' . NEWLINE . $fan;
 	}
 
 	$replaces = valueIfSet($settings, 'replaces', []);

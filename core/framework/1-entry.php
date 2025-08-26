@@ -116,7 +116,8 @@ function bootstrap($config) {
 		$slugs = explode('/', $node);
 		$node = array_shift($slugs);
 		variable('page_parameters', $slugs);
-		foreach ($slugs as $ix => $slug) variable('page_parameter' . ($ix + 1), $slugs[$ix]);
+		foreach ($slugs as $ix => $slug) variable('page_parameter' . ($ix + 1), $slug);
+		variable(LASTPARAM, $ix + 1);
 	}
 
 	variable(NODEVAR, variableOr('node-alias', $node));
@@ -229,7 +230,7 @@ function _credits($pre = '', $return = false) {
 	$url = $world . '?utm_content=site-credits&utm_referrer=' . variable('safeName');
 	$result = $pre . sprintf('<a href="%s" target="_blank" class="amadeus-credits" title="Built With AmadeusWeb.com" style="display: inline-block;">' .
 		NEWLINE . '			<img src="%s" height="50" alt="%s" style="border-radius: 12px; vertical-align: middle;"></a>',
-		$url, $world . 'amadeusweb-world-logo.png', 'Amadeus Web World');
+		$url, $world . 'amadeuswebworld-logo.png', 'Amadeus Web World');
 
 	if ($return) return $result; else echo $result;
 }

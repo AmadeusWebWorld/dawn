@@ -111,7 +111,8 @@ function getExtension($file) {
 
 function doToBuffering($what) {
 	if ($what == 'initialize' || $what == 1) {
-		ob_flush();
+		if (ob_get_length() !== false) //quirk with VAR 
+			ob_flush();
 		ob_start();
 	} else if ($what == 'get' || $what == 2) {
 		return ob_get_contents();

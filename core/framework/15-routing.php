@@ -49,12 +49,14 @@ function getSectionFrom($dir) {
 	return pathinfo($dir, PATHINFO_FILENAME);
 }
 
+DEFINE('LASTPARAM', 'last-page');
 DEFINE('NODEVAR', 'node');
 DEFINE('SITEHOME', 'index');
 function nodeValue() { return variable(NODEVAR); }
 function nodeIs($what) { return nodeValue() == $what; }
 function nodeIsNot($what) { return nodeValue() != $what; }
 function nodeIsOneOf($whatAll) { return in_array(nodeValue(), $whatAll); }
+function lastParamIs($what) { return getPageParameterAt(variable(LASTPARAM)) == $what; }
 
 DEFINE('SECTIONVAR', 'section');
 function sectionValue() { return variable(SECTIONVAR); }

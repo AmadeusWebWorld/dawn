@@ -394,6 +394,12 @@ function getLink($text, $href, $class = '', $target = false) {
 	return replaceItems('<a href="%href%"%class%%target%>%text%</a>', $params, '%');
 }
 
+function getLinkWithCustomAttr($text, $href, $attr) {
+	$href = ' href="' .  $href . '"';
+	$params = compact('text', 'href', 'attr');
+	return replaceItems('<a %href%%attr%>%text%</a>', $params, '%');
+}
+
 function getIconSpan($what = 'expand', $size = 'large') {
 	$theme = variable('theme');
 	if ($theme == 'biz-land') {

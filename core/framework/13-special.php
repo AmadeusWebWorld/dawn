@@ -63,14 +63,16 @@ function autoRender($file, $type = false, $useHeading = true) {
 
 	if (endsWith($file, '.md')) {
 		sectionId('special-md', 'container');
-		if (startsWith($raw, '<!--is-blurbs-->'))
+		if (startsWith($raw, '<!--is-blurbs-->')) {
 			_renderedBlurbs($file);
-		else if (startsWith($raw, '<!--is-deck-->'))
+		} else if (startsWith($raw, '<!--is-deck-->')) {
 			_renderedDeck($file, $pageName);
-		else if ($useHeading)
-			renderAny($file, ['use-content-box' => true, 'heading' => $pageName]);
-		else
-			renderAny($file, ['use-content-box' => true]);
+		} else {
+			$settings = ['use-content-box' => true];
+			if ($useHeading) $settings['heading'] = $pageName;
+			if (variable(FIRSTSECTIONONLY)) $settings[FIRSTSECTIONONLY] = true;
+			renderAny($file, $settings);
+		}
 
 		section('end');
 		pageMenu($file);
