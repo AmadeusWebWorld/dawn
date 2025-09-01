@@ -88,6 +88,7 @@ function _visane($siteVars) {
 		['address', 'Chennai, India'],
 		['timings', 'Mon - Sat 11am to 7pm'],
 		//['address-url', '#address'], //not here as needed for social too
+		['owned-by', false], //in _copyright
 
 		['mediakit', '?palette=default'],
 		['fonts', []], //used in mediakit.php

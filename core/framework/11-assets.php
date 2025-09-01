@@ -97,13 +97,14 @@ function getLogoOrIcon($what, $which = 'site') {
 
 	$netWorkManaged = variable('network-manages-site-assets');
 	$prefix = $netWorkManaged && DEFINED('SITENAME') ? SITENAME . '/' : '';
+	$site = variable('dont-overwrite-logo') && $what == 'logo';
 
-	if (is_array($which)) {
+	if (is_array($which) && !$site) {
 		$inNode = true;
 		$name = $which['nodeSafeName'] . $suffix;
 		$where = $which[assetKey(NODEASSETS)];
 	} else {
-		$inNode = $which == 'node' && hasVariable('nodeSafeName') && DEFINED('NODEPATH');
+		$inNode = $which == 'node' && !$site && hasVariable('nodeSafeName') && DEFINED('NODEPATH');
 		$name = variable($inNode ? 'nodeSafeName' : 'safeName') . $suffix;
 
 		$where = $inNode ? STARTATNODE : ($netWorkManaged ? STARTATNETWORK : STARTATSITE);

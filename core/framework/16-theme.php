@@ -101,7 +101,7 @@ function runThemePart($what) {
 		$vars['body-classes'] = body_classes(true);
 
 		//TODO: icon link to node home, should have 2nd menu & back to home
-		$baseUrl = hasVariable('nodeSafeName') ? pageUrl(nodeValue()) : pageUrl();
+		$baseUrl = hasVariable('nodeSafeName') && !variable('dont-overwrite-logo') ? pageUrl(nodeValue()) : pageUrl();
 		$logo2x = getLogoOrIcon('logo', 'node');
 		$vars['logo'] = concatSlugs(['<a href="', $baseUrl . variableOr('nodeChildSlug', ''), '">' . NEWLINE
 			. '								<img src="', $logo2x, '" class="img-fluid img-max-',
@@ -205,7 +205,11 @@ function _page_menu($siteIcon, $nodeIcon) {
 	$menuFile = getThemeFile('snippets/page-menu.html');
 	$menuContent = disk_file_get_contents($menuFile);
 
-	$menuVars = [
+	$siteOnly = variable('dont-overwrite-logo');
+	$menuVars = $siteOnly ? [
+		'menu-title' => NEWLINE . _iconLink($siteIcon)
+		 . getLink(variable('nodeSiteName'), pageUrl(variable('nodeSlug')), 'btn btn-site') . NEWLINE,
+	] : [
 		'menu-title' => NEWLINE . site_and_node_icons($siteIcon, $nodeIcon)
 			 . variable('nodeSiteName') . NEWLINE,
 	];

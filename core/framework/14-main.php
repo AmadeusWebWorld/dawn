@@ -1,5 +1,5 @@
 <?php
-DEFINE('OURNETWORK', 'world, work, core, friends');
+DEFINE('OURNETWORK', 'world, work, core');
 
 main::initialize();
 
