@@ -22,15 +22,9 @@ function renderThemeFile($file, $themeName = false) {
 	}
 
 	if (!$themeName) $themeName = variable('theme');
-	$variables = [
-		/*
-		'theme' => variable('app') . "themes/$themeName/",
-		'themeFol' => $themeFol = concatSlugs([AMADEUSTHEMESFOLDER, $themeName, '']),
-		*/
-	];
-
 	$themeFol = concatSlugs([AMADEUSTHEMESFOLDER, $themeName, '']);
-	disk_include_once($themeFol . $file . '.php', $variables);
+
+	disk_include_once($themeFol . $file . '.php');
 }
 
 function getThemeTemplate($end = '-rich-page.php') {

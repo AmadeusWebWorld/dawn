@@ -66,7 +66,7 @@ function read_seo($file = false) {
 }
 
 function print_seo() {
-	if (variable('meta-rendered')) return;
+	if (variable('meta-rendered') || variable('no-seo-info')) return;
 	$file = variable('file');
 	if (!$file) return;
 
