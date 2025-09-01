@@ -3,10 +3,14 @@ DEFINE('PINICONS', 'icons');
 DEFINE('PINTEXT',  'text');
 DEFINE('PINEMBED', 'embed');
 
+function wantsPollen() {
+	return hasPageParameter('slider') || hasPageParameter('content');
+}
+
 function pollenAt($where, $exclude = 'me, business') {
 	return;
 	if (variable('live') || variable('dont-pollinate')) return;
-	if (hasPageParameter('slider') || hasPageParameter('content')) return;
+	if (wantsPollen()) return;
 
 	$sheet = getSheet(AMADEUSROOT . 'admin/public-interest-network/pollen.tsv', 'where');
 

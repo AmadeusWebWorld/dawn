@@ -428,6 +428,7 @@ function add_body_class($name) {
 }
 
 function body_classes($return = false) {
+	$loadingPollen = wantsPollen();
 	$op = [];
 
 	$op[] = 'site-' . variable('safeName');
@@ -439,7 +440,7 @@ function body_classes($return = false) {
 
 	$op[] = 'mobile-click-to-expand'; //TODO: configurable!
 
-	if (hasVariable('ChatraID')) $op[] = 'has-chatra';
+	if (hasVariable('ChatraID') && !$loadingPollen) $op[] = 'has-chatra';
 
 	if (hasVariable(BODYCLASSES)) $op[] = implode(' ', variable(BODYCLASSES));
 
