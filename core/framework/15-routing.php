@@ -76,6 +76,13 @@ function nodeVarsInUse($append = false) {
 	variable(USEDNODEVAR, $vars);
 }
 
+/*
+TODO: chain function??
+DEFINE('DontOverwriteLogo', 'dont-overwrite-logo');
+DEFINE('PrefixSafeName', 'prefix-safeName');
+DEFINE('NodeSafeName', 'nodeSafeName');
+*/
+
 function autoSetNode($level, $where, $overrides = []) {
 	$section = variable('section');
 

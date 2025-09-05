@@ -50,7 +50,7 @@ class main {
 
 	static function analytics() {
 		$val = variable('google-analytics');
-		$val = $val && $val != 'none' ? ($val != '--use-amadeusweb' ? $val : 'UA-166048963-1') : false;
+		$val = $val && $val != 'none' ? ($val != '--use-amadeusweb' ? $val : 'G-LN2JB9GLDC') : false;
 		if (!$val) return;
 		variable('google-analytics', $val);
 		runModule('google-analytics');

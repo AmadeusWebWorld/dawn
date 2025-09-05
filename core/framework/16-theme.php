@@ -78,6 +78,9 @@ function runThemePart($what) {
 		'optional-page-menu' => '',
 		'optional-slider' => '', //this could be a page title too
 		'optional-right-button' => '',
+		'optional-after-menu' => '',
+		'optional-search-trigger' => '',
+		'optional-search' => '',
 		'header-align' => '', //an addon class needed if video page title has an image and wants content on right
 		'search-url' => searchUrl(),
 		'app-static' => assetMeta(COREASSETS)['location'],
@@ -105,6 +108,11 @@ function runThemePart($what) {
 		$vars['optional-page-css'] = [];
 		$vars['optional-page-menu'] = _page_menu($siteIcon, $nodeIcon);
 
+		if (!variable('no-search')) {
+			$vars['optional-search-trigger'] = getThemeSnippet('search-trigger');
+			$vars['optional-search'] = replaceItems(getThemeSnippet('search'), ['search-url' => searchUrl()], '##');
+		}
+
 		$header = _substituteThemeVars($content, 'header', $vars);
 
 		$bits = explode('##menu##', $header);
@@ -120,7 +128,7 @@ function runThemePart($what) {
 		if (!variable('footer-widgets-in-enrich')) {
 			$logo2x = getLogoOrIcon('logo', 'site');
 			$logo = NEWLINE . '			' . concatSlugs(['<a href="', pageUrl(), '">' . NEWLINE .
-				'				<img src="', $logo2x, '" style="border-radius: 20px;" class="img-fluid img-logo" alt="', variable('name'), '">' . NEWLINE . '			</a><br>'], '');
+				'				<img src="', $logo2x, '" style="border-radius: 20px;" class="img-fluid img-logo img-max-500" alt="', variable('name'), '">' . NEWLINE . '			</a><br>'], '');
 
 			$message = !variable('footer-message') ? '' : (NEWLINE . '			<span class="btn btn-secondary mb-2">' . returnLine(variable('footer-message')) . '</span>' . NEWLINE);
 
