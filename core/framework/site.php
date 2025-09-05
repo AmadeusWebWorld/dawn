@@ -80,7 +80,7 @@ function _visane($siteVars) {
 		['link-to-site-home', true, 'bool'],
 		['link-to-section-home', false, 'bool'],
 		['ChatraID', '--use-amadeusweb'],
-		['google-analytics', 'none', 'bool'], //'--use-amadeusweb'
+		['google-analytics', '--use-amadeusweb'],
 
 		['email', 'imran@amadeusweb.com'],
 		['phone', '+91-9841223313'],
