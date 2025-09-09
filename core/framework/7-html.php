@@ -333,6 +333,9 @@ function prepareLinks($output) {
 
 	$output = replaceItems($output, [
 		'DIV|LARGELIST' => '<div class="large-list">',
+		'DIV-ROW' => '<div class="row">',
+		'DIV-CELL4' => '<div class="col-md-4 col-sm-12">',
+		'DIV-CELL8' => '<div class="col-md-8 col-sm-12">',
 		'DIV-CLOSE' => '</div>',
 	]);
 

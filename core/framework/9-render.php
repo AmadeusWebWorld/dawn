@@ -171,6 +171,7 @@ function _renderImplementation($fileOrRaw, $settings) {
 	$echo = valueIfSet($settings, 'echo', true);
 	$excerpt = valueIfSet($settings, 'excerpt', false);
 	$no_processing = valueIfSet($settings, 'raw', false) || contains($raw, '<!--no-processing-->') || do_md_in_parser($raw);
+	if (contains($raw, '<!--no-p-tags-->')) $settings['strip-paragraph-tag'] = true;
 
 	if ($excerpt) $raw = explode('<!--more-->', $raw)[0];
 

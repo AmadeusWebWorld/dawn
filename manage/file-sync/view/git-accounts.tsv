@@ -1,10 +1,9 @@
 #Provider	Type	Slug	Notes
-|is-table-with-template
+|is-table-with-template			
 ||head-columns: name, url, notes
 ||row-template: <tr><td>%Slug%</td><td><a href="https://github.com/%Slug%~~TARGETNEW">%Slug% &nbsp;|&nbsp; <a href="https://github.com/%Slug%?tab=repositories~~TARGETNEW">repos</a></td><td>%Notes%</td></tr>
-GitHub	users	AmadeusWebWorld	Main +CP
-GitHub	orgs	AmadeusWebAlliances	AS++
+GitHub	users	AmadeusWebWorld	websites, wisdom, work, world
 GitHub	orgs	AmadeusWebFriends	Friends and CBs
-|GitHub	orgs	WiseOwlsPeople	WiseOwls
+GitHub	orgs	AmadeusWebMembers	Not on own domain
 GitHub	orgs	ImranAliNamazi	Imran
 |GitHub	orgs	AmadeusWebArchives	Unused

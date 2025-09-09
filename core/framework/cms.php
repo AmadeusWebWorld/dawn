@@ -187,6 +187,7 @@ variable('specialHumanizeReplaces', [
 	'2025 06' => 'Jun 2025',
 	'2025 07' => 'Jul 2025',
 	'2025 08' => 'Aug 2025',
+	'2025 09' => 'Sep 2025',
 ]);
 
 function site_humanize($txt, $field = 'title', $how = false) {
@@ -197,8 +198,9 @@ function site_humanize($txt, $field = 'title', $how = false) {
 		variableOr('specialHumanizeReplaces', []),
 	];
 
+	$key = strtolower($txt);
 	foreach ($arrays as $list)
-		if (array_key_exists($key = strtolower($txt), $list))
+		if (array_key_exists($key, $list))
 			return $list[$key];
 
 	return $txt;
