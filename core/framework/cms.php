@@ -139,6 +139,7 @@ function setFileIfExists($section, $fwe, $breadcrumbs, $itemToAdd) {
 
 function afterSectionSet() {
 	//TODO: include _folder.php on $file if it exists
+	if (function_exists('network_before_render')) network_before_render();
 	if (function_exists('site_before_render')) site_before_render();
 
 	$file = variable('file');

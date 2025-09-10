@@ -45,10 +45,56 @@ if ($groups = variable('section-groups')) {
 	}
 }
 
+subsitesMenu();
 if (function_exists('pollenAt')) pollenAt(PINICONS);
 if (function_exists('after_menu')) after_menu();
 if (function_exists('network_after_menu')) network_after_menu();
 if (!$noOuterUl) _menuULStart('site');
+
+function subsitesMenu() {
+	$items = variableOr('subsiteItems', []);
+	if (count($items) == 0) return;
+
+	$home = variable('subsiteHome');
+	if (!$home) return;
+
+	$name = humanize($home['Name']) . '++';
+
+	extract(variable('menu-settings'));
+	if ($wrapTextInADiv) $name = '<div>' . $name . $topLevelAngle . '</div>';
+
+	echo '<li class="' . $itemClass . ' ' . $subMenuClass . '"><a class="' . $anchorClass . '">' . $name . '</a>' . NEWLINE;
+	echo '	<ul class="' . $ulClass . '">' . NEWLINE;
+
+	$all = variable('allSiteItems');
+	$homePath = $home['Path'] . '/' . $home['Subsite']['Site'];
+
+	$name = _siteOf($home, $all, $wrapTextInADiv, $anchorClass);
+	echo '<li class="' . $itemClass . ' ' . $subMenuClass . '">' . $name . '</li>';
+
+	foreach ($items as $siteAt => $item) {
+		if ($item['Path'] != $home['Path']) continue; //skip other networks
+		if ($siteAt == $homePath) continue;
+		$name = _siteOf($item, $all, $wrapTextInADiv, $anchorClass);
+		echo '<li class="' . $itemClass . ' ' . $subMenuClass . '">' . $name . '</li>';
+	}
+
+	echo '	</ul>' . variable('2nl');
+	echo '</li>' . NEWLINE;
+}
+
+function _siteOf($item, $items, $wrap, $anchorClass) {
+	$site = $items[$item['Path'] . '/' . $item['Subsite']['Site']];
+	$name = str_replace('site-icon', $anchorClass, $site['icon-link']);
+	if ($wrap) $name = '<div>' . $name . '</div>';
+	return $name;
+}
+
+function _headerMenuItem($name, $link, $target = false) {
+	extract(variable('menu-settings'));
+	if ($wrapTextInADiv) $name = '<div>' . $name . '</div>';
+	echo '<li class="' . $itemClass . ' ' . $subMenuClass . '">' . getLink($name, $link, $anchorClass, $target) . '</li>' . NEWLINE;
+}
 
 function renderHeaderMenu($slug, $node = '', $name = false) {
 	$parentSlug = $node ? $node : $slug;

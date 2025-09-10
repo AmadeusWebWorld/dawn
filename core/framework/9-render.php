@@ -213,6 +213,9 @@ function _renderImplementation($fileOrRaw, $settings) {
 	$md = $raw != '' && ($raw[0] == '#' || startsWith($raw, $markdownStart));
 	$engageContent = false;
 
+	if ($rawVars = variable('rawReplaces'))
+		$raw = replaceItems($raw, $rawVars, '%');
+
 	if ($no_processing) {
 		$output = $raw;
 	} else if ($autop || ($endsWithMd && variable('autop-for-markdown'))) {

@@ -1,3 +1,6 @@
+/* FIXES */
+.device-xs #header-wrap #logo img { height: auto; }
+
 /* MISC */
 div.large-list {
 	background-color: #fffeea !important;

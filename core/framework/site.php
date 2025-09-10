@@ -157,6 +157,12 @@ function setupNetwork($thisUrl) {
 	$networkUrls = [];
 	$networkHome = false;
 
+	$subsiteItems = [];
+	$subsiteHome = false;
+
+	//NOTE: supports only 2 levels for now
+	$currentSitePath = pathinfo(dirname(SITEPATH, 1), PATHINFO_FILENAME) . '/' . pathinfo(SITEPATH, PATHINFO_FILENAME);
+
 	$sites = getSheet(AMADEUSROOT . '/data/sites.tsv', false);
 
 	$sitePaths = [];
@@ -177,11 +183,28 @@ function setupNetwork($thisUrl) {
 		$thisPath = $sites->getValue($siteRow, 'Path');
 		$siteObj = $sites->asObject($siteRow);
 		$siteObj['Matched'] = $matched;
+		$siteObj['Subsite'] = false;
 
 		if ($siteObj['HomeOf'] == $mainNetwork)
 			$networkHome = $thisPath;
 
-		$sitePaths[$thisPath] = $siteObj;
+		if (disk_file_exists($subsitesTsv = ALLSITESROOT . $thisPath . '/subsites.tsv')) {
+			$subsites = getSheet($subsitesTsv, false);
+			foreach ($subsites->rows as $subsite) {
+				$name = $subsites->getValue($subsite, 'Site');
+				$thisSitePath = $thisPath . '/' . $name;
+				$siteObj = $sites->asObject($siteRow);
+				$siteObj['Matched'] = $matched;
+				$siteObj['Subsite'] = $subsites->asObject($subsite);
+				$subsiteItems[$thisSitePath] = $siteObj;
+				$sitePaths[$thisSitePath] = $siteObj;
+
+				if ($currentSitePath == $thisSitePath)
+					$subsiteHome = $siteObj;
+			}
+		} else {
+			$sitePaths[$thisPath] = $siteObj;
+		}
 	}
 
 	$networkItems = [];
@@ -220,7 +243,7 @@ function setupNetwork($thisUrl) {
 			'text' => $item['iconName'][0][$valueIndex],
 			], '%');
 
-		$allSiteItems[] = $thisItem = [
+		$allSiteItems[$siteAt] = $thisItem = [
 			'url' => $url,
 			'siteAt' => $siteAt,
 			'safeName' => $slug,
@@ -234,8 +257,18 @@ function setupNetwork($thisUrl) {
 		];
 
 		if (!$siteObj['Matched']) continue;
+		//if ($siteObj['Subsite'] !== false) $subsiteItems[$siteAt] = $thisItem;
 
 		$networkItems[$siteAt] = $thisItem;
+
+		if ($subsiteHome['Path'] == $siteAt) {
+			//$subsiteHome = $thisItem;
+			if ($thisUrl == $url) {
+				$scaffold = variableOr('scaffold', []);
+				$scaffold[] = 'our-sites';
+				variable('scaffold', $scaffold);
+			}
+		}
 
 		if ($networkHome == $siteAt) {
 			variable('networkHome', $thisItem);
@@ -248,9 +281,13 @@ function setupNetwork($thisUrl) {
 	}
 
 	$networkUrls['network-assets'] = variable(assetKey(NETWORKASSETS));
+	variable('subsiteItems', $subsiteItems);
+	variable('subsiteHome', $subsiteHome);
+
 	variable('networkItems', $networkItems);
-	variable('allSiteItems', $allSiteItems);
 	variable('networkUrls', $networkUrls);
+
+	variable('allSiteItems', $allSiteItems);
 }
 
 runFrameworkFile('cms');
