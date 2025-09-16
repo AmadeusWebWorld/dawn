@@ -1,6 +1,7 @@
 /**
- * v2.5 of the engage feature - a part of v7.AmadeusWeb.com
+ * v2.6 of the engage feature - a part of dawn.amadeusweb.com (v8.5)
  *     .5 - make it more fluent / friendly.
+ * 	   .6 - supports salutation
  * **** Get Emails with details on each call to action.
  * 
  * DO NOTE: This is proprietary software by Imran Ali Namazi.
@@ -59,9 +60,10 @@ $(document).ready(function() {
 			return;
 		}
 		
-		var siteName = div.data('site-name');
-		if (!siteName) siteName = 'Amadeus Web World';
-		var headings = {}, firstHeading = true, output = 'Dear ' + siteName + ",\r\n\r\n";
+		const siteName = div.data('site-name');
+		let salutation = div.data('salutation');
+		if (!salutation) salutation = 'Dear Amadeus Web World,';
+		var headings = {}, firstHeading = true, output = salutation + "\r\n\r\n";
 
 		items.each(function() {
 			var item = $(this).closest('li');
@@ -96,7 +98,7 @@ $(document).ready(function() {
 
 		var user = $('.sender-name', div).val();
 
-		var subject = '[%caseId%] "%user%" responds on page: %site%'
+		var subject = '[%caseId%] "%user%" responds on website: %site%'
 				.replace('%caseId%', caseId)
 				.replace('%user%', user)
 				.replace('%site%', siteName)

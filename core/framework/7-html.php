@@ -192,6 +192,7 @@ function replaceHtml($html) {
 		variable($key, $replaces = [
 			//Also, we should incorporate dev tools like w3c & broken link checkers
 			'%url%' => variable('page-url'),
+			'%' . OTHERSITEPREFIX . 'core%' => variable('app'),
 
 			'%node-assets%' => _resolveFile('', STARTATNODE),
 			'%site-assets%' => _resolveFile('', STARTATSITE),
@@ -240,6 +241,7 @@ function replaceHtml($html) {
 
 	if ($nw = variable('networkUrls'))
 		$html = replaceItems($html, $nw, '%');
+
 	return replaceItems($html, $replaces);
 }
 

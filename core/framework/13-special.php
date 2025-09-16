@@ -48,9 +48,9 @@ function autoRender($file, $type = false, $useHeading = true) {
 			sectionId('special-form' . ($ix = variableOr('special-form', 1)), 'container');
 
 		if ($md)
-			_renderEngage($pageName, $raw, true);
+			renderEngage($pageName, $raw);
 		else
-			_runEngageFromSheet(getPageName(), $file);
+			runEngageFromSheet(getPageName(), $file);
 
 		if ($detectedEngage) {
 			variableOr('special-form', ++$ix);

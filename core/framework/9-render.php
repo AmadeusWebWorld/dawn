@@ -232,7 +232,8 @@ function _renderImplementation($fileOrRaw, $settings) {
 		if (is_engage($raw) && !contains($raw, $inProgress)) {
 			runFeature('engage');
 			$settings['use-content-box'] = false;
-			$output = _renderEngage(getPageName(), $raw . $inProgress, true, false);
+			$meta = $wasFile ? variable('meta_' . $fileName) : [];
+			$output = renderEngage(getPageName(), $raw . $inProgress, false, $meta);
 		} else {
 			$ai = contains($raw, FROM_GEMINI_AI);
 			if ($ai) {
@@ -276,7 +277,8 @@ function _renderImplementation($fileOrRaw, $settings) {
 	if ($engageContent) {
 		runFeature('engage');
 		$settings['use-content-box'] = false;
-		$output .= _renderEngage(getPageName(), $engageContent . $inProgress, true, false);
+		$meta = $wasFile ? variable('meta_' . $fileName) : [];
+		$output .= renderEngage(getPageName(), $engageContent . $inProgress, false, $meta);
 	}
 
 	if (!$echo) return $output;

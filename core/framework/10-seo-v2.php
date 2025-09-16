@@ -73,7 +73,10 @@ function print_seo() {
 	$meta = variable('meta_' . $file);
 	if (!$meta) return;
 
-	$show = ['Title', 'About', 'Description', 'Primary Keyword', 'Keywords', 'Related Keywords', 'Long-Tail Keywords',
+	$show = [
+		'Title', 'About', 'Excerpt', 'Description',
+		'Salutation', 'Email To', 'Email Cc', 'WhatsApp To',
+		'Primary Keyword', 'Keywords', 'Related Keywords', 'Long-Tail Keywords',
 		'Date', 'Author', 'Page Custodian', 'Prompted By', 'Published', 'Meta Author',
 		'Born', 'Died',
 	];

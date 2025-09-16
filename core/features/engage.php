@@ -3,15 +3,30 @@ addStyle('engage', COREASSETS);
 addScript('engage', COREASSETS);
 
 //TODO: Make a toggle-more when the md contains <!--more-->
-function _renderEngage($name, $raw, $open = false, $echo = true) {
-	if (!$open) echo engageButton($name, $class);
+function renderEngage($name, $raw, $echo = true, $meta = []) {
+	//if (!$open) echo engageButton($name, $class);
+
+	$salutation = variableOr('salutation', 'Dear ' . variable('name') . ',');
+	$addressee = '';
+	$additionalCC = '';
+	$whatsapp = variable('whatsapp-txt-start');
+
+	if ($meta) {
+		$mailSpacer = ',';
+		if (isset($meta['Salutation'])) $salutation = $meta['Salutation'];
+		if (isset($meta['Email To'])) $addressee = $meta['Email To'] . $mailSpacer;
+		if (isset($meta['Email Cc'])) $additionalCC = $meta['Email Cc'] . $mailSpacer;
+		if (isset($meta['WhatsApp To'])) $whatsapp = _whatsAppME($meta['WhatsApp To']);
+	}
 
 	$result = '	<div id="engage-' . urlize($name) . '" class="' . _getCBClassIfWanted('engage') . '" ' .
-		($open ? '' : 'style="display: none" ') .
-		'data-to="' . ($email = variable('email')) . '" data-cc="' .
-		variableOr('assistantEmail', variable('systemEmail')) .
-		'" data-whatsapp="' . variable('whatsapp-txt-start') . '"' .
-		'" data-site-name="' . variable('name') . '">' . variable('nl');
+		//($open ? '' : 'style="display: none" ') .
+		'data-to="' . ($email = $addressee . variable('email')) .
+		'" data-cc="' . $additionalCC .
+			variableOr('assistantEmail', variable('systemEmail')) .
+		'" data-whatsapp="' . $whatsapp .
+		'" data-site-name="' . variable('name') .
+		'" data-salutation="' . $salutation . '">' . variable('nl');
 
 	$replaces = [];
 	if (disk_file_exists($note = (AMADEUSCORE . 'data/engage-note.md'))) {
@@ -31,7 +46,7 @@ function _renderEngage($name, $raw, $open = false, $echo = true) {
 	echo $result;
 }
 
-function _runEngageFromSheet($pageName, $sheetName) {
+function runEngageFromSheet($pageName, $sheetName) {
 	$sheet = getSheet($sheetName);
 	$contentIndex = $sheet->columns['content'];
 	$introIndex = $sheet->columns['section-intro'];
@@ -86,6 +101,6 @@ function _runEngageFromSheet($pageName, $sheetName) {
 
 	//$raw = print_r($items, 1); //$raw = renderPills($items); //todo: LATER!
 	sectionId('engage-' . urlize($pageName));
-	_renderEngage($pageName, implode(variable('nl'), $raw), true);
+	renderEngage($pageName, implode(variable('nl'), $raw));
 	section('end');
 }
