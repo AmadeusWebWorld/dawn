@@ -18,6 +18,7 @@ For the current file, please create an html comment with all these "meta: fields
 <!--//meta
 About: 
 Description: 
+Excerpt: 
 Primary Keyword: 
 Related Keywords: 
 Long-Tail Keywords: 

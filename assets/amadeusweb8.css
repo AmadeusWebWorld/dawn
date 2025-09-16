@@ -17,8 +17,11 @@ div.large-list {
 .with-labels li { list-style-type: none; margin-bottom: 4px; border-bottom: 1px solid lightgray; }
 .with-labels a { font-size: 115%; font-weight: bold; }
 
+ol.large-list,
+ul.large-list,
 .large-list ol,
 .large-list ul {
+	list-style-type: none;
 	border: 2px solid #333;
 	border-width: 2px 0 2px 0;
 	padding: 10px 0 10px 0;

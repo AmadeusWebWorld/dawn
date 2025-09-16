@@ -43,7 +43,7 @@ function renderAnyFile($fwe, $settings = []) {
 			$exists = disk_file_exists($fpe);
 			if ($exists) {
 				autoRender($fpe);
-				if ($returnOnFirst) return true;
+				if ($returnOnFirst) return $extension;
 			}
 		}
 	} else if (array_key_exists($extensions, $known)) {
@@ -53,7 +53,7 @@ function renderAnyFile($fwe, $settings = []) {
 		foreach ($known as $key => $item) {
 			$newSettings = array_merge($inUseValues, ['extensions' => $key]);
 			$result = renderAnyFile($fwe, $newSettings);
-			if ($result && $returnOnFirst) return true;
+			if ($result && $returnOnFirst) return $result;
 		}
 	} else {
 		parameterError('CRITICAL - NOT SUPPORTED', $failParams);
@@ -79,11 +79,16 @@ function renderPlainHtml($file) {
 
 function renderExcerpt($file, $link, $prefix = '', $echo = true) {
 	$prefix = $prefix ? renderMarkdown($prefix) : '';
+
+	$meta = read_seo($file);
+	if ($meta AND isset($meta['excerpt'])) $raw = $meta['excerpt']; else
 	$raw = renderAny($file, ['excerpt' => true, 'echo' => false, 'markdown' => endsWith($file, '.md')]);
 
+	if ($meta && isset($meta['meta']['Date'])) $raw .= BRTAG . '<i>on ' . $meta['meta']['Date'] . '</i>';
+
 	$result = $prefix . _excludeFromGoogleSearch($raw)
-		. '<a class="read-more" href="' . $link . '">Read More&hellip;</a>';
-	
+		. BRTAG . '<a class="read-more" href="' . $link . '">Read More&hellip;</a>';
+
 	if (!$echo) return $result;
 	echo $result;
 }

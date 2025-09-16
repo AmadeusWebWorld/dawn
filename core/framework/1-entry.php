@@ -153,8 +153,17 @@ function render() {
 	} else if (hasPageParameter('slider')) {
 		$rendered = true; //dont want to render content. and needed here as it shouldnt support "content" menu pages
 	} else {
+		$rendered = false;
+
 		$fwe =  $folder . nodeValue();
-		$rendered = renderAnyFile($fwe . '.', ['extensions' => 'core', 'return-on-first' => true]);
+		$ext = renderAnyFile($fwe . '.', ['extensions' => 'core', 'return-on-first' => true]);
+		if ($ext) {
+			$rendered = true;
+			variable('file', $file = $fwe . '.' . $ext);
+			variable('seo-handled', false);
+			read_seo();
+			pageMenu($file);
+		}
 	}
 
 	if (isset($_GET['debug']) || isset($_GET['stats'])) {

@@ -229,7 +229,8 @@ function setupNetwork($thisUrl) {
 			$url = replaceItems($url, ['localhost' => 'localhost' . variable('port')]);
 
 		$site = sluggize($siteAt);
-		$networkUrls[OTHERSITEPREFIX . $site] = $url;
+		$safeSite = $site == 'main' && DEFINED('NETWORKMAIN') ? NETWORKMAIN : $site;
+		$networkUrls[OTHERSITEPREFIX . $safeSite] = $url;
 
 		$status = variable('local') ? "\r\n\r\nstatus: " . $siteObj['Status'] : '';
 		$imgPrefix = $url . ($slug = $item['safeName'][0][$valueIndex]);
@@ -261,7 +262,7 @@ function setupNetwork($thisUrl) {
 
 		$networkItems[$siteAt] = $thisItem;
 
-		if ($subsiteHome['Path'] == $siteAt) {
+		if ($subsiteHome && $subsiteHome['Path'] == $siteAt) {
 			//$subsiteHome = $thisItem;
 			if ($thisUrl == $url) {
 				$scaffold = variableOr('scaffold', []);

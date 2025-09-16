@@ -17,6 +17,7 @@ function read_seo($file = false) {
 	if ($meta) {
 		$aboutFields = ['About', 'about'];
 		$descriptionFields = ['Description', 'description'];
+		$excerptFields = ['Excerpt', 'excerpt'];
 		$titleFields = ['Title', 'title'];
 
 		if (variable('omit-long-keywords'))
@@ -26,6 +27,7 @@ function read_seo($file = false) {
 
 		$about = false;
 		$description = false; //if meta exists, this is mandatory (but only single)
+		$excerpt = false;
 		$title = false;
 		$keywords = []; //can be multiple
 
@@ -37,6 +39,8 @@ function read_seo($file = false) {
 				$about = $value;
 			} else if (in_array($key, $descriptionFields)) {
 				$description = $value;
+			} else if (in_array($key, $excerptFields)) {
+				$excerpt = $value;
 			} else if (in_array($key, $keywordsFields)) {
 				$keywords[] = $value;
 			/* TODO: DECIDE and REMOVE after seeing how seo reacts!
@@ -51,7 +55,7 @@ function read_seo($file = false) {
 		$keywords = count($keywords) ? implode(', ', $keywords) : '';
 
 		variable('meta_' . $file, $meta);
-		if ($fileGiven) return compact('about', 'title', 'description', 'keywords', 'meta');
+		if ($fileGiven) return compact('about', 'title', 'description', 'excerpt', 'keywords', 'meta');
 
 		if ($description) {
 			variable('description', $description);
