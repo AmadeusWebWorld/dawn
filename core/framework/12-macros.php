@@ -26,6 +26,9 @@ function runAllMacros($html) {
 	if (contains($html, '[youtube]'))
 		$html = processYouTubeShortcode($html);
 
+	if (contains($html, '[spotify]'))
+		$html = processSpotifyShortcode($html);
+
 	if (contains($html, '[audio]'))
 		$html = processAudioShortcode($html);
 
@@ -178,6 +181,13 @@ function processYouTubeShortcode($html) {
 	return replaceItems($html, [
 		'[youtube]' => '<div class="video-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/',
 		'[/youtube]' => '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>',
+	]);
+}
+
+function processSpotifyShortcode($html) {
+	return replaceItems($html, [
+		'[spotify]' => '<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/',
+		'[/spotify]' => '?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
 	]);
 }
 

@@ -2,6 +2,10 @@
 
 ---
 
+%media-corecodesnippet%
+
+---
+
 # %siteName%
 
 Welcomes you!
