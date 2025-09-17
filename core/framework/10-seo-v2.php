@@ -14,6 +14,13 @@ function read_seo($file = false) {
 		$meta = getSheet($file, false)->values;
 	}
 
+	if (!$meta) {
+		$altFile = relatedMetaFile($file);
+		if (!disk_file_exists($altFile)) return;
+		$raw = disk_file_get_contents($altFile);
+		$meta = parseMeta($raw);
+	}
+
 	if ($meta) {
 		$aboutFields = ['About', 'about'];
 		$descriptionFields = ['Description', 'description'];

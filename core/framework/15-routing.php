@@ -56,7 +56,8 @@ function nodeValue() { return variable(NODEVAR); }
 function nodeIs($what) { return nodeValue() == $what; }
 function nodeIsNot($what) { return nodeValue() != $what; }
 function nodeIsOneOf($whatAll) { return in_array(nodeValue(), $whatAll); }
-function lastParamIs($what) { return getPageParameterAt(variable(LASTPARAM)) == $what; }
+function lastParamIs($what) { return lastParam() == $what; }
+function lastParam() { return getPageParameterAt(variable(LASTPARAM)); }
 
 DEFINE('SECTIONVAR', 'section');
 function sectionValue() { return variable(SECTIONVAR); }

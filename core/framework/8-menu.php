@@ -62,7 +62,9 @@ function _skipExcludedFiles($files, $excludeNames = 'home', $excludeExtensions =
 	return $op;
 }
 
-function pageMenu() {
+function pageMenu($file) {
+	printRelatedPages($file);
+
 	print_seo();
 
 	if (variable('no-page-menu') || !sectionValue() || hasPageParameter('embed')) return;

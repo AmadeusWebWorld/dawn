@@ -205,6 +205,7 @@ function printSpacer($heading, $ix = 1) {
 
 function processSpacerShortcode($html) {
 	return replaceItems($html, [
+		'[spacer][no-content-box]' => SPACERSTART,
 		'[spacer]' => cbCloseAndOpen('spacer') . SPACERSTART,
 		'[/spacer]' => NEWLINE . SPACEREND, // . cbCloseAndOpen(),
 	]);

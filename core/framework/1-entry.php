@@ -67,6 +67,9 @@ runFrameworkFile('16-theme');
 //v8.3
 runFrameworkFile('17-pollinator');
 
+//v8.5
+runFrameworkFile('18-related');
+
 function before_bootstrap() {
 	$port = $_SERVER['SERVER_PORT'];
 
@@ -131,6 +134,10 @@ function hasPageParameter($param) {
 	return in_array($param, variableOr('page_parameters', [])) || isset($_GET[$param]);
 }
 
+function getQueryParameter($param) {
+	return isset($_GET[$param]) ? $_GET[$param] : false;
+}
+
 function render() {
 	if (function_exists('before_render')) before_render();
 	ob_start();
@@ -152,6 +159,8 @@ function render() {
 		$rendered = true;
 	} else if (hasPageParameter('slider')) {
 		$rendered = true; //dont want to render content. and needed here as it shouldnt support "content" menu pages
+	} else if (variable('skip-content-render')) {
+		$rendered = false;
 	} else {
 		$rendered = false;
 

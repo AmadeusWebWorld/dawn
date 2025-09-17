@@ -16,7 +16,7 @@ foreach ($sheet->rows as $item) {
 	$link = replaceHtml('%' . OTHERSITEPREFIX . $site . '%') . $relPath . '/';
 
 	$file = NETWORKPATH . '/'
-		. ($site == NETWORKMAIN ? 'main/' : $path . '/')
+		. ($site == NETWORKMAIN ? 'main/' : $site . '/')
 		. $sheet->getValue($item, 'section') . '/'
 		. $path
 		. $sheet->getValue($item, 'extension');
