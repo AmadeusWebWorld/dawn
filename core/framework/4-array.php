@@ -236,6 +236,10 @@ class sheet {
 	public array $values;
 	public array | null $group;
 
+	public function hasColumn($columnName) {
+		return isset($this->columns[$columnName]);
+	}
+
 	public function getValue($item, $columnName, $default = '') {
 		$result = $item[$this->columns[$columnName]];
 		return $result ? $result : $default;

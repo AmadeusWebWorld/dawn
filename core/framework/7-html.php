@@ -5,6 +5,13 @@ function currentUrl() {
 	return pageUrl(variable('all_page_parameters'));
 }
 
+function printNodeHeading($noEnd = false) {
+	sectionId('node', 'container text-center');
+	h2(humanize(nodeValue()), 'amadeus-icon');
+	if (!$noEnd)
+		section('end');
+}
+
 function currentLevel($wrap = true) {
 	return '';
 	$nodeIsSection = nodeIsSection();
@@ -335,8 +342,12 @@ function prepareLinks($output) {
 
 	$output = replaceItems($output, [
 		'DIV|LARGELIST' => '<div class="large-list">',
+		'DIV-CONTAINER' => '<div class="video-container">',
+		'DIV-CENTER' => '<div class="text-center">',
+		'DIV-RIGHT' => '<div class="float-right">',
 		'DIV-ROW' => '<div class="row">',
 		'DIV-CELL4' => '<div class="col-md-4 col-sm-12">',
+		'DIV-CELL6' => '<div class="col-md-6 col-sm-12">',
 		'DIV-CELL8' => '<div class="col-md-8 col-sm-12">',
 		'DIV-CLOSE' => '</div>',
 	]);

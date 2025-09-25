@@ -9,14 +9,19 @@ $op = ['<ul class="large-list">' . NEWLINE];
 $format = '<li class="mb-3">%sno% %title%<blockquote class="after-content mt-2 ms-4">%excerpt%</blockquote><hr class="m-2" /></li>';
 
 foreach ($sheet->rows as $item) {
-	$site = $sheet->getValue($item, 'site');
+	$site = $sheet->hasColumn('site') ? $sheet->getValue($item, 'site') : '';
 	$path = $sheet->getValue($item, 'path');
 
 	$relPath = str_replace('/home', '', $path);
-	$link = replaceHtml('%' . OTHERSITEPREFIX . $site . '%') . $relPath . '/';
+	$url = replaceHtml(DEFINED('NETWORKPATH') ? '%' . OTHERSITEPREFIX . $site . '%' : '%url%');
 
-	$file = NETWORKPATH . '/'
-		. ($site == NETWORKMAIN ? 'main/' : $site . '/')
+	$link = $url . $relPath . '/';
+
+	$base = DEFINED('NETWORKPATH')
+		? NETWORKPATH . '/' . ($site == NETWORKMAIN ? 'main/' : $site . '/')
+		: SITEPATH . '/';
+
+	$file = $base
 		. $sheet->getValue($item, 'section') . '/'
 		. $path
 		. $sheet->getValue($item, 'extension');

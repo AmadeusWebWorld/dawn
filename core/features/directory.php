@@ -1,4 +1,5 @@
 <?php
+if (variable('skip-directory')) return;
 $where = variableOr('directory_of', variable('section'));
 $folder = SITEPATH . '/' . $where . '/';
 if (disk_file_exists($php = $folder . 'home.php')) {
