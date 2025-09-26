@@ -12,6 +12,8 @@ function relatedMetaFile($file) {
 function printRelatedPages($file) {
 	$fol = pathinfo($file, PATHINFO_DIRNAME) . '/_/' . pathinfo($file, PATHINFO_FILENAME) . '/';
 	if (!disk_is_dir($fol)) return;
+	$files = _skipNodeFiles(scandir($fol));
+	if (!COUNT($files)) return;
 
 	contentBox('related', 'container');
 	h2('Related Pages');
@@ -32,7 +34,6 @@ function printRelatedPages($file) {
 		$links[] = getLink(humanize($name = pathinfo($item, PATHINFO_FILENAME)), $url . $name . '/', 'btn btn-outline-info', true);
 	}
 
-	$files = _skipNodeFiles(scandir($fol));
 	foreach ($files as $item)
 		$links[] = getLink(humanize($name = pathinfo($item, PATHINFO_FILENAME)), $url . $name . '/', 'btn btn-outline-info me-3 mb-3', true);
 

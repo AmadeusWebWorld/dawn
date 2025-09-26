@@ -48,13 +48,20 @@ DEFINE('CORESNIPPET', 'use-core');
 
 function _getSnippetPath($fol, $type = 'plain') {
 	if ($fol && $fol != CORESNIPPET) return $fol;
-	if ($type == 'plain') {
-		return $fol == CORESNIPPET ? (AMADEUSCORE . 'data/core-snippets/')
-			: (SITEPATH . '/data/snippets/');
-	}
+	$result = false;
+	if ($type == 'plain')
+		$result = $fol == CORESNIPPET
+			? (AMADEUSCORE . 'data/core-snippets/')
+			: '/snippets/';
+	else
+		$result = $fol == CORESNIPPET
+			? (AMADEUSCORE . 'data/core-code-snippets/')
+			: ('code-snippets/');
+	
+	if ($fol == CORESNIPPET)
+		return $result;
 
-	return $fol == CORESNIPPET ? (AMADEUSCORE . 'data/core-code-snippets/')
-		: (SITEPATH . '/data/code-snippets/');
+	return (defined('NETWORKDATA') ? NETWORKDATA : SITEPATH . '/data/') . $result;
 }
 
 function getSnippet($name, $fol = false) {
@@ -179,8 +186,8 @@ function textBoxWithCopyOnClick($lineBefore, $value, $lineAfter = 'Text Copied!'
 
 function processYouTubeShortcode($html) {
 	return replaceItems($html, [
-		'[youtube]' => '<div class="video-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/',
-		'[/youtube]' => '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>',
+		'[youtube]' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/',
+		'[/youtube]' => '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
 	]);
 }
 

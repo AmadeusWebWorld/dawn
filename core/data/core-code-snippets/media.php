@@ -28,11 +28,11 @@ if (!count($allItems)) return !variable('local') ? ''
 	: h2('No items resolved for current page.', 'text-danger', true) . '<p>Please check sufficient data in the "data/media.tsv" file.</p>';
 
 $items = getShuffledItems($allItems, 1);
-$html = '';
+$result = '';
 foreach ($items as $item)
-	$html .= replaceItems('[%type%]%id%[/%type%]' . NEWLINES2, $sheet->asObject($item) , '%');
+	$result .= replaceItems('[%type%]%id%[/%type%]' . NEWLINES2, $sheet->asObject($item) , '%');
 
-return runAllMacros($html);
+return $result;
 
 //echo '<pre>' . print_r($allItems, true) . '</pre>';
 //return '<pre>' . print_r($allItems, true) . '</pre>';
