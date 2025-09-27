@@ -85,6 +85,8 @@ function _visane($siteVars) {
 		['email', 'imran@amadeusweb.com'],
 		['phone', '+91-9841223313'],
 		['whatsapp', '919841223313'],
+		['phone2', '+91-9566166880'],
+		['whatsapp2', '#no-alt-wa-number'],
 		['address', 'Chennai, India'],
 		['timings', 'Mon - Sat 11am to 7pm'],
 		//['address-url', '#address'], //not here as needed for social too

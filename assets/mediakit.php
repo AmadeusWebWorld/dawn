@@ -8,6 +8,8 @@ if ($raw = valueIfSetAndNotEmpty($_GET, 'raw')) { echo $raw; return; }
 
 $palette = $fonts = $_GET;
 $moreVars = [''];
+if ($menuColor = valueIfSetAndNotEmpty($palette, 'sticky-menu'))
+	$moreVars[] = '--amadeus-sticky-menu: #' . $menuColor . ';';
 
 $cursive = valueIfSetAndNotEmpty($fonts, 'cursive');
 $menu = valueIfSetAndNotEmpty($fonts, 'menu');
@@ -62,4 +64,8 @@ if ($menu) {
 	$menuSize = valueIfSetAndNotEmpty($fonts, 'menu-size');
 	$menuSize = $menuSize ? '--cnvs-primary-menu-font-size: ' . $menuSize . '; ' : '';
 	echo '#header { --cnvs-primary-menu-font: "' . $menu . '", serif; ' . $menuSize . '}' . NEWLINES2;
+
+	$menuHeight = valueIfSetAndNotEmpty($fonts, 'menu-height');
+	if ($menuHeight)
+		echo '#header .menu-link {  line-height: ' . $menuHeight . '!important; }' . NEWLINES2;
 }

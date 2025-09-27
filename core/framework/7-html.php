@@ -215,11 +215,13 @@ function replaceHtml($html) {
 			'%nodeFullUrl%' => pageUrl(variableOr('nodeSlug', '##no-nodeSlug')),
 			'%leafNodeAssets%' => variableOr(assetKey(LEAFNODEASSETS), ''),
 
+			'%email%' => variableOr('email', ''),
 			'%phone%' => variableOr('phone', ''),
 			'%phone2%' => variableOr('phone2', ''),
-			'%email%' => variableOr('email', ''),
-			'%whatsapp-number%' => ($wa = variableOr('whatsapp', '##no-number-specified')) . variableOr('whatsapp-info', ''),
+			'%whatsapp-number%' => ($wa = variableOr('whatsapp', '##no-number-specified')),
 			'%whatsapp%' => $wame = _whatsAppME($wa),
+			'%whatsapp2-number%' => ($wa2 = variableOr('whatsapp2', '##no-number2-specified')),
+			'%whatsapp2%' => _whatsAppME($wa2),
 
 			'%address%' => variableOr('address', '[no-address]'),
 			'%address2%' => variableOr('address2', '[no-address2]'),

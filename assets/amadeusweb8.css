@@ -1,7 +1,9 @@
 /* FIXES */
 .device-xs #header-wrap #logo img { height: auto; }
 
-.sub-theme-parallax .menu-link { text-transform: none; }
+.sub-theme-parallax .menu-link { text-transform: none; font-weight: normal; }
+.sub-theme-parallax section *:not(a), .sub-theme-parallax .menu-link:not(.sub-theme-parallax .sub-menu-container .menu-link) { color: #fff; }
+.sub-theme-parallax .sticky-header a div { color: var(--amadeus-sticky-menu, #666)!important; }
 
 /* MISC */
 div.large-list {

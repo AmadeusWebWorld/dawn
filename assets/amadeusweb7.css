@@ -28,7 +28,6 @@ body:not(.is-expanded-menu) .primary-menu a { font-size: 130%; padding-top: 15px
 .footer-widgets-wrap a { color: var(--footer-widgets-link, #fff); font-weight: bold; letter-spacing: 1px; }
 .footer-widgets a, a.icon { display: inline-block; margin-top: 6px; line-height: 30px; }
 .footer-widgets h4 { text-decoration: underline; margin-bottom: 6px; }
-.device-sm .container, .device-xs .container { margin: 10px 10px 25px 10px; width: calc(100vw - 20px - var(--scrollbar-width)); }
 body.theme-canvas #content { padding-bottom: 10px; }
 
 #content a.icon { margin-left: 8px; text-decoration: underline overline; }
