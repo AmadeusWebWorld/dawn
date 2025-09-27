@@ -282,7 +282,7 @@ function _renderImplementation($fileOrRaw, $settings) {
 	if ($engageContent) {
 		runFeature('engage');
 		$settings['use-content-box'] = false;
-		$meta = $wasFile ? variable('meta_' . $fileName) : [];
+		$meta = $wasFile ? read_seo($fileName) : [];
 		$output .= renderEngage(getPageName(), $engageContent . $inProgress, false, $meta);
 	}
 

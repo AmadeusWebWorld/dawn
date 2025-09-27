@@ -6,7 +6,7 @@ addScript('engage', COREASSETS);
 function renderEngage($name, $raw, $echo = true, $meta = []) {
 	//if (!$open) echo engageButton($name, $class);
 
-	$salutation = variableOr('salutation', 'Dear ' . variable('name') . ',');
+	$salutation = variableOr('salutation', 'Dear ' . variable('name')) . ',';
 	$addressee = '';
 	$additionalCC = '';
 	$whatsapp = variable('whatsapp-txt-start');

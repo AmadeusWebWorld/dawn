@@ -358,6 +358,17 @@ function prepareLinks($output) {
 	return $output;
 }
 
+function url_r($url) {
+	$url = replaceItems($url, [
+		'preview.' => '',
+		'https://' => '',
+		'http://' => '',
+		'//' => '',
+	]);
+	if (endsWith($url, '/')) $url = substr($url, 0, strlen($url) - 1);
+	return $url;
+}
+
 function _whatsAppME($mob, $txt = '?text=') {
 	return 'https://wa.me/' . replaceItems($mob, ['+' => '', '-' => '', '.' => '']) . $txt;
 }

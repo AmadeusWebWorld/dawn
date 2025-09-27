@@ -160,8 +160,7 @@ function setupNetwork($thisUrl) {
 	$subsiteItems = [];
 	$subsiteHome = false;
 
-	//NOTE: supports only 2 levels for now
-	$currentSitePath = pathinfo(dirname(SITEPATH, 1), PATHINFO_FILENAME) . '/' . pathinfo(SITEPATH, PATHINFO_FILENAME);
+	$currentSitePath = str_replace('\\', '/', substr(SITEPATH, strlen(ALLSITESROOT)));
 
 	$sites = getSheet(AMADEUSROOT . '/data/sites.tsv', false);
 
@@ -190,15 +189,17 @@ function setupNetwork($thisUrl) {
 
 		if (disk_file_exists($subsitesTsv = ALLSITESROOT . $thisPath . '/subsites.tsv')) {
 			$subsites = getSheet($subsitesTsv, false);
+			$hasFolder = $subsites->hasColumn('Folder');
 			foreach ($subsites->rows as $subsite) {
-				$name = $subsites->getValue($subsite, 'Site');
+				$folder = $hasFolder ? $subsites->getValue($subsite, 'Folder') : '';
+				$name = $folder . $subsites->getValue($subsite, 'Site');
 				$thisSitePath = $thisPath . '/' . $name;
 				$siteObj = $sites->asObject($siteRow);
+				$siteObj['Folder'] = $folder;
 				$siteObj['Matched'] = $matched;
 				$siteObj['Subsite'] = $subsites->asObject($subsite);
 				$subsiteItems[$thisSitePath] = $siteObj;
 				$sitePaths[$thisSitePath] = $siteObj;
-
 				if ($currentSitePath == $thisSitePath)
 					$subsiteHome = $siteObj;
 			}
@@ -232,14 +233,13 @@ function setupNetwork($thisUrl) {
 		$safeSite = $site == 'main' && DEFINED('NETWORKMAIN') ? NETWORKMAIN : $site;
 		$networkUrls[OTHERSITEPREFIX . $safeSite] = $url;
 
-		$status = variable('local') ? "\r\n\r\nstatus: " . $siteObj['Status'] : '';
 		$imgPrefix = $url . ($slug = $item['safeName'][0][$valueIndex]);
 
 		$link = replaceItems('<a class="site-icon" href="%href%" target="_blank" title="%name% &mdash; %byline%">' .
 				'<img src="%src%" height="30px" />  %text%</a>', [
 			'href' => $url,
 			'name' => $name = $item['name'][0][$valueIndex],
-			'byline' => ($byline = $item['byline'][0][$valueIndex]) . $status,
+			'byline' => ($byline = $item['byline'][0][$valueIndex]),
 			'src' => $imgPrefix . '-icon.png',
 			'text' => $item['iconName'][0][$valueIndex],
 			], '%');
@@ -253,7 +253,6 @@ function setupNetwork($thisUrl) {
 			'description' => $item['footer-message'][0][$valueIndex],
 			'icon-link' => $link,
 			'img-prefix' => $imgPrefix,
-			'status' => $siteObj['Status'],
 			'category' => $siteObj['Category'],
 		];
 

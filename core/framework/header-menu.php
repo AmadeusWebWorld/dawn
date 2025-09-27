@@ -67,7 +67,7 @@ function subsitesMenu() {
 	echo '	<ul class="' . $ulClass . '">' . NEWLINE;
 
 	$all = variable('allSiteItems');
-	$homePath = $home['Path'] . '/' . $home['Subsite']['Site'];
+	$homePath = $home['Path'] . '/' . (isset($home['Folder']) ? $home['Folder'] : '') . $home['Subsite']['Site'];
 
 	$name = _siteOf($home, $all, $wrapTextInADiv, $anchorClass);
 	echo '<li class="' . $itemClass . ' ' . $subMenuClass . '">' . $name . '</li>';
@@ -76,6 +76,7 @@ function subsitesMenu() {
 		if ($item['Path'] != $home['Path']) continue; //skip other networks
 		if ($siteAt == $homePath) continue;
 		$name = _siteOf($item, $all, $wrapTextInADiv, $anchorClass);
+		if (!$name) continue;
 		echo '<li class="' . $itemClass . ' ' . $subMenuClass . '">' . $name . '</li>';
 	}
 
@@ -84,7 +85,9 @@ function subsitesMenu() {
 }
 
 function _siteOf($item, $items, $wrap, $anchorClass) {
-	$site = $items[$item['Path'] . '/' . $item['Subsite']['Site']];
+	$key = $item['Path'] . '/' . (isset($item['Folder']) ? $item['Folder'] : '') . $item['Subsite']['Site'];
+	if (!isset($items[$key])) return false;
+	$site = $items[$key];
 	$name = str_replace('site-icon', $anchorClass, $site['icon-link']);
 	if ($wrap) $name = '<div>' . $name . '</div>';
 	return $name;

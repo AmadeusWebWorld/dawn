@@ -1,11 +1,8 @@
-#Network	Category	Name	Path	HomeOf	Status
+#Network	Category	Name	Path	Multisite	HomeOf
 |https://docs.google.com/spreadsheets/d/1dsEA395vzHMqRZTlUhPsc34LYFy-TRhbsNZA9L5Xvi8/edit?gid=0#gid=0					
-world	Community	Amadeus Web World	world	world	reorg sep 9
-world	Community	Wisdom from You	wiseowls		sections planned
-world	Personal	Imran's World	imran		nearing ready
-work	Work	AmadeusWeb Consulting	work		services
-work	Work	Community & Voices	websites		blog
-core	Technology	AmadeusWeb Dawns	dawn		wants rework
-friends	Healing	VidyAntara Retreat	friends/vidyantara		live
-friends	Social Enterprise	Awaken To Life	friends/awakentolife		starting
-joyism	Movement	JoyfulEarth	joyfulearth		starting
+world	Community	AFG World	alliance-of	alliance-of/sites/world	world
+world	Personal	Imran's World	imran		
+core	Technology	AmadeusWeb Dawns	dawn		
+friends	Healing	VidyAntara Retreat	friends/vidyantara		
+friends	Social Enterprise	Awaken To Life	friends/awakentolife		
+world	Movement	Joyism's JoyfulEarth	joyfulearth	joyfulearth/main	
