@@ -1,6 +1,8 @@
 /* FIXES */
 .device-xs #header-wrap #logo img { height: auto; }
 
+.sub-theme-parallax .menu-link { text-transform: none; }
+
 /* MISC */
 div.large-list {
 	background-color: #fffeea !important;
