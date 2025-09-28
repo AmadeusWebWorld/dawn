@@ -17,8 +17,8 @@ foreach ($sheet->rows as $item) {
 
 	$link = $url . $relPath . '/';
 
-	$base = DEFINED('NETWORKPATH')
-		? NETWORKPATH . '/' . ($site == NETWORKMAIN ? 'main/' : $site . '/')
+	$base = $site && DEFINED('NETWORKPATH')
+		? NETWORKPATH . '/' . $site . '/'
 		: SITEPATH . '/';
 
 	$file = $base

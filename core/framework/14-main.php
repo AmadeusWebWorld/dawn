@@ -1,15 +1,15 @@
 <?php
-DEFINE('OURNETWORK', 'world, work, core');
-
 main::initialize();
 
 //NOTE: allows referring to values by name and avoids duplication
 class main {
 
 	static function initialize() {
+		$ours = contains(SITEPATH, 'dawn') || contains(SITEPATH, 'imran') || contains(SITEPATH, 'alliance-of');
 		variables([
 			'assistantEmail' => 'imran+assistant@amadeusweb.world',
 			'systemEmail' => 'imran@amadeusweb.world',
+			'terms' => $ours ? '[Terms](%urlOf-world%terms/) &nbsp;' : '',
 		]);
 	}
 

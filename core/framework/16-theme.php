@@ -145,8 +145,10 @@ function runThemePart($what) {
 				'footer-contact' => $contact,
 				'copyright' => _copyright(true),
 				'credits' => _credits('', true),
+				'terms' => returnLine(variable('terms')),
 			];
 
+			
 			$vars['footer-widgets'] = _substituteThemeVars($content, 'footer-widgets', $fwVars);
 		}
 

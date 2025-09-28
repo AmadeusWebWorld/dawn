@@ -185,6 +185,7 @@ function setupNetwork($thisUrl) {
 		$siteObj = $sites->asObject($siteRow);
 		$siteObj['Matched'] = $matched;
 		$siteObj['Subsite'] = false;
+		$siteObj['FullPath'] = false;
 
 		if ($siteObj['HomeOf'] == $mainNetwork)
 			$networkHome = $thisPath;
@@ -196,12 +197,18 @@ function setupNetwork($thisUrl) {
 				$folder = $hasFolder ? $subsites->getValue($subsite, 'Folder') : '';
 				$name = $folder . $subsites->getValue($subsite, 'Site');
 				$thisSitePath = $thisPath . '/' . $name;
+
 				$siteObj = $sites->asObject($siteRow);
-				$siteObj['Folder'] = $folder;
 				$siteObj['Matched'] = $matched;
-				$siteObj['Subsite'] = $subsites->asObject($subsite);
+				$siteObj['FullPath'] = $thisSitePath;
+
+				$subsiteObj = $subsites->asObject($subsite);
+				$subsiteObj['Folder'] = sluggize(trim($folder, '/'));
+				$siteObj['Subsite'] = $subsiteObj;
+
 				$subsiteItems[$thisSitePath] = $siteObj;
 				$sitePaths[$thisSitePath] = $siteObj;
+
 				if ($currentSitePath == $thisSitePath)
 					$subsiteHome = $siteObj;
 			}
@@ -232,8 +239,7 @@ function setupNetwork($thisUrl) {
 			$url = replaceItems($url, ['localhost' => 'localhost' . variable('port')]);
 
 		$site = sluggize($siteAt);
-		$safeSite = $site == 'main' && DEFINED('NETWORKMAIN') ? NETWORKMAIN : $site;
-		$networkUrls[OTHERSITEPREFIX . $safeSite] = $url;
+		$networkUrls[OTHERSITEPREFIX . $site] = $url;
 
 		$imgPrefix = $url . ($slug = $item['safeName'][0][$valueIndex]);
 
@@ -263,7 +269,7 @@ function setupNetwork($thisUrl) {
 
 		$networkItems[$siteAt] = $thisItem;
 
-		if ($subsiteHome && $subsiteHome['Path'] == $siteAt) {
+		if ($subsiteHome && $subsiteHome['FullPath'] == $siteAt) {
 			//$subsiteHome = $thisItem;
 			if ($thisUrl == $url) {
 				$scaffold = variableOr('scaffold', []);

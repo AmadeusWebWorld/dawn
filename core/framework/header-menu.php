@@ -73,7 +73,7 @@ function subsitesMenu() {
 	echo '<li class="' . $itemClass . ' ' . $subMenuClass . '">' . $name . '</li>';
 
 	foreach ($items as $siteAt => $item) {
-		if ($item['Path'] != $home['Path']) continue; //skip other networks
+		//if ($item['Path'] != $home['Path']) continue; //skip other networks
 		if ($siteAt == $homePath) continue;
 		$name = _siteOf($item, $all, $wrapTextInADiv, $anchorClass);
 		if (!$name) continue;

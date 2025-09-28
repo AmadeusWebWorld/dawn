@@ -13,3 +13,9 @@ Unique to AmadeusWebWorld, in this section, we will describe the use of
 By using GitHub, we will easily pull up repositories / display them.
 
 We assume all content and websites are given in the same **source/content available** manner as this **proprietary** system.
+
+---
+
+## Site Sync and Uploading
+
+> [Download Here v18.8.1](https://dawn.amadeusweb.com/assets/cdn/downloads/FileSyncCompanion-v18.8.zip)

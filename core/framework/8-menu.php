@@ -138,14 +138,23 @@ function menu($folderRelative = false, $settings = []) {
 			$filesGiven = true;
 			$files = [];
 
-			$hasSNo = isset($itemsSheet->columns['sno']);
-			if ($hasSNo) { $namesOfFiles = []; $snoIndex = $itemsSheet->columns['sno']; }
-			//later we can make it sno and text as optional
+			$hasSNo = $itemsSheet->hasColumn('sno');
+			$hasName = $itemsSheet->hasColumn('name');
+			if ($hasSNo || $hasName) $namesOfFiles = [];
 
-			foreach ($itemsSheet->group as $thisFile => $thisItem) {
-				$files[] = $thisFile;
-				if ($hasSNo)
-					$namesOfFiles[$thisFile] = $thisItem[0][$snoIndex] . '. ' . humanize($thisFile);
+			foreach ($itemsSheet->group as $slug => $error) {
+				$item = $itemsSheet->firstOfGroup($slug);
+				$files[] = $name = $itemsSheet->getValue($item, 'slug');
+				$sno = $hasSNo ? $itemsSheet->getValue($item, 'sno') . '. ' : '';
+				if ($hasName) {
+					$nameOrEmpty = $itemsSheet->getValue($item, 'name');
+					$name = $nameOrEmpty ? $nameOrEmpty : humanize($name);
+				} else {
+					$name = humanize($name);
+				}
+				//parameterError('153', [$sno, $name, $slug, $name], false);
+				if ($hasSNo || $hasName)
+					$namesOfFiles[$slug] = $sno . $name;
 			}
 		} else {
 			$files = disk_scandir($folder);

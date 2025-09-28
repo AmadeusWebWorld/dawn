@@ -188,8 +188,16 @@ function _renderImplementation($fileOrRaw, $settings) {
 		$output .= renderEngage(getPageName(), $engageContent . $inProgress, false, $meta);
 	}
 
+	if ($wasFile)
+		$output .= _txtInfo('File Rendered', $fileName);
+
 	if (!$echo) return $output;
 	echo $output;
+}
+
+function _txtInfo($msg, $info) {
+	if (true || !variable('local')) return '';
+	return textBoxWithCopyOnClick($msg, _makeSlashesConsistent($info), 'Link Copied');
 }
 
 DEFINE('FROM_GEMINI_AI', '<!--exported-from-gemini-ai-->');
