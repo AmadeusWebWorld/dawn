@@ -1,44 +1,52 @@
 <?php
 startDiv('git', 'container');
-startDiv('', 'row');
 
-$boxStart = '<div class="col-md-4 col-sm-6 col-12 p-3"><div class="content-box">';
-
-$sheet = getSheet(__DIR__ . '/../view/repositories.tsv', false);
-$paths = getSheet(__DIR__ . '/../view/clone-paths.tsv', 'Name');
+$sheet = getSheet(__DIR__ . '/repositories.tsv', false);
+$paths = getSheet(__DIR__ . '/clone-paths.tsv', 'Name');
 $items = [];
 
-DEFINE('LOCATIONNOTSET', 'Undefined');
+DEFINE('LOCATIONNOTSET', 'not-set');
+
+$yes = '<span class="btn btn-success">yes</span>';
+$no = '<span class="btn btn-warning">no</span>';
+$notSet = '<span class="btn btn-danger">not set</span>';
+$clonePaths = ' &mdash; <span class="btn btn-outline-danger"><abbr title="D:\AmadeusWeb\amadeus\dawn\manage\file-sync\view\clone-paths.tsv">set path</abbr></span>';
+
+$rows = [];
 
 foreach ($sheet->rows as $repo) {
 	$item = $sheet->asObject($repo);
 
-	$name = $paths->firstOfGroup($item['name']);
-	$location = $name ? $paths->getValue($name, 'Location') . $item['name'] : LOCATIONNOTSET;
+	$nameLookup = $paths->firstOfGroup($item['name']);
+	$location = $nameLookup ? $paths->getValue($nameLookup, 'Location') . $item['name'] : LOCATIONNOTSET;
 	$exists = $location != LOCATIONNOTSET && disk_is_dir(ALLSITESROOT . $location);
-	$res = returnLine($item['repo_link_md'] . BRTAG . ' &mdash;> <small>' . $item['description'] . '</small>' . BRTAG . ' @ ' . $location . BRNL);
 
-	$res .= ($exists ? '<span class="btn btn-outline-primary">Exists</span>'
-		: '<span class="btn btn-outline-secondary">Missing</span>') . NEWLINE;
+	$row = [
+		'name' => returnLine($item['repo_link_md']),
+		'owner' => returnLine($item['owner_link_md']),
+		'location' => $location == LOCATIONNOTSET ? $notSet . $clonePaths : $location,
+		'exists' => ($exists ? $yes : $no) . (!$exists && $location != LOCATIONNOTSET ? ' &mdash; ' . _clone($location, $item) : ''),
+		'actions' => $exists && $location != LOCATIONNOTSET ? _pull_and_log($location) : '',
+		'description' => returnLine($item['description']),
+	];
 
-	if ($exists) $res .= _getGuiLink($location, 'pull', 'outline-success') . NEWLINE
-		. ' ' . _getGuiLink($location, 'log', 'outline-info') . NEWLINE;
-	else if ($location == LOCATIONNOTSET)
-		$res .= '<span class="btn btn-outline-danger">Not Set - see <abbr title="D:\AmadeusWeb\amadeus\dawn\manage\file-sync\view\clone-paths.tsv">clone-paths.tsv</abbr></span>';
-	else
-		$res .= _getGuiLink($location, 'clone', 'outline-warning', '&git-url=' . $item['clone_url']) . NEWLINE;
-
-	$items[$item['name']] = $res;
+	$rows[$item['name']] = $row; //needed to sort
+	continue;
 }
 
-ksort($items);
+ksort($rows);
 
-echo $boxStart;
-echo implode('</div></div>' . $boxStart . NEWLINES2, $items);
-endDiv(); endDiv(); //boxes
+runFeature('tables');
+(new tableBuilder('repo', $rows))->render();
 
-endDiv();
-endDiv();
+function _pull_and_log($location) {
+	return _getGuiLink($location, 'pull', 'outline-success') . NEWLINE
+		. ' ' . _getGuiLink($location, 'log', 'outline-info') . NEWLINE;
+}
+
+function _clone($location, $item) {
+	return _getGuiLink($location, 'clone', 'outline-primary', '&git-url=' . $item['clone_url']);
+}
 
 function _getGuiLink($site, $action, $classSuffix, $optional = '') {
 	$script = 'http://localhost/git-web-ui.php';

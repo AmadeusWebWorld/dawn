@@ -97,6 +97,52 @@ function _table_link($item, $c, $values, $key, $cols) {
 	return makeLink($text, $link, 'external');
 }
 
+class tableBuilder {
+	private $id, $data, $cols, $template, $settings;
+
+	function __construct($id, $data, $cols = 'auto', $template = 'auto', $settings = [])
+	{
+		$this->id = $id;
+		$this->data = $data;
+		$this->cols = $cols;
+		$this->template = $template;
+		$this->settings = $settings;
+		$this->settings['dont-treat-array'] = true;
+		$this->settings['use-datatables'] = true;
+	}
+
+	function set($append = []) {
+		$this->settings = array_merge($this->settings, $append);
+		return $this;
+	}
+
+	function unset($keysToClear = []) {
+		if (is_string($keysToClear))
+			$keysToClear = [$keysToClear];
+
+		foreach ($keysToClear as $key)
+			unset($this->settings[$key]);
+		return $this;
+	}
+
+	function render() {
+		if (!isset($this->data[0]) && count($this->data))
+			$this->data = array_values($this->data);
+
+		if ($this->cols == 'auto') { $this->cols = array_keys($this->data[0]); } //onus on caller to have rows if cols are auto
+
+		if ($this->template == 'auto') $this->template = '<tr><td>%' . (implode('%</td><td>%', $this->cols)) . '%</td></tr>' . NEWLINE;
+
+		add_table(
+			$this->id,
+			$this->data,
+			$this->cols,
+			$this->template,
+			$this->settings,
+		);
+	}
+}
+
 //TEST: http://localhost/amadeus8/code/
 
 function add_table($id, $dataFile, $columnList, $template, $values = []) {
@@ -109,6 +155,8 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 
 	if ($dontTreat) {
 		$rows = $dataFile;
+		if (is_array($columnList))
+			$headings = implode('</th>' . variable('nl') . '			<th>', $columnList);
 	} else if (is_array($dataFile)) {
 		$tsv = 'array';
 		$rows = $dataFile;
