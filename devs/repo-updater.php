@@ -1,5 +1,6 @@
 <?php
-startDiv('git', 'container');
+contentBox('git', 'container');
+h2('Repositories ' . (new linkBuilder('per this', 'repositories'))->btnOutline()->make(false));
 
 $sheet = getSheet(__DIR__ . '/repositories.tsv', false);
 $paths = getSheet(__DIR__ . '/clone-paths.tsv', 'Name');
@@ -38,6 +39,8 @@ ksort($rows);
 
 runFeature('tables');
 (new tableBuilder('repo', $rows))->render();
+
+contentBox('end');
 
 function _pull_and_log($location) {
 	return _getGuiLink($location, 'pull', 'outline-success') . NEWLINE

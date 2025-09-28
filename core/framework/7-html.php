@@ -1,6 +1,41 @@
 <?php
-///Tag Helpers
+//added in 8..5
+abstract class builderBase {
+	public $settings;
 
+	//called in constructor, check so doesnt override
+	protected function setDefault($key, $value) {
+		if (!isset($this->settings[$key]))
+			$this->set([$key => $value]);
+		return $this;
+	}
+
+	protected function settingIs($key, $value = true) {
+		return isset($this->settings[$key]) ? $this->settings[$key] == $value : false;
+	}
+
+	function setValue($key, $value) {
+		return $this->set([$key => $value]);
+	}
+
+	function set($override = []) {
+		foreach ($override as $key => $value)
+		$this->settings[$key] = $value;
+		return $this;
+	}
+
+	function unset($keys = []) {
+		if (is_string($keys))
+			$keys = [$keys];
+
+		foreach ($keys as $key)
+			unset($this->settings[$key]);
+
+			return $this;
+	}
+}
+
+///Tag Helpers
 function currentUrl() {
 	return pageUrl(variable('all_page_parameters'));
 }
@@ -399,6 +434,54 @@ function specialLinkVars($item) {
 	}
 
 	return compact('text', 'url', 'class');
+}
+
+class linkBuilder extends builderBase {
+	const usePageUrl = 'usePageUrl';
+
+	private $text, $href, $class, $target;
+
+	function __construct($text, $href, $class = '', $target = false, $settings = [])
+	{
+		$this->text = $text;
+		$this->href = $href;
+		$this->class = $class;
+		$this->target = $target;
+		$this->settings = $settings;
+		$this->setDefault(self::usePageUrl, true);
+	}
+
+	function btn($color = 'success') {
+		$this->addClass('btn btn-' . $color);
+		return $this;	
+	}
+
+	function btnOutline($color = 'success') {
+		$this->addClass('btn btn-outline-' . $color);
+		return $this;	
+	}
+
+	private function addClass($class) {
+		$this->class .= ($this->class ? ' ' : '') . $class;
+		return $this;
+	}
+
+	function make($echo = true, $settings = []) {
+		$this->set($settings);
+
+		if ($this->settingIs(self::usePageUrl))
+			$this->href = pageUrl($this->href);
+
+		$result = getLink(
+			$this->text,
+			$this->href,
+			$this->class,
+			$this->target,
+		);
+
+		if (!$echo) return $result;
+		echo $result;
+	}
 }
 
 function makeRelativeLink($text, $relUrl) {

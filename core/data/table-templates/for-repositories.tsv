@@ -1,4 +1,5 @@
 #values
+|note: unused since auto came in
 ||use-a-bootstrap-row: yes
 ||no-content-box: yes
 ||head-columns: none

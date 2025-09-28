@@ -44,6 +44,8 @@ function _table_row_values($item, $cols, $tsv, $values, $template) {
 			$r[$key] = returnLine($value);
 		else if (endsWith($key, '_urlized'))
 			$r[$key] = $start ? '' : $value . '/';
+		else if (endsWith($key, '_date'))
+			$r[$key] = replaceItems((new DateTime($value))->format('D, d-/S/- M Y // h:mA'), ['-/' => '<sup class="plain">', '/-' => '</sup>', '//' => '&mdash;']);
 		else if (contains($key, 'tags'))
 			$r[$key] = csvToHashtags($value);
 		else
@@ -97,8 +99,8 @@ function _table_link($item, $c, $values, $key, $cols) {
 	return makeLink($text, $link, 'external');
 }
 
-class tableBuilder {
-	private $id, $data, $cols, $template, $settings;
+class tableBuilder extends builderBase {
+	private $id, $data, $cols, $template;
 
 	function __construct($id, $data, $cols = 'auto', $template = 'auto', $settings = [])
 	{
@@ -107,22 +109,8 @@ class tableBuilder {
 		$this->cols = $cols;
 		$this->template = $template;
 		$this->settings = $settings;
-		$this->settings['dont-treat-array'] = true;
-		$this->settings['use-datatables'] = true;
-	}
-
-	function set($append = []) {
-		$this->settings = array_merge($this->settings, $append);
-		return $this;
-	}
-
-	function unset($keysToClear = []) {
-		if (is_string($keysToClear))
-			$keysToClear = [$keysToClear];
-
-		foreach ($keysToClear as $key)
-			unset($this->settings[$key]);
-		return $this;
+		$this->setDefault('dont-treat-array', true);
+		$this->setDefault('use-datatables', true);
 	}
 
 	function render() {

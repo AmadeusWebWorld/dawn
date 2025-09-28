@@ -31,7 +31,7 @@ ul.large-list,
 	padding: 10px 0 10px 0;
 }
 
-sup { padding: 2px 6px 2px 6px; background-color: #fcc3f9; border-radius: 35%; }
+sup:not(.plain) { padding: 2px 6px 2px 6px; background-color: #fcc3f9; border-radius: 35%; }
 
 .amadeus-2x-icon {
 	font-size: 36px;
