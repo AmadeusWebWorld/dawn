@@ -7,8 +7,6 @@ echo '<h1>Searching In Repos:</h1>';
 $sheet = getSheet(NODEPATH . '/view/git-accounts.tsv', false);
 $sources = [];
 
-//DEFINE('LOCATIONPREFIX', 'location: ./');
-
 DEFINE('CARDTEMPLATE', '%repo_link_md% &mdash;> %website_link_md%|%description%');
 DEFINE('GITHUBORGLINK',  '[%name%](https://github.com/orgs/%name%/repositories)');
 DEFINE('GITHUBUSERLINK', '[%name%](https://github.com/%name%?tab=repositories)');
@@ -34,7 +32,11 @@ foreach ($sources as $repos) {
 		if (count($op) == 0)
 			$op[] = '#' . implode('	', array_keys($repo))
 				. NEWLINE . '|is-table-with-template'
-				. NEWLINE . '||use-template: for-repositories';
+				. NEWLINE . '||use-template: for-repositories'
+				. NEWLINE . '||head-columns: auto'
+				. NEWLINE . '||row-template: auto'
+				. NEWLINE . '||use-datatables: yes';
+
 		$op[] = implode('	', array_values($repo));
 	}
 }
@@ -65,16 +67,7 @@ function _gitHubToOurs($url) {
 		$org = $owner['type'] == 'Organization';
 		$ownerLink = replaceItems($org ? GITHUBORGLINK : GITHUBUSERLINK, [ 'name' => $owner['login'] ], '%');
 
-		$location = '--not-set--';
 		$description = valueIfSetAndNotEmpty($item, 'description', '');
-		/*
-		if (startsWith($description, LOCATIONPREFIX)) {
-			$bits = explode(', ', $description, 2);
-			$location = substr($bits[0], strlen(LOCATIONPREFIX));
-			$location .= ($location ? '/' : '') . $name;
-			$description = $bits[1];
-		}
-		*/
 
 		$exclude = false;
 		foreach ($excludeContaining as $toMatch)
@@ -88,14 +81,13 @@ function _gitHubToOurs($url) {
 			'owner_link_md' => $ownerLink,
 			'repo_link_md' => '[' . $name . '](' . $item['html_url'] . ')',
 
-			//'location' => $location,
 			'clone_url' => $item['clone_url'],
 			'description' => $description,
 
 			'website_link_md' => !$item['homepage'] ? '--empty--' : '[' . url_r($item['homepage']) . '](' . $item['homepage'] . ')',
 
-			//'created' => $item['created_at'],
-			//'updated' => $item['updated_at'],
+			'created' => $item['created_at'],
+			'updated' => $item['updated_at'],
 		];
 	}
 

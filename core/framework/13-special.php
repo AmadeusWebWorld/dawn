@@ -82,7 +82,8 @@ function autoRender($file, $type = false, $useHeading = true) {
 	if (endsWith($file, '.tsv')) {
 		runFeature('tables');
 
-		$istwt = contains($raw, '|is-table-with-template') && $meta = getSheet($file, false);
+		$meta = getSheet($file, false);
+		$istwt = contains($raw, '|is-table-with-template');
 		if ($meta && isset($meta->values['use-template']))
 			$meta->values = array_merge($meta->values, getSheet(getTableTemplate($meta), false)->values);
 
@@ -99,8 +100,8 @@ function autoRender($file, $type = false, $useHeading = true) {
 			renderSheetAsDeck($file, variableOr('all_page_parameters', nodeValue()) . '/');
 		else if (startsWith($raw, '|is-rich-page'))
 			renderRichPage($file);
-		else if (startsWith($raw, '|is-table'))
-			add_table(pathinfo($file, PATHINFO_FILENAME), $file, 'auto', disk_file_get_contents(dirname($file) . '/.template.html'));
+		else if (contains($raw, '|is-table'))
+			add_table(pathinfo($file, PATHINFO_FILENAME), $file, valueIfSet($meta->values, 'head-columns', 'auto'), valueIfSet($meta->values, 'row-template', 'auto'), $meta->values);
 		else if ($istwt)
 			add_table(pathinfo($file, PATHINFO_FILENAME), $file, $meta->values['head-columns'], $meta->values['row-template'], $meta->values);
 		else

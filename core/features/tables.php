@@ -130,6 +130,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 			$headingNames[] = humanize(explode('_', $item)[0]);
 		}
 
+		if ($template == 'auto') $template = '<tr><td>%' . (implode('%</td><td>%', $cols)) . '%</td></tr>' . NEWLINE;
 		$rows = $sheet->rows;
 		$columns = $sheet->columns;
 	} else if (!$wantsBSRow) {

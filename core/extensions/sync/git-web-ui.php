@@ -41,6 +41,7 @@ function _executeCommand($name, $command) {
 
 function _blocker($message) {
 	echo '<div style="margin: 60px auto; max-width: 400px; background-color: #FFE4E1; padding: 40px; border-radius: 30px; text-align: center;">' . $message . '</div>';
+	exit;
 }
 
 $git = isset($_GET['git-action']) ? $_GET['git-action'] : false;
@@ -54,6 +55,9 @@ if ($git) {
 	else _blocker('Not supported git-action' . $git);
 
 	$site = $_GET['site'];
+
+	if ($git == 'clone' && contains( strtolower($site), 'undefined'))
+		_blocker('Clone path invalid! Contact dawn.amadeusweb.com.');
 
 	if ($git == 'clone' && !is_dir($abs = __DIR__ . '/' . $site)) {
 		mkdir($abs);

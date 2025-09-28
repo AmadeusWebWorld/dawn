@@ -236,6 +236,10 @@ class sheet {
 	public array $values;
 	public array | null $group;
 
+	public function firstOfGroup($key, $else = false) {
+		return isset($this->group[$key]) ? $this->group[$key][0] : $else;
+	}
+
 	public function hasColumn($columnName) {
 		return isset($this->columns[$columnName]);
 	}
