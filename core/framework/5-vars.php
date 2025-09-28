@@ -53,12 +53,6 @@ function hasSubVariable($name, $subName)
 	return isset($a[$subName]);
 }
 
-function echo_if_var($key)
-{
-	if(!variable($key)) return;
-	echo replaceVariables(variable($key));
-}
-
 function is_debug($value = false) {
 	$qs = itemOr($_GET, 'debug');
 	if ($value == 'verbose') return $qs == 'verbose';

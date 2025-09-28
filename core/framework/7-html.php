@@ -338,6 +338,7 @@ function prepareLinks($output) {
 		'BTNPHONE' => '~class~btnNBSPbtn-danger~/class~',
 		'BTNWHATSAPP' => '~class~btnNBSPbtn-warning~/class~',
 		'BTNEMAIL' => '~class~btnNBSPbtn-info~/class~',
+		'BTNLARGE' => '~class~btnNBSPbtn-successNBSPbtn-lgNBSPbtn-primary~/class~',
 		'BTNSITE' => '~class~btnNBSPbtn-successNBSPbtn-site~/class~',
 		'MORELINK' => '~class~more-link~/class~',
 	]);

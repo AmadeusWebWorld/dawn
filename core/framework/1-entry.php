@@ -145,12 +145,17 @@ function render() {
 	$theme = variable('theme') ? variable('theme') : 'default';
 	$embed = variable('embed');
 
+	$folder = variable('path') . '/' . (variable('folder') ? variable('folder') : '');
+	$contentExt = disk_one_of_files_exist($contentFWE = $folder . nodeValue() . '.', CONTENTFILES);
+	if ($contentExt) {
+		read_seo($contentFWE . $contentExt, true);
+	}
+
 	if (!$embed) {
 		renderThemeFile('header', $theme);
 		if (function_exists('before_file')) before_file();
 	}
 
-	$folder = variable('path') . '/' . (variable('folder') ? variable('folder') : '');
 	if (variable('under-construction')) {
 		runFeature('under-construction');
 		$rendered = true;
@@ -163,14 +168,9 @@ function render() {
 		$rendered = false;
 	} else {
 		$rendered = false;
-
-		$fwe =  $folder . nodeValue();
-		$ext = renderAnyFile($fwe . '.', ['extensions' => 'core', 'return-on-first' => true]);
-		if ($ext) {
+		if ($contentExt) {
 			$rendered = true;
-			variable('file', $file = $fwe . '.' . $ext);
-			variable('seo-handled', false);
-			read_seo();
+			autoRender($file = $contentFWE . $contentExt);
 			pageMenu($file);
 		}
 	}

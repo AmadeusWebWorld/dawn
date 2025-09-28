@@ -26,7 +26,7 @@ function isContentFile($fileOrRaw) {
 
 function autoRender($file, $type = false, $useHeading = true) {
 	if (endsWith($file, '.php')) {
-		renderAnyFile($file);
+		renderAny($file);
 		pageMenu($file);
 		return;
 	}

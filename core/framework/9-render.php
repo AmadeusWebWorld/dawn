@@ -1,81 +1,5 @@
 <?php
-variable('known-extensions', [
-	'prefixes' => ['jpg'],
-	'core' => ['php', 'md', 'tsv', 'html', 'txt'],
-	'suffixes' => ['pdf'],
-]);
-
-function remove_extension($file) {
-	if (!($core = variable('replace_extensions'))) {
-		$extns = subVariable('known-extensions', 'core');
-		$core = [];
-		foreach ($extns as $extn) {
-			$core['.' . $extn] = '';
-		}
-		variable('replace_extensions', $core);
-	}
-
-	return replaceItems($file, $core);
-}
-
-//extensions will render multiple. Can be - explicit / prefixes / core / suffixes / array[]
-function renderAnyFile($fwe, $settings = []) {
-	$extensions = valueIfSet($settings, 'extensions', 'explicit');
-	$fail = valueIfSet($settings, 'fail', true);
-	$returnOnFirst = valueIfSet($settings, 'return-on-first', true); //adapt when implementing for archives
-
-	$inUseValues = [ 'extensions' => $extensions, 'fail' => $fail, 'return-on-first' => $returnOnFirst ];
-	$failParams = ['$fwe (file with/without extension)' => $fwe, 'in-use-values' => $inUseValues, 'settings' => $settings];
-	$known = variable('known-extensions');
-
-	if ($extensions == 'explicit') {
-		$exists = disk_file_exists($fwe);
-		if ($exists) {
-			_renderSingleFile($fwe);
-			return true;
-		}
-
-		if ($fail) raiseParameterError('FILE NOT FOUND', $failParams);
-	} else if (is_array($extensions)) {
-		//fail never applies here
-		foreach($extensions as $extension) {
-			$fpe = $fwe . $extension; //name PLUS extension
-			$exists = disk_file_exists($fpe);
-			if ($exists) {
-				autoRender($fpe);
-				if ($returnOnFirst) return $extension;
-			}
-		}
-	} else if (array_key_exists($extensions, $known)) {
-		$newSettings = array_merge($inUseValues, ['extensions' => $known[$extensions]]);
-		return renderAnyFile($fwe, $newSettings);
-	} else if ($extensions == 'all') {
-		foreach ($known as $key => $item) {
-			$newSettings = array_merge($inUseValues, ['extensions' => $key]);
-			$result = renderAnyFile($fwe, $newSettings);
-			if ($result && $returnOnFirst) return $result;
-		}
-	} else {
-		parameterError('CRITICAL - NOT SUPPORTED', $failParams);
-		exit;
-	}
-}
-
-//internal method - expects file to exist 
-function _renderSingleFile($file, $extension = 'auto') {
-	if ($extension == 'php' || endsWith($file, '.php')) {
-		disk_include_once($file);
-		return;
-	}
-
-	//TODO: Copy media + pdf logic from archives.yieldmore.org
-
-	renderAny($file);
-}
-
-function renderPlainHtml($file) {
-	echo disk_file_get_contents($file);
-}
+//removed renderAnyFile, _renderSingleFile in 8.5, extensions like jpg & pdf can be done in before/after file
 
 function renderExcerpt($file, $link, $prefix = '', $echo = true) {
 	$prefix = $prefix ? renderMarkdown($prefix) : '';
@@ -98,9 +22,9 @@ DEFINE('GOOGLEON', '<!--googleon: all-->');
 
 function _excludeFromGoogleSearch($raw) {
 	return GOOGLEOFF
-		. variable('nl') . $raw
-		. variable('nl') . GOOGLEON
-		. variable('2nl');
+		. NEWLINE . $raw
+		. NEWLINE . GOOGLEON
+		. NEWLINES2;
 }
 
 function renderOnlyMarkdownOrRaw($raw, $wantsMD, $settings = []) {
@@ -128,19 +52,11 @@ function renderSingleLineMarkdown($raw, $settings = []) {
 	return renderMarkdown($raw, array_merge($settings, ['strip-paragraph-tag' => true]));
 }
 
-function renderMarkdownSection($h1, $raw, $settings = []) {
-	echo '<section><h1>' . $h1 . '</h1>' . variable('nl');
-
-	if (isset($settings['excerpt']))
-		renderExcerpt($raw, $settings['link'], $settings);
-	else
-		renderMarkdown($raw, $settings);
-
-	echo variable('nl') . '</section>' . variable('2nl');
-}
-
 function renderAny($file, $settings = []) {
-	return _renderImplementation($file, $settings);
+	if (endsWith($file, '.php'))
+		return disk_include_once($file);
+	else
+		return _renderImplementation($file, $settings);
 }
 
 DEFINE('FIRSTSECTIONONLY', 'FirstSectionOnly');
@@ -153,9 +69,6 @@ function _renderImplementation($fileOrRaw, $settings) {
 		renderFamilyTree($fileOrRaw); //only echoes for now
 		return;
 	}
-
-	//TODO: Consider an explicit-load so file exists can be avoided?
-	//debug('render.php - _renderImplementation', ['verbose params!', $fileOrRaw]);
 
 	$endsWithMd = false;
 	$raw = $fileOrRaw; $fileName = '[RAW]';
@@ -172,7 +85,6 @@ function _renderImplementation($fileOrRaw, $settings) {
 			$raw .= '---' . NEWLINE . $fan;
 	}
 
-	$replaces = valueIfSet($settings, 'replaces', []);
 	$echo = valueIfSet($settings, 'echo', true);
 	$excerpt = valueIfSet($settings, 'excerpt', false);
 	$no_processing = valueIfSet($settings, 'raw', false) || contains($raw, '<!--no-processing-->') || do_md_in_parser($raw);
@@ -197,16 +109,6 @@ function _renderImplementation($fileOrRaw, $settings) {
 
 	if ($wasFile && !variable('dont-autofix-encoding')) $raw = simplify_encoding($raw);
 
-	/**** rethink this
-	if (variable('node') && variable('section')) {
-		$assetsUrl = fileUrl('url') . variable('section') . '/assets/' . variable('node') . '/';
-		$assetsFol = SITEPATH . '/'. variable('section') . '/assets/' . variable('node') . '/';
-		variables($assetsVars = ['assetsUrl' => $assetsUrl, 'assetsFol' => $assetsFol]);
-		$raw = replaceItems($raw, $assetsVars, '%');
-	}
-
-	if ($vars = variable('node-replaces')) $raw = replaceItems($raw, $vars, '%', true);
-	*/
 	if ($svars = variable('siteReplaces')) $raw = replaceItems($raw, $svars, '%', true);
 
 	$markdownStart = variable('markdownStartTag');

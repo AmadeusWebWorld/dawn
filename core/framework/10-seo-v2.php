@@ -1,5 +1,5 @@
 <?php
-function read_seo($file = false) {
+function read_seo($file = false, $inContent = false) {
 	if (variable('seo-handled')) return;
 
 	$fileGiven = !!$file;
@@ -62,7 +62,7 @@ function read_seo($file = false) {
 		$keywords = count($keywords) ? implode(', ', $keywords) : '';
 
 		variable('meta_' . $file, $meta);
-		if ($fileGiven) return compact('about', 'title', 'description', 'excerpt', 'keywords', 'meta');
+		if ($fileGiven && !$inContent) return compact('about', 'title', 'description', 'excerpt', 'keywords', 'meta');
 
 		if ($description) {
 			variable('description', $description);
