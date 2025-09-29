@@ -1,9 +1,8 @@
 <?php
-function read_seo($file = false, $inContent = false) {
+function read_seo($file, $inContent = false) {
 	if (variable('seo-handled')) return;
 
-	$fileGiven = !!$file;
-	if (!$file) $file = variable('file');
+	$fileGiven = $file != variable('file');
 	if (!$file) return;
 
 	$meta = false;

@@ -215,7 +215,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 		} else if($wantsBSRow && $lineTemplateForBS) {
 			$row = $sheet->asObject($item);
 		} else {
-			$more = isset($item[0]) && $item[0] == '<!--more-->';
+			$more = isset($item[0]) && $item[0] == MORETAG;
 			if ($more) { if (variable('is-in-directory')) break; else continue; }
 			$row = _table_row_values($item, $columns, $tsv, $values, $template);
 			if ($skipItemFn && $skipItemFn($row)) continue;

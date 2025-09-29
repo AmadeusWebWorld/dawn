@@ -5,13 +5,15 @@ function renderExcerpt($file, $link, $prefix = '', $echo = true) {
 	$prefix = $prefix ? renderMarkdown($prefix) : '';
 
 	$meta = read_seo($file);
-	if ($meta AND isset($meta['excerpt'])) $raw = $meta['excerpt']; else
+
+	$hasMoreTag = disk_file_exists($file) ? contains(disk_file_get_contents($file), '') : false;
+	if (!$hasMoreTag && $meta && isset($meta['excerpt'])) $raw = $meta['excerpt']; else
 	$raw = renderAny($file, ['excerpt' => true, 'echo' => false, 'markdown' => endsWith($file, '.md')]);
 
 	if ($meta && isset($meta['meta']['Date'])) $raw .= BRTAG . '<i>on ' . $meta['meta']['Date'] . '</i>';
 
 	$result = $prefix . _excludeFromGoogleSearch($raw)
-		. BRTAG . '<a class="read-more" href="' . $link . '">Read More&hellip;</a>';
+		. BRTAG . '<a class="read-more btn btn-success" href="' . $link . '">Read More&hellip;</a>';
 
 	if (!$echo) return $result;
 	echo $result;
@@ -90,7 +92,7 @@ function _renderImplementation($fileOrRaw, $settings) {
 	$no_processing = valueIfSet($settings, 'raw', false) || contains($raw, '<!--no-processing-->') || do_md_in_parser($raw);
 	if (contains($raw, '<!--no-p-tags-->')) $settings['strip-paragraph-tag'] = true;
 
-	if ($excerpt) $raw = explode('<!--more-->', $raw)[0];
+	if ($excerpt) $raw = explode(MORETAG, $raw)[0];
 
 	if (function_exists('site_render_content')) $raw = site_render_content($raw);
 

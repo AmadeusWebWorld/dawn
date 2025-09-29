@@ -1,4 +1,6 @@
 <?php
+DEFINE('MORETAG', '<!--more-->');
+
 //added in 8..5
 abstract class builderBase {
 	public $settings;

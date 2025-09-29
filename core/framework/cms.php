@@ -152,8 +152,8 @@ function afterSectionSet() {
 
 	$fol = $leafFolder;
 	while (startsWith($fol, SITEPATH) && $fol != SITEPATH) {
-		if (disk_file_exists($file = $fol . '/_include.php'))
-			disk_include_once($file); //its in include once so no worry
+		if (disk_file_exists($incFile = $fol . '/_include.php'))
+			disk_include_once($incFile); //its in include once so no worry
 		$fol = dirname($fol);
 	}
 
@@ -161,7 +161,7 @@ function afterSectionSet() {
 
 	ensureNodeVar();
 	if (function_exists('node_before_render')) node_before_render();
-	read_seo();
+	read_seo($file);
 }
 
 function did_render_page() {

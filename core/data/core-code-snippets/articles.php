@@ -5,8 +5,9 @@ if (!sheetExists($sheetName)) return h2('No articles found.', 'text-danger', tru
 
 $sheet = getSheet($sheetName, false);
 
-$op = ['<ul class="large-list">' . NEWLINE];
-$format = '<li class="mb-3">%sno% %title%<blockquote class="after-content mt-2 ms-4">%excerpt%</blockquote><hr class="m-2" /></li>';
+$op = ['</section><div class="container">' . NEWLINE];
+$format = '<section class="content-box"><sup>%sno%</sup> %title%
+<br /><br />%excerpt%</section>';
 
 foreach ($sheet->rows as $item) {
 	$site = $sheet->hasColumn('site') ? $sheet->getValue($item, 'site') : '';
@@ -37,6 +38,6 @@ foreach ($sheet->rows as $item) {
 	$op[] = $itm;
 }
 
-$op[] = '</ul>' . NEWLINES2;
+$op[] = '<section>' . NEWLINES2;
 
 return implode(NEWLINES2, $op);
