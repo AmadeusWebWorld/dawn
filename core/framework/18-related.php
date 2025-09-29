@@ -15,7 +15,7 @@ function printRelatedPages($file) {
 	$files = _skipNodeFiles(scandir($fol));
 	if (!COUNT($files)) return;
 
-	contentBox('related', 'container');
+	contentBox('related', 'container text-center');
 	h2('Related Pages');
 
 	$extn = pathinfo($file, PATHINFO_EXTENSION);
@@ -28,15 +28,25 @@ function printRelatedPages($file) {
 		'/' . $leaf => '',
 	]) . '/_/' . $leaf . '/');
 
-	//peDie('19', [$url, $leaf, $fol]);
 	$links = [];
-	if (disk_file_exists($fol . ($item = '_deep-dive.md'))) {
-		$links[] = getLink(humanize($name = pathinfo($item, PATHINFO_FILENAME)), $url . $name . '/', 'btn btn-outline-info', true);
+
+	if (disk_file_exists($fol . ($item = '_deep-dive.md')))
+		$links[] = linkBuilder::factory($item, $url, linkBuilder::openFileBlock);
+
+	foreach ($files as $item) {
+		if (disk_is_dir($fol . $item)) {
+			$links[] = '<div class="btn btn-outline-secondary p-1">';
+			$links[] = '<span class="d-block mb-1">' . $item . '</span>';
+			$pages = _skipNodeFiles(scandir($fol . $item));
+			natsort($pages);
+			foreach ($pages as $page)
+				$links[] = linkBuilder::factory($page, $url . $item, linkBuilder::openFileInline);
+			$links[] = '</div>';
+			continue;
+		}
+		$links[] = linkBuilder::factory($item, $url, linkBuilder::openFileBlock);
 	}
 
-	foreach ($files as $item)
-		$links[] = getLink(humanize($name = pathinfo($item, PATHINFO_FILENAME)), $url . $name . '/', 'btn btn-outline-info me-3 mb-3', true);
-
-	echo implode(BRNL, $links);
+	echo implode(NEWLINE, $links);
 	contentBox('end');
 }

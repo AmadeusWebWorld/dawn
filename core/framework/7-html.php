@@ -438,8 +438,50 @@ function specialLinkVars($item) {
 
 class linkBuilder extends builderBase {
 	const usePageUrl = 'usePageUrl';
+	const content = '/?content=1';
 
-	private $text, $href, $class, $target;
+	const openFile = 'strip-extension text-suffix humanize outline-info margins lightbox noPageUrl';
+	const openFileInline = self::openFile . ' inline';
+	const openFileBlock = self::openFile . ' block';
+
+	static function factory($text, $href, $setting, $echo = false) {
+		$do = explode(' ', $setting);
+
+		if (in_array('strip-extension', $do))
+			$text = pathinfo($text, PATHINFO_FILENAME);
+
+		if (in_array('text-suffix', $do))
+			$href = $href . '/' . $text;
+
+		if (in_array('humanize', $do))
+			$text = humanize($text);
+
+		$result = new linkBuilder($text, $href); //->make(false)
+
+		if (in_array('outline-info', $do))
+			$result->btnOutline('info');
+
+		if (in_array('margins', $do))
+			$result->addClass('m-2');
+
+		if (in_array('inline', $do))
+			$result->addClass('d-inline-block');
+
+		if (in_array('block', $do))
+			$result->addClass('d-block me-3 mb-3');
+
+		if (in_array('lightbox', $do)) {
+			$result->attrs = ' data-lightbox="iframe"';
+			$result->href .= self::content;
+		}
+
+		if (in_array('noPageUrl', $do))
+			$result->unset(self::usePageUrl);
+
+		return $result->make($echo);
+	}
+
+	private $text, $href, $class, $target, $attrs = '';
 
 	function __construct($text, $href, $class = '', $target = false, $settings = [])
 	{
@@ -477,6 +519,7 @@ class linkBuilder extends builderBase {
 			$this->href,
 			$this->class,
 			$this->target,
+			$this->attrs,
 		);
 
 		if (!$echo) return $result;
@@ -501,11 +544,11 @@ function urlFromSlugs() {
 	return pageUrl(urlize(concatSlugs(func_get_args())));
 }
 
-function getLink($text, $href, $class = '', $target = false) {
+function getLink($text, $href, $class = '', $target = false, $attrs = '') {
 	$target = $target ? ' target="' . (is_bool($target) ? '_blank' : $target) . '"' : '';
 	if ($class && !contains($class, 'class="')) $class = ' class="' .  $class . '"';
-	$params = compact('text', 'href', 'class', 'target');
-	return replaceItems('<a href="%href%"%class%%target%>%text%</a>', $params, '%');
+	$params = compact('text', 'href', 'class', 'target', 'attrs');
+	return replaceItems('<a href="%href%"%class%%target%%attrs%>%text%</a>', $params, '%');
 }
 
 function getLinkWithCustomAttr($text, $href, $attr) {

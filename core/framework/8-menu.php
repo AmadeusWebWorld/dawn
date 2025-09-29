@@ -67,7 +67,7 @@ function pageMenu($file) {
 
 	print_seo();
 
-	if (variable('no-page-menu') || !sectionValue() || hasPageParameter('embed')) return;
+	if (variable('no-page-menu') || !sectionValue() || hasPageParameter('embed') || getQueryParameter('content')) return;
 
 	$breadcrumbs = variable('breadcrumbs');
 
