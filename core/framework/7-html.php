@@ -245,6 +245,7 @@ function replaceHtml($html) {
 
 			'%cdn%' => variableOr('cdn', variable('assets-url') . 'assets/cdn/'),
 
+			'%nodeSlug%' => $node,
 			'%nodeName%' => humanize($node),
 			'%nodeUrl%' => pageUrl($node),
 			'%nodeItem%' => getPageParameterAt(1, ''),
@@ -371,14 +372,13 @@ function prepareLinks($output) {
 	$campaign = isset($_GET['utm_campaign']) ? '&utm_campaign=' . $_GET['utm_campaign'] : '';
 	$output = str_replace('#utm', '?utm_source=' . variable('safeName') . $campaign, $output);
 
-	$output = replaceItems($output, [
-		'BTNPHONE' => '~class~btnNBSPbtn-danger~/class~',
-		'BTNWHATSAPP' => '~class~btnNBSPbtn-warning~/class~',
-		'BTNEMAIL' => '~class~btnNBSPbtn-info~/class~',
-		'BTNLARGE' => '~class~btnNBSPbtn-successNBSPbtn-lgNBSPbtn-primary~/class~',
-		'BTNSITE' => '~class~btnNBSPbtn-successNBSPbtn-site~/class~',
-		'MORELINK' => '~class~more-link~/class~',
-	]);
+	/*
+	'BTNPHONE' => '~class~btnNBSPbtn-danger~/class~',
+	'BTNWHATSAPP' => '~class~btnNBSPbtn-warning~/class~',
+	'BTNEMAIL' => '~class~btnNBSPbtn-info~/class~',
+	'MORELINK' => '~class~more-link~/class~',
+	*/
+	$output = bootstrapAndUX::toButtons($output);
 
 	$output = replaceItems($output, [
 		'DIV|LARGELIST' => '<div class="large-list">',
@@ -398,7 +398,7 @@ function prepareLinks($output) {
 	return $output;
 }
 
-function url_r($url) {
+function url_r($url, $domainOnly = false) {
 	$url = replaceItems($url, [
 		'preview.' => '',
 		'https://' => '',
@@ -406,7 +406,7 @@ function url_r($url) {
 		'//' => '',
 	]);
 	if (endsWith($url, '/')) $url = substr($url, 0, strlen($url) - 1);
-	return $url;
+	return $domainOnly ? explode('/', $url)[0] : $url;
 }
 
 function _whatsAppME($mob, $txt = '?text=') {
@@ -438,13 +438,47 @@ function specialLinkVars($item) {
 	return compact('text', 'url', 'class');
 }
 
+class bootstrapAndUX {
+	const colors = ['primary', 'secondary', 'info', 'success', 'warning', 'danger'];
+
+	//TODO:
+	const namedButtons = [
+		'PHONE' => 'danger fa fa-phone',
+		'WHATSAPP' => 'warning fab fab-whatsapp',
+		'EMAIL' => 'info bi bi-email',
+	];
+
+	static $buttonVars = []; //static on demand for optimizing
+
+	private static function buttonVars() {
+		if (count(self::$buttonVars) == 0) {
+			$btn = 'BTN'; $bigBtn = 'BTNLARGE';
+			$start = '" class="';
+			foreach (self::colors as $color) {
+				$colorUpper = strtoupper($color);
+				self::$buttonVars[$btn . $colorUpper] = $start . 'btn btn-' . $color;
+				self::$buttonVars[$bigBtn . $colorUpper] = $start . 'btn btn-lg btn-' . $color;
+			}
+		}
+		return self::$buttonVars;
+	}
+
+	//NOTE: for now, supports single css class only
+	static function toButtons($html) {
+		if (!contains($html, 'BTN')) return $html;
+		return replaceItems($html, self::buttonVars());
+	}
+}
+
 class linkBuilder extends builderBase {
+	//NOTE: cant keep this in buttonsInText as thats an only when needed static class
 	const usePageUrl = 'usePageUrl';
 	const content = '/?content=1';
 
 	const openFile = 'strip-extension text-suffix humanize outline-info margins lightbox noPageUrl';
 	const openFileInline = self::openFile . ' inline';
 	const openFileBlock = self::openFile . ' block';
+	const localhostLink = 'new-tab localhost btn-secondary noPageUrl';
 
 	static function factory($text, $href, $setting, $echo = false) {
 		$do = explode(' ', $setting);
@@ -455,13 +489,27 @@ class linkBuilder extends builderBase {
 		if (in_array('text-suffix', $do))
 			$href = $href . '/' . $text;
 
+		if (in_array('localhost', $do))
+			$href = 'http://localhost/' . $text . '/';
+
 		if (in_array('humanize', $do))
 			$text = humanize($text);
 
 		$result = new linkBuilder($text, $href); //->make(false)
 
-		if (in_array('outline-info', $do))
-			$result->btnOutline('info');
+		if (in_array('new-tab', $do))
+			$result->target = true;
+
+		foreach (bootstrapAndUX::colors as $color) {
+			$break = true;
+			if (in_array('btn-' . $color, $do))
+				$result->btn($color);
+			else if (in_array('outline-' . $color, $do))
+				$result->btnOutline($color);
+			else
+				$break = false;
+			if ($break) break;
+		}
 
 		if (in_array('margins', $do))
 			$result->addClass('m-2');
@@ -502,6 +550,12 @@ class linkBuilder extends builderBase {
 
 	function btnOutline($color = 'success') {
 		$this->addClass('btn btn-outline-' . $color);
+		return $this;	
+	}
+
+	function btnOrOutline($color = 'success', $outline = false) {
+		if ($outline) $this->btnOutline($color);
+		else $this->btn($color);
 		return $this;	
 	}
 

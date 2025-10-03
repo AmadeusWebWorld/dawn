@@ -134,6 +134,8 @@ function menu($folderRelative = false, $settings = []) {
 		$filesGiven = true;
 	} else {
 		if (disk_file_exists($itemsTsv = $folder . '_menu-items.tsv')) {
+			$allNamesOfFiles = variableOr('menu-humanize', []);
+
 			$itemsSheet = getSheet($itemsTsv, 'slug');
 			$filesGiven = true;
 			$files = [];
@@ -154,8 +156,9 @@ function menu($folderRelative = false, $settings = []) {
 				}
 				//parameterError('153', [$sno, $name, $slug, $name], false);
 				if ($hasSNo || $hasName)
-					$namesOfFiles[$slug] = $sno . $name;
+					$allNamesOfFiles[$slug] = $namesOfFiles[$slug] = $sno . $name;
 			}
+			variable('menu-humanize', $allNamesOfFiles);
 		} else {
 			$files = disk_scandir($folder);
 			natsort($files);

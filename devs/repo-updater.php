@@ -1,6 +1,13 @@
 <?php
+$onlyCloned = getQueryParameter('cloned');
+
+$all = (new linkBuilder('all', nodeValue()))->btnOrOutline('info', $onlyCloned)->make(false);
+$cloned = (new linkBuilder('only cloned', nodeValue() . '	/?cloned=true'))->btnOrOutline('success', !$onlyCloned)->make(false);
+
 contentBox('git', 'container');
-h2('Repositories ' . (new linkBuilder('per this', 'repositories'))->btnOutline()->make(false));
+
+$reposLink = (new linkBuilder('per this', 'repositories'))->btnOutline()->make(false);
+h2('Repositories ' . $reposLink . ' &mdash;&gt; ' . $all . ' ' . $cloned);
 
 $sheet = getSheet(__DIR__ . '/repositories.tsv', false);
 $paths = getSheet(__DIR__ . '/clone-paths.tsv', 'Name');
@@ -21,11 +28,13 @@ foreach ($sheet->rows as $repo) {
 	$nameLookup = $paths->firstOfGroup($item['name']);
 	$location = $nameLookup ? $paths->getValue($nameLookup, 'Location') . $item['name'] : LOCATIONNOTSET;
 	$exists = $location != LOCATIONNOTSET && disk_is_dir(ALLSITESROOT . $location);
+	if ($onlyCloned && !$exists) continue;
 
 	$row = [
 		'name' => returnLine($item['repo_link_md']),
 		'owner' => returnLine($item['owner_link_md']),
-		'location' => $location == LOCATIONNOTSET ? $notSet . $clonePaths : $location,
+		'location' => $location == LOCATIONNOTSET ? $notSet . $clonePaths
+			: linkBuilder::factory($location, $location, linkBuilder::localhostLink),
 		'exists' => ($exists ? $yes : $no) . (!$exists && $location != LOCATIONNOTSET ? ' &mdash; ' . _clone($location, $item) : ''),
 		'actions' => $exists && $location != LOCATIONNOTSET ? _pull_and_log($location) : '',
 		'description' => returnLine($item['description']),

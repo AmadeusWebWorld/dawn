@@ -87,8 +87,12 @@ function autoRender($file, $type = false, $useHeading = true) {
 		if ($meta && isset($meta->values['use-template']))
 			$meta->values = array_merge($meta->values, getSheet(getTableTemplate($meta), false)->values);
 
-		$noCB = $istwt && $meta ? valueIfSet($meta->values, 'no-content-box') : false;
-		if ($istwt) h2(title(FORHEADING) . currentLevel(), 'amadeus-icon');
+		$noCB = $meta ? valueIfSet($meta->values, 'no-content-box') : false;
+
+		if (valueIfSet($meta->values, 'no-title')) $title = false;
+		else if (($mh = variable('menu-humanize')) && isset($mh[nodeValue()])) $title = $mh[nodeValue()];
+		else $title = title(FORHEADING);
+		if ($title) h2($title . currentLevel(), 'amadeus-icon');
 
 		$isDeck = contains($raw, '|is-deck');
 		$notRendering = !hasPageParameter('embed') && !hasPageParameter('expanded');
@@ -397,7 +401,7 @@ function _renderedScaffold() {
 	$code = variable('scaffoldCode');
 	if (!$code) return false;
 
-	runFeature($code);
+	runFeature('scaffold/' . $code);
 	return true;
 }
 
