@@ -7,6 +7,7 @@ function runOpusItem($name) {
 
 runOpusItem('o1-site');
 runOpusItem('o2-auth');
+runOpusItem('o3-google');
 
 before_bootstrap();
 

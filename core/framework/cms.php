@@ -1,4 +1,9 @@
 <?php
+function sectionBaseOrSitePath($isThisContentQM = false) {
+	if ($isThisContentQM == '/content/') return SITEPATH;
+	return defined('SECTIONSBASE') ? SECTIONSBASE : variable('path');
+}
+
 function before_render() {
 	addStyle('amadeusweb7', COREASSETS);
 	addStyle('amadeusweb8', COREASSETS);
@@ -13,8 +18,9 @@ function before_render() {
 	$node = variable('node');
 	$innerSlugs = variable('page_parameters');
 
+	$sectionsRoot = sectionBaseOrSitePath();
 	foreach (variable('sections') as $slug) {
-		if (disk_file_exists($incFile = variable('path') . '/' . $slug . '/' . $node . '/_include.php')) {
+		if (disk_file_exists($incFile = $sectionsRoot . '/' . $slug . '/' . $node . '/_include.php')) {
 			variable('section', $slug);
 			disk_include_once($incFile);
 			if (hasVariable('is-standalone-section')) {
@@ -39,13 +45,13 @@ function before_render() {
 
 		if ($canHaveFiles) {
 			if ($slug == $node) {
-				$level0 = [$slug == $node ? variable('path') . '/' . $slug . '/home.' :
-					variable('path') . '/' . $slug . '/' . $node . '.'];
+				$level0 = [$slug == $node ? $sectionsRoot . '/' . $slug . '/home.' :
+					$sectionsRoot . '/' . $slug . '/' . $node . '.'];
 				if (setFileIfExists($slug, $level0, false, false)) return;
 			}
 
 			$page1 = variable('page_parameter1') ? variable('page_parameter1') : 'home';
-			$folUptoNode = variable('path') . '/' . $slug . '/' . $node;
+			$folUptoNode = $sectionsRoot . '/' . $slug . '/' . $node;
 
 			if (setFileIfExists($slug, $folUptoNode . '/' . $page1 . '.', false, false)) return;
 			if (setFileIfExists($slug, $folUptoNode . '.', false, false)) return;
@@ -54,7 +60,7 @@ function before_render() {
 		}
 
 		//NOTE: rewritten in v 7.2 & 8.0
-		$baseFol = variable('path') . '/' . $slug . ($slug != $node ? '/' . $node : ''); //no trailing slash
+		$baseFol = $sectionsRoot . '/' . $slug . ($slug != $node ? '/' . $node : ''); //no trailing slash
 
 		if (!disk_is_dir($baseFol)) {
 			continue;

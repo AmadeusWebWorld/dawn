@@ -75,7 +75,7 @@ function pageMenu($file) {
 		if (nodeIsSection()) return;
 
 		//happens when: 'sections-have-files' (Ag)
-		if (!disk_is_dir(concatSlugs([variable('path'), sectionValue(), nodeValue()]))) return;
+		if (!disk_is_dir(concatSlugs([sectionBaseOrSitePath(), sectionValue(), nodeValue()]))) return;
 
 		variable('in-node', true);
 
@@ -114,7 +114,7 @@ function menu($folderRelative = false, $settings = []) {
 	if (!$noul) $result .= $indent . '<ul' . cssClass($class_ul) . '>' . NEWLINE;
 
 	$isAbsolute = startsWith($folderRelative, ABSOLUTEPATHPREFIX);
-	$folderPrefix = $isAbsolute ? '' : variable('path');
+	$folderPrefix = $isAbsolute ? '' : sectionBaseOrSitePath($folderRelative);
 	if ($isAbsolute) $folderRelative = substr($folderRelative, strlen(ABSOLUTEPATHPREFIX));
 	$folder = $folderPrefix. ($folderRelative ? $folderRelative : (variable('folder') ? '/' . variable('folder') : '/'));
 
