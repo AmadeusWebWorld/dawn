@@ -1,19 +1,19 @@
-#slug
-~Quick Access
-health-checker
-pollen-registry
+#slug	name
+~Quick Access	
+health-checker	Check Health
+pollen-registry	Pollen Overview
 
-~Repo Console
-repo-updater
-refresh-repo-list
+~Repo Console (only local)	
+repo-updater	Update Codes
+refresh-repo-list	Refresh Git List
 
-~Repo / Site Registry
-clone-paths
-repositories
-git-accounts
+~Repo / Site Registry	
+clone-paths	Paths (for Code)
+repositories	All Codes
+git-accounts	Code Sources
 
-~Future
-test-console
+~Future	
+test-console	Everthing Testing (todo)
 
-~UX Tools
-icon-explorer
+~UX Tools	
+icon-explorer	Find Icons
