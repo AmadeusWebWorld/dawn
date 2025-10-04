@@ -80,7 +80,17 @@ function _table_row_values($item, $cols, $tsv, $values, $template) {
 function _table_link($item, $c, $values, $key, $cols) {
 	$link = $item[$c];
 
-	if (isset($values[$key . '_template'])) {
+	$text = 'open';
+	if (contains($link, 'docs.google.com'))
+		$text = 'document';
+
+	if (isset($values[$key . '_text_format'])) {
+		$wanted = $values[$key . '_text_format'];
+		if ($wanted == 'link')
+			$text = url_r($link);
+		else if ($wanted == 'domain')
+			$text = url_r($link, true);
+	} else if (isset($values[$key . '_template'])) {
 		$lookup = []; foreach ($cols as $ix => $c) $lookup[$ix] = $item[$c];
 		$format = trim($values[$key . '_template'], '	'); //comes from vscode tsv editor
 		$text = str_replace('_link', '', $key);
@@ -89,12 +99,6 @@ function _table_link($item, $c, $values, $key, $cols) {
 		return getLink($text, $link, $class);
 	}
 
-	$text = 'open';
-
-	if (contains($link, 'docs.google.com'))
-		$text = 'document';
-	else if (contains($link, '/folders/'))
-		$text = 'folder';
 
 	return makeLink($text, $link, 'external');
 }
@@ -139,6 +143,7 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	$json = is_string($dataFile) && endsWith($dataFile, '.json');
 	$dontTreat = valueIfSetAndNotEmpty($values, 'dont-treat-array', false);
 	$wantsBSRow = isset($values['use-a-bootstrap-row']) && $values['use-a-bootstrap-row'];
+	$customHead = valueIfSet($values, 'use-a-custom-head');
 	$lineTemplateForBS = isset($values['bs-template']) ? $values['bs-template'] : false;
 
 	if ($dontTreat) {
@@ -199,8 +204,9 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	if ($beforeContent = valueIfSetAndNotEmpty($values, 'before-content')) echo returnLine(pipeToBR($beforeContent));
 	if ($allowCards) echo '<div class="text-center"><button data-table-id="amadeus-table-' . $id . '" class="amadeus-table-' . $id . '-card-view">toggle card view</button></div>' . BRNL;
 
-	if ($wantsBSRow) echo '<div id="amadeus-bs-row-' . $id . '" class="row">'; else
-	echo '
+	if ($wantsBSRow) echo '<div id="amadeus-bs-row-' . $id . '" class="row">';
+	else if ($customHead) echo $values['head-template'];
+	else echo '
 	<table id="amadeus-table-' . $id . '" class="' . $datatableClass . 'table table-striped table-bordered" ' . $datatableParams . 'cellspacing="0" width="100%">
 	<thead>
 		<tr class="align-text-top amadeus-header-row">

@@ -5,7 +5,7 @@ main::initialize();
 class main {
 
 	static function initialize() {
-		$ours = contains(SITEPATH, 'dawn') || contains(SITEPATH, 'imran') || contains(SITEPATH, 'alliance-of');
+		$ours = false; // contains(SITEPATH, 'dawn') || contains(SITEPATH, 'imran') || contains(SITEPATH, 'alliance-of');
 		variables([
 			'assistantEmail' => 'imran+assistant@amadeusweb.world',
 			'systemEmail' => 'imran@amadeusweb.world',

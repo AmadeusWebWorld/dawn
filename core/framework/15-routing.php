@@ -1,4 +1,6 @@
 <?php
+DEFINE('OURNETWORK', '');
+
 DEFINE('OTHERSITEPREFIX', 'urlOf-');
 function sluggize($relPath) {
 	if (!contains($relPath, '/')) return $relPath;

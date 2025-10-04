@@ -99,7 +99,8 @@ function before_bootstrap() {
 	runModule('wordpress');
 }
 
-before_bootstrap();
+if (!DEFINED('AMADEUSPRODUCT'))
+	before_bootstrap();
 
 //Now this only sets up the node and page parameters - rest moved to before_bootstrap()
 function bootstrap($config) {
