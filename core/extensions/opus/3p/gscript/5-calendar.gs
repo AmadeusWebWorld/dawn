@@ -1,6 +1,6 @@
 function TestCalendarExport() {
   const configObj = {
-    'File': 'SKLS - Demo of Reporting', 'SheetOrTab': 'All Calendar Events',
+    'File': 'SKLS - Demo of Reporting', 'SheetOrTab': 'SKLS Calendar', UseDateSuffix: 'yes',
     'CalNameExclude': 'SKLS', 'TimeMin': '2025, 07, 01', 'TimeMax': '2026, 10, 01',
   }
   FillCalendarItems(configObj)
@@ -9,12 +9,12 @@ function TestCalendarExport() {
 const _exportCalendarAliases = { Setting1: 'CalNameExclude', Setting2: 'TimeMin', Setting3: 'TimeMax' }
 
 function FillCalendarItems(configObj) {
-  const sheet = _getSheet(configObj.File, configObj.SheetOrTab)
+  const sheet = _getSheet(configObj.File, configObj.SheetOrTab + todayIfWanted(configObj.UseDateSuffix))
   Logger.log('About to run "%s" with %s', 'FillCalendarItems', JSON.stringify(configObj))
 
   sheet.clearContents()
 
-  sheet.appendRow(['CalendarName', 'EventName', 'EventDate', 'EventUrl', 'FileName', 'FileId', 'FileUrl'])
+  sheet.appendRow(['CalendarName', 'EventName', 'EventDate', 'FileName', 'FileId'])
 
   const filter = { timeMin: _dateFromCsv(configObj.TimeMin), timeMax: _dateFromCsv(configObj.TimeMax) }
   const cals = Calendar.CalendarList.list()
@@ -32,7 +32,13 @@ function FillCalendarItems(configObj) {
 
       //NOTE: let it be not normalized - 1 cal 1 doc only...
       atts.forEach(function (att, ax) {
-        sheet.appendRow([calName, event.summary, event.start.date.toString(), event.htmlLink, att.title, att.fileId, att.fileUrl])
+        const event_r = __rtf(__cellRun(event.summary, event.htmlLink, 'event'))
+        const file_r = __rtf(__cellRun(att.title, att.fileUrl, 'file'))
+        const newRow = sheet.appendRow([calName, '_adding', event.start.date.toString(), '_adding', att.fileId])
+
+        const index = sheet.getLastRow()
+        newRow.getRange(index, 2).setRichTextValue(event_r)
+        newRow.getRange(index, 4).setRichTextValue(file_r)
       })
 
     })

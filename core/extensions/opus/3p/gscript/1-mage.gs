@@ -6,6 +6,7 @@
 
 const MageActions = {
   ExportCalendar: 'Export Calendar',
+  WorkItemsReport: 'WorkItems Report',
 }
 
 let mageColumns
@@ -18,10 +19,11 @@ function RunMageForMe() {
     return
   }
 
-  mageColumns = new OpusColumns(['Action', 'Skip', 'Organization', 'File', 'Access', 'SheetOrTab', 'LastRun', 'Setting1', 'Setting2', 'Setting3'])
+  mageColumns = new OpusColumns(['Action', 'Skip', 'Organization', 'File', 'Access', 'SheetOrTab', 'UseDateSuffix', 'LastRun', 'Setting1', 'Setting2', 'Setting3'])
     .appendAliases({ Setting1: 'LabelFilter', Setting2: 'MainContactLabel', Setting3: 'ExtraFields' }, 'Pull Contacts')
     .appendAliases({ Setting1: 'OnlyOnLabel', Setting2: 'Fields' }, 'Contacts Fields')
     .appendAliases(_exportCalendarAliases, MageActions.ExportCalendar)
+    .appendAliases(_workItemsReportAliases, MageActions.WorkItemsReport)
 
   const rows = sheet.getRange(1, 1, sheet.getLastRow(), mageColumns.columnNames.length).getValues()
 
@@ -42,7 +44,9 @@ function _runMageAction(row) {
     PullContactsInto(item)
   } else if (item.Action == MageActions.ExportCalendar) {
     FillCalendarItems(mageColumns.enrichObject(item, MageActions.ExportCalendar))
+  } else if (item.Action == MageActions.WorkItemsReport) {
+    RefreshWorkItemsReport(mageColumns.enrichObject(item, MageActions.WorkItemsReport))
   } else {
-    Logger.log(JSON.stringify({ level: 'ERROR', message: 'Action ' + item.Action + ' not defined / has typo' }))
+    Logger.log(JSON.stringify({ level: 'ERROR', message: 'Action: \'' + item.Action + '\' not defined / has typo' }))
   }
 }

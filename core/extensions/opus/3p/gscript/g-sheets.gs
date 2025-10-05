@@ -1,6 +1,4 @@
-function NoopGS() { }
-
-function TestSheetInits() {
+function TestSheets() {
   /*
   var wo = _getSheetObject('Demo - Donors from Imran at WiseOwls', 'Contacts Pulled 1')
   Logger.log({ testName: 'WO', expected: 'ok', actual: wo })
@@ -10,10 +8,19 @@ function TestSheetInits() {
 
   var nfe = _getSheet('Duplicate B for Opus Testing', '__NEW')
   Logger.log({ testName: 'NFE', expected: 'fail', actual: nfe })
-  */
 
   var nf = _getSheet('Duplicate B for Opus Testing', '__NEW', 'AMW Opus Demo Project')
   Logger.log({ testName: 'NF', expected: 'ok', actual: nf })
+  */
+
+  Logger.log(todayIfWanted('yes'));
+}
+
+function todayIfWanted(yes) {
+  if (!yes) return ''
+  const today = new Date()
+  const months = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ')
+  return '_' + (today.getDate() + '') + '-' + months[today.getMonth()]
 }
 
 //TODO: code and test all usages / failure scenarios
