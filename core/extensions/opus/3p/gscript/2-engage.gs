@@ -9,11 +9,16 @@
     * Wean away from sending files to sending links / referredBy links
 */
 
-function NoopEngage() { }
+function TestContactExport() {
+  PullContactsInto('', '', 'Donors at Demo Charity')
+}
 
-function _pullContactsInto(item) {
+
+function PullContactsInto(item) {
   const sheet = _getSheet(item.File, item.SheetOrTab)
-  Logger.log('About to run "%s" with %s', '_pullContactsInto', JSON.stringify(item))
+  Logger.log('About to run "%s" with %s', 'PullContactsInto', JSON.stringify(item))
+
+  sheet.clearContents()
 
   sheet.appendRow([
     "#GWID",
