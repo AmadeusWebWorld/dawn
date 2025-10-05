@@ -19,9 +19,12 @@ function RunMageForMe() {
     return
   }
 
-  mageColumns = new OpusColumns(['Action', 'Skip', 'Organization', 'File', 'Access', 'SheetOrTab', 'UseDateSuffix', 'LastRun', 'Setting1', 'Setting2', 'Setting3'])
+  mageColumns = new OpusColumns(['Action', 'Skip', 'Organization', 'File', 'Access', 'SheetOrTab', 'UseDateSuffix', 'LastRun',
+      'Setting1', 'Setting2', 'Setting3', 'Setting4', 'Setting5', 'Setting6'])
+    /*
     .appendAliases({ Setting1: 'LabelFilter', Setting2: 'MainContactLabel', Setting3: 'ExtraFields' }, 'Pull Contacts')
     .appendAliases({ Setting1: 'OnlyOnLabel', Setting2: 'Fields' }, 'Contacts Fields')
+    */
     .appendAliases(_exportCalendarAliases, MageActions.ExportCalendar)
     .appendAliases(_workItemsReportAliases, MageActions.WorkItemsReport)
 

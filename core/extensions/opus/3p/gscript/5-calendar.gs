@@ -44,7 +44,7 @@ function FillCalendarItems(configObj) {
     })
   })
 
-  _sanitizeSheet(sheet)
+  _sanitizeSheet(sheet, 3)
 }
 
 function _dateFromCsv(txt) {

@@ -61,10 +61,12 @@ function _getSheet(fileName, sheetName, parentFolder = 'NONE') {
   return sheet
 }
 
-function _sanitizeSheet(sheet) {
+function _sanitizeSheet(sheet, cols = false) {
   __removeEmptyColumns(sheet)
   __removeEmptyRows(sheet)
-  sheet.autoResizeColumns(1, sheet.getLastColumn()) //to support reasonable multiline
+  sheet.autoResizeColumns(1, sheet.getLastColumn()) //todo - support reasonable multiline
+  sheet.setFrozenRows(1)
+  if (cols) sheet.setFrozenColumns(cols)
 }
 
 //FROM: https://stackoverflow.com/a/34781833
