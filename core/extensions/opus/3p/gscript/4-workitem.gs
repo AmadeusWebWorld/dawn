@@ -1,16 +1,14 @@
 function TestWorkItemsReport() {
   const configObj = {
-    'File': 'SKLS - Demo of Reporting', 'SheetOrTab': 'DemoWk', UseDateSuffix: '',
+    'File': 'SKLS - Demo of Reporting', 'SheetOrTab': '**Work', UseDateSuffix: 'yes',
     //'Folder': 'TM WorkItems by MemberA', 'InSharedDrive': 'AW Opus - Automation - SKLS',
     'Folder': 'Demo Dept A', 'InSharedDrive': '',
-    'Detection': '_by_description_', 'StatusTableName': 'SKLS WorkItem Information', 'Setting5': 'LookupReminders'
+    'Detection': '_by_description_', 'StatusTableName': 'SKLS WorkItem Information', 'LookupReminders' : '**Cal'
   }
   RefreshWorkItemsReport(configObj)
 }
 
 const _workItemsReportAliases = { Setting1: 'Folder', Setting2: 'InSharedDrive', Setting3: 'Detection', Setting4: 'StatusTableName', 'Setting5': 'LookupReminders' }
-
-//S. NO.	ASSIGNED DATE / QUERY DATE	WORK TYPE	ACTIVITY	COMPLETION STATUS	DEADLINE / INTERNAL TIMELINE	REMARKS
 
 function RefreshWorkItemsReport(configObj) {
   const sheet = _getSheet(configObj.File, configObj.SheetOrTab + todayIfWanted(configObj.UseDateSuffix))
@@ -26,8 +24,10 @@ function RefreshWorkItemsReport(configObj) {
 
   const iterator = new OpusDrive(configObj.Folder, configObj.InSharedDrive)
 
-  if (configObj.LookupReminders && false)
-    remindersSheet = _getSheet(configObj.File, configObj.LookupReminders + todayIfWanted(configObj.UseDateSuffix))
+  if (configObj.LookupReminders)
+    remindersSheet = _getSheet(configObj.File, configObj.LookupReminders + todayIfWanted(configObj.UseDateSuffix), 'NONE', true)
+  else
+    remindersSheet = false //in case multiple calls
 
   appendResults(iterator.getFiles(onlyWorkitems)) //other filters tested..
 
@@ -39,12 +39,26 @@ let tableTitle = 'DEMO Status', ourSheet, remindersSheet
 function appendResults(files) {
   const sheet = ourSheet
 
+  const remindersByFile = {}
+  if (false && remindersSheet) {
+    var cols = OpusColumns.invertHeadings(_calendarHeadings)
+    for (let ix = 1; ix < remindersSheet.rows; ix++) {
+      var row = remindersSheet.tableRows[ix]
+      if (row[cols.FileId]) {
+        const fileId = row[cols.FileId]
+        if (!remindersByFile[fileId]) remindersByFile[fileId] = [];
+        rtf = remindersSheet.tableRows
+        remindersByFile[fileId].push(row[cols.FileId])
+      }
+    }
+  }
+
   files.forEach(function (doc, fx) {
 
     const doc_r = __rtf(__cellRun(doc.name, doc.link, doc.opusType))
 
-    let status = '_todo - status' //from inside table
-    let reminders = '_todo'; //from other sheet
+    let status = '_how-to-do'
+    let reminders = '_todo'
 
     if (doc.opusType == 'doc') {
       const asDoc = Docs.Documents.get(doc.id)

@@ -1,12 +1,13 @@
 function TestCalendarExport() {
   const configObj = {
-    'File': 'SKLS - Demo of Reporting', 'SheetOrTab': 'SKLS Calendar', UseDateSuffix: 'yes',
+    'File': 'SKLS - Demo of Reporting', 'SheetOrTab': '**Cal', UseDateSuffix: 'yes',
     'CalNameExclude': 'SKLS', 'TimeMin': '2025, 07, 01', 'TimeMax': '2026, 10, 01',
   }
   FillCalendarItems(configObj)
 }
 
 const _exportCalendarAliases = { Setting1: 'CalNameExclude', Setting2: 'TimeMin', Setting3: 'TimeMax' }
+const _calendarHeadings = ['CalendarName', 'EventName', 'EventDate', 'FileName', 'FileId']
 
 function FillCalendarItems(configObj) {
   const sheet = _getSheet(configObj.File, configObj.SheetOrTab + todayIfWanted(configObj.UseDateSuffix))
@@ -14,7 +15,7 @@ function FillCalendarItems(configObj) {
 
   sheet.clearContents()
 
-  sheet.appendRow(['CalendarName', 'EventName', 'EventDate', 'FileName', 'FileId'])
+  sheet.appendRow(_calendarHeadings)
 
   const filter = { timeMin: _dateFromCsv(configObj.TimeMin), timeMax: _dateFromCsv(configObj.TimeMax) }
   const cals = Calendar.CalendarList.list()

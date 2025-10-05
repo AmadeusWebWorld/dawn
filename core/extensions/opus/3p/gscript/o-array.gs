@@ -26,6 +26,13 @@ function TestColumnAlias() {
 
 class OpusColumns {
 
+  static invertHeadings(list, startAt = 1) {
+    const result = {}
+    for (let ix = 0; ix < list.length; ix++)
+      result[startAt + ix] = list[ix]
+    return result
+  }
+
   constructor(names) {
     const cols = names.map(function (name, index) {
       return {

@@ -24,7 +24,7 @@ function todayIfWanted(yes) {
 }
 
 //TODO: code and test all usages / failure scenarios
-function _getSheet(fileName, sheetName, parentFolder = 'NONE') {
+function _getSheet(fileName, sheetName, parentFolder = 'NONE', dontClear = false) {
   var files = DriveApp.getFilesByName(fileName)
 
   if (!files.hasNext()) {
@@ -54,8 +54,9 @@ function _getSheet(fileName, sheetName, parentFolder = 'NONE') {
     Logger.log('Having to create "%s" Sheet in: "%s"', sheetName, sheetFile.getName())
     sheet = sheetFile.insertSheet(sheetName)
   } else {
-    Logger.log('Detected "%s" Sheet in: "%s" and clearing it', sheetName, sheetFile.getName())
-    sheet.clearContents().clearFormats()
+    Logger.log('Detected "%s" Sheet in: "%s"' + (dontClear ? '' : ' and clearing it'), sheetName, sheetFile.getName())
+    if (!dontClear)
+      sheet.clearContents().clearFormats()
   }
 
   return sheet
