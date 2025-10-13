@@ -7,13 +7,13 @@ $all = (new linkBuilder('all', nodeValue()))->btnOrOutline('info', $onlyCloned)-
 $cloned = (new linkBuilder('only cloned', nodeValue() . '/?cloned=true'))->btnOrOutline('success', !$onlyCloned)->make(false);
 $cloningNeedeed = (new linkBuilder('only to clone', nodeValue() . '/?to-clone=true'))->btnOrOutline('danger', !$onlyToClone)->make(false);
 
-contentBox('git', 'container');
+contentBox('git', 'm-3');
 
 $reposLink = (new linkBuilder('per this', 'repositories'))->btnOutline()->make(false);
 h2('Repositories ' . $reposLink . ' &mdash;&gt; ' . $all . ' ' . $cloned . ' ' . $cloningNeedeed);
 
 $sheet = getSheet(__DIR__ . '/repositories.tsv', false);
-$paths = getSheet(__DIR__ . '/clone-paths.tsv', 'Name');
+$paths = getSheet(__DIR__ . '/all-projects.tsv', 'Name');
 $items = [];
 
 DEFINE('LOCATIONNOTSET', 'not-set');
@@ -21,7 +21,7 @@ DEFINE('LOCATIONNOTSET', 'not-set');
 $yes = '<span class="btn btn-success">yes</span>';
 $no = '<span class="btn btn-warning">no</span>';
 $notSet = '<span class="btn btn-danger">not set</span>';
-$clonePaths = ' &mdash; <span class="btn btn-outline-danger"><abbr title="D:\AmadeusWeb\amadeus\dawn\devs\clone-paths.tsv">set path</abbr></span>';
+$clonePaths = ' &mdash; <span class="btn btn-outline-danger"><abbr title="D:\AmadeusWeb\amadeus\dawn\devs\all-projects.tsv">set path</abbr></span>';
 
 $rows = [];
 

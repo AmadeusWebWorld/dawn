@@ -2,8 +2,11 @@
 |is-table-with-template			
 ||head-columns: name, url, notes
 ||row-template: <tr><td>%Slug%</td><td><a href="https://github.com/%Slug%~~TARGETNEW">%Slug% &nbsp;|&nbsp; <a href="https://github.com/%Slug%?tab=repositories~~TARGETNEW">repos</a></td><td>%Notes%</td></tr>
+
 GitHub	users	AmadeusWebWorld	websites, wisdom, work, world
+GitHub	orgs	AmadeusWebPlaces	Countries mainly, linked with global movements
+
 GitHub	orgs	AmadeusWebFriends	Friends and CBs
-GitHub	orgs	AmadeusWebMembers	Not on own domain
-GitHub	orgs	ImranAliNamazi	Imran
-|GitHub	orgs	AmadeusWebArchives	Unused
+GitHub	orgs	AmadeusWebMembers	On our domain
+
+GitHub	orgs	ImranAliNamazi	Imran & Freelance work

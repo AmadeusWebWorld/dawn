@@ -8,7 +8,7 @@ repo-updater	Update Codes
 refresh-repo-list	Refresh Git List
 
 ~Repo / Site Registry	
-clone-paths	Paths (for Code)
+all-projects	All Sites
 repositories	All Codes
 git-accounts	Code Sources
 
