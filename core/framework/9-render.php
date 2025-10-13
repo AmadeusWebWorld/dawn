@@ -93,6 +93,7 @@ function _renderImplementation($fileOrRaw, $settings) {
 	if (contains($raw, '<!--no-p-tags-->')) $settings['strip-paragraph-tag'] = true;
 
 	if ($excerpt) $raw = explode(MORETAG, $raw)[0];
+	if ($excerpt && contains($raw, EXCERPTSTART)) $raw = explode(EXCERPTSTART, $raw)[1];
 
 	if (function_exists('site_render_content')) $raw = site_render_content($raw);
 

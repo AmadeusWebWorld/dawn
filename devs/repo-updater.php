@@ -1,6 +1,7 @@
 <?php
 $onlyCloned = getQueryParameter('cloned');
 $onlyToClone = getQueryParameter('to-clone');
+$isMobile = variable('is-mobile');
 
 $all = (new linkBuilder('all', nodeValue()))->btnOrOutline('info', $onlyCloned)->make(false);
 $cloned = (new linkBuilder('only cloned', nodeValue() . '/?cloned=true'))->btnOrOutline('success', !$onlyCloned)->make(false);
@@ -34,13 +35,19 @@ foreach ($sheet->rows as $repo) {
 	if ($onlyCloned && !$exists) continue;
 	if ($onlyToClone && $exists) continue;
 
+	$actions = '';
+	if ($isMobile && $location == LOCATIONNOTSET) {
+		$actions = linkBuilder::factory('Clone URL', $item['clone_url'], linkBuilder::copyUrl)
+			. ' ' . linkBuilder::factory('Relative Path', $location, linkBuilder::copyRelUrl);
+	}
+
 	$row = [
 		'name' => returnLine($item['repo_link_md']),
 		'owner' => returnLine($item['owner_link_md']),
 		'location' => $location == LOCATIONNOTSET ? $notSet . $clonePaths
 			: linkBuilder::factory($location, $location, linkBuilder::localhostLink),
 		'exists' => ($exists ? $yes : $no) . (!$exists && $location != LOCATIONNOTSET ? ' &mdash; ' . _clone($location, $item) : ''),
-		'actions' => $exists && $location != LOCATIONNOTSET ? _pull_and_log($location) : '',
+		'actions' => $exists && $location != LOCATIONNOTSET ? _pull_and_log($location) : $actions,
 		'description' => returnLine($item['description']),
 	];
 

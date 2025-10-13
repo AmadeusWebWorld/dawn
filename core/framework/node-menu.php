@@ -10,9 +10,14 @@ function renderNodeMenu() {
 	extract(variable('menu-settings'));
 
 	$hasFiles = variable('nodes-have-files'); //yay now we support both sections with files & folders in same site
+	if (($order = NODEPATH . '/_menu-items.txt') && disk_file_exists($order))
+		$files = textToList(disk_file_get_contents($order)); else
 	$files = _skipNodeFiles(disk_scandir(NODEPATH));
 
 	_menuULStart(NOPAGESTART);
+
+	if (variable('link-to-node-home'))
+		echo '<li class="' . $itemClass . '"><a href="' . pageUrl(variable(SAFENODEVAR)) . '" class="' . $anchorClass . '">' . getHtmlVariable('nodeName') . '</a>';
 
 	foreach ($files as $page) {
 		//if (cannot_access($slug)) continue;
@@ -33,7 +38,7 @@ function renderNodeMenu() {
 		if (disk_is_dir(NODEPATH . '/' . $page)) {
 			echo '<li class="' . $itemClass . '"><a class="' . $anchorClass . '">' . $page_r . '</a>';
 			menu('/' . variable('section') . '/' . variable(SAFENODEVAR) . '/' . $page . '/', [
-				'link-to-home' => variable('link-to-node-sub-section'),
+				'link-to-home' => variable('link-to-sub-node-home'),
 				'files' => $files, 'this-is-standalone-section' => $tiss,
 				'ul-class' => $ulClass,
 				'li-class' => $itemClass,

@@ -77,7 +77,6 @@ function before_bootstrap() {
 	$isMobile = $testMobile != 80 || startsWith(__DIR__, '/storage/');
 	
 	variable('port', $port != $testMobile ? ':' . $port : '');
-	variable('is_mobile_server', $isMobile);
 
 	variable('local', $local = startsWith($_SERVER['HTTP_HOST'], 'localhost'));
 	variable('live', contains(SITEPATH, 'live'));
@@ -92,6 +91,8 @@ function before_bootstrap() {
 	variable(assetKey(COREASSETS), variable('app') . 'assets/');
 
 	$php = contains($_SERVER['DOCUMENT_ROOT'], 'magique') || contains($_SERVER['DOCUMENT_ROOT'], 'Magique');
+	variable('is-mobile', $isMobile || $php);
+
 	variable('no_url_rewrite', $isMobile || $php);
 	if ($isMobile || $php) variable('scriptNameForUrl', 'index.php/'); //do here so we can simulate usage in site.php
 

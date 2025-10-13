@@ -1,5 +1,6 @@
 <?php
 DEFINE('MORETAG', '<!--more-->');
+DEFINE('EXCERPTSTART', '<!--start-excerpt-->');
 
 //added in 8..5
 abstract class builderBase {
@@ -253,6 +254,7 @@ function replaceHtml($html) {
 			'%nodeFullUrl%' => pageUrl(variableOr('nodeSlug', '##no-nodeSlug')),
 			'%leafNodeAssets%' => variableOr(assetKey(LEAFNODEASSETS), ''),
 
+			'%admin-email%' => variableOr('systemEmail', variableOr('assistantEmail', '#error--no-email-configured')),
 			'%email%' => variableOr('email', ''),
 			'%phone%' => variableOr('phone', ''),
 			'%phone2%' => variableOr('phone2', ''),
@@ -271,7 +273,7 @@ function replaceHtml($html) {
 			'%safeName%' =>  variable('safeName'),
 			'%section%' => $section, //let archives break!
 			'%section_r%' => humanize($section),
-			'%site-engage-btn%' => engageButton('Engage With Us', 'inline'),
+			'%site-engage-btn%' => engageButton('Engage With Us', 'btn btn-lg btn-site'),
 
 			'%nodeUrlUptoLeaf%' => $loc = variable('all_page_parameters'), //experimental
 			'%enquiry%' => str_replace(' ', '+', 'enquiry (for) ' . $sn . ' (at) ' . $loc),
@@ -336,8 +338,13 @@ variable('_engageButtonFormat', '<a href="javascript: void(0);" class="btn btn-p
 
 function engageButton($name, $class, $scroll = false) {
 	if ($scroll) $class .= ' engage-scroll';
-	$class .= ' btn-fill';
-	return replaceItems(variable('_engageButtonFormat'), ['id' => urlize($name), 'name' => $name, 'class' => $class], '%') . variable('nl');
+	//$class .= ' btn-fill';
+
+	return replaceItems(variable('_engageButtonFormat'), [
+		'id' => urlize($name),
+		'name' => $name,
+		'class' => $class],
+	'%') . NEWLINE;
 }
 
 ///Other Amadeus Stuff
@@ -386,9 +393,11 @@ function prepareLinks($output) {
 		'DIV-CENTER' => '<div class="text-center">',
 		'DIV-RIGHT' => '<div class="float-right">',
 		'DIV-ROW' => '<div class="row">',
+		'DIV-CELL3' => '<div class="col-md-3 col-sm-12">',
 		'DIV-CELL4' => '<div class="col-md-4 col-sm-12">',
 		'DIV-CELL6' => '<div class="col-md-6 col-sm-12">',
 		'DIV-CELL8' => '<div class="col-md-8 col-sm-12">',
+		'DIV-CELL9' => '<div class="col-md-9 col-sm-12">',
 		'DIV-CLOSE' => '</div>',
 	]);
 
@@ -403,6 +412,7 @@ function url_r($url, $domainOnly = false) {
 		'preview.' => '',
 		'https://' => '',
 		'http://' => '',
+		'www.' => '',
 		'//' => '',
 	]);
 	if (endsWith($url, '/')) $url = substr($url, 0, strlen($url) - 1);
@@ -441,8 +451,9 @@ function specialLinkVars($item) {
 class bootstrapAndUX {
 	const colors = ['primary', 'secondary', 'info', 'success', 'warning', 'danger'];
 
-	//TODO:
 	const namedButtons = [
+		'DOWNLOAD' => 'btn btn-lg btn-primary" target="_blank',
+		'SITE' => 'btn btn-info',
 		'PHONE' => 'danger fa fa-phone',
 		'WHATSAPP' => 'warning fab fab-whatsapp',
 		'EMAIL' => 'info bi bi-email',
@@ -459,7 +470,11 @@ class bootstrapAndUX {
 				self::$buttonVars[$btn . $colorUpper] = $start . 'btn btn-' . $color;
 				self::$buttonVars[$bigBtn . $colorUpper] = $start . 'btn btn-lg btn-' . $color;
 			}
+
+			foreach (self::namedButtons as $name => $class)
+				self::$buttonVars[$btn . $name] = $start . $class;
 		}
+
 		return self::$buttonVars;
 	}
 
@@ -479,6 +494,9 @@ class linkBuilder extends builderBase {
 	const openFileInline = self::openFile . ' inline';
 	const openFileBlock = self::openFile . ' block';
 	const localhostLink = 'new-tab localhost btn-secondary noPageUrl';
+	const copyOnClick = 'copy noPageUrl btn btn-lg';
+	const copyUrl = self::copyOnClick . ' outline-primary';
+	const copyRelUrl = self::copyOnClick . ' outline-danger';
 
 	static function factory($text, $href, $setting, $echo = false) {
 		$do = explode(' ', $setting);
@@ -495,7 +513,19 @@ class linkBuilder extends builderBase {
 		if (in_array('humanize', $do))
 			$text = humanize($text);
 
-		$result = new linkBuilder($text, $href); //->make(false)
+		$attrs = '';
+		if (in_array('copy', $do)) {
+			$attrs = ' onclick="
+			const val = new Blob([this.getAttribute(\'href\')], { type: \'text/plain\' });
+			navigator.clipboard.write([new ClipboardItem({\'text/plain\': val})]);
+			this.classList.add(\'text-decoration-underline\'); this.classList.add(\'fw-bolder\');
+			return false;"';
+		}
+
+		$result = new linkBuilder($text, $href);
+
+		if ($attrs)
+			$result->attrs = $attrs;
 
 		if (in_array('new-tab', $do))
 			$result->target = true;
@@ -521,7 +551,7 @@ class linkBuilder extends builderBase {
 			$result->addClass('d-block me-3 mb-3');
 
 		if (in_array('lightbox', $do)) {
-			$result->attrs = ' data-lightbox="iframe"';
+			$result->attrs .= ' data-lightbox="iframe"';
 			$result->href .= self::content;
 		}
 

@@ -35,11 +35,17 @@ function runAllMacros($html) {
 	if (contains($html, '[video]'))
 		$html = processVideoShortcode($html);
 
+	if (contains($html, '[pdf]'))
+		$html = processPdfShortcode($html);
+
 	if (contains($html, '[spacer]'))
 		$html = processSpacerShortcode($html);
 
 	if (contains($html, '[prompt]'))
 		$html = processPromptShortcode($html);
+
+	if (contains($html, '[content-box]'))
+		$html = processContentBoxShortcode($html);
 
 	return $html;
 }
@@ -212,11 +218,17 @@ function processVideoShortcode($html) {
 	]);
 }
 
+function processPdfShortcode($html) {
+	return replaceItems($html, [
+		'[pdf]' => '<iframe src="',
+		'[/pdf]' => '" style="height: 80vh" frameborder="0"></iframe>',
+	]);
+}
+
 DEFINE('SPACERSTART', '<div class="divider divider-center m-0"><h1>');
 DEFINE('SPACEREND', '</h1></div>');
 
-function printSpacer($heading, $ix = 1) {
-	sectionId('spacer' . $ix, 'spacer');
+function printSpacer($heading) {
 	echo SPACERSTART . $heading . SPACEREND;
 }
 
@@ -233,6 +245,13 @@ function processPromptShortcode($html) {
 	return replaceItems($html, [
 		'[prompt]' => cbCloseAndOpen('prompt'),
 		'[/prompt]' => cbCloseAndOpen(),
+	]);
+}
+
+function processContentBoxShortcode($html) {
+	return replaceItems($html, [
+		'[content-box]' => contentBox('', '', true),
+		'[/content-box]' => contentBox('end', '', true),
 	]);
 }
 

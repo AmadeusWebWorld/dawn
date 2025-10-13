@@ -5,7 +5,7 @@ if (!sheetExists($sheetName)) return h2('No articles found.', 'text-danger', tru
 
 $sheet = getSheet($sheetName, false);
 
-$op = ['</section><div class="container">' . NEWLINE];
+$op = ['</section><div class="container articles">' . NEWLINE];
 $format = '<section class="content-box"><sup>%sno%</sup> %title%
 <br /><br />%excerpt%</section>';
 
@@ -14,7 +14,7 @@ foreach ($sheet->rows as $item) {
 	$path = $sheet->getValue($item, 'path');
 
 	$relPath = str_replace('/home', '', $path);
-	$url = replaceHtml(DEFINED('NETWORKPATH') ? '%' . OTHERSITEPREFIX . $site . '%' : '%url%');
+	$url = replaceHtml(DEFINED('NETWORKPATH') && $site ? '%' . OTHERSITEPREFIX . $site . '%' : '%url%');
 
 	$link = $url . $relPath . '/';
 

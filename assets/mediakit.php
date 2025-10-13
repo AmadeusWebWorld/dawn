@@ -56,7 +56,7 @@ if ($node = _color($palette, 'node', false))
 	echo '#page-menu-wrap { background-color: ' . $node . ' }' . NEWLINES2;
 
 if ($content)
-	echo '#content { background-color: ' . $content . '; }' . NEWLINES2;
+	echo '#content, .also-content { background-color: ' . $content . '!important; }' . NEWLINES2;
 
 if ($cursive) echo '.cursive { font-family: "' . $cursive . '", serif; }' . NEWLINES2;
 

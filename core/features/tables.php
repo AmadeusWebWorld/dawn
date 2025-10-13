@@ -106,6 +106,10 @@ function _table_link($item, $c, $values, $key, $cols) {
 class tableBuilder extends builderBase {
 	private $id, $data, $cols, $template;
 
+	static function factory($id, $items) {
+		(new tableBuilder($id, $items))->render();
+	}
+
 	function __construct($id, $data, $cols = 'auto', $template = 'auto', $settings = [])
 	{
 		$this->id = $id;

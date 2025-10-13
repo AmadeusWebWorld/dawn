@@ -249,6 +249,14 @@ class sheet {
 		return $result ? $result : $default;
 	}
 
+	public function getAllItemsAsObject($source = false) {
+		if (!$source) $source = $this->rows;
+		$items = [];
+		foreach ($source as $item)
+			$items[] = $this->asObject($item);
+		return $items;
+	}
+
 	public function asObject($item) {
 		return rowToObject($item, $this);
 	}

@@ -6,6 +6,10 @@
 #statistics .amadeus-icon { background-color: whitesmoke; }
 h2.amadeus-icon { font-size: 120%; padding: 5px; }
 
+/* code-snippets */
+
+.container.articles h2 { margin: 10px 0 0 0; }
+
 /* TABLES */
 table.headings-on-left th { text-align: right; }
 table.headings-on-left td, .header th.left { text-align: left; }

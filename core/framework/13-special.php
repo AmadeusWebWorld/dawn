@@ -68,7 +68,7 @@ function autoRender($file, $type = false, $useHeading = true) {
 		} else if (startsWith($raw, '<!--is-deck-->')) {
 			_renderedDeck($file, $pageName);
 		} else {
-			$settings = ['use-content-box' => true];
+			$settings = ['use-content-box' => (!variable('skip-content-box-for-this-page'))];
 			if ($useHeading) $settings['heading'] = $pageName;
 			if (variable(FIRSTSECTIONONLY)) $settings[FIRSTSECTIONONLY] = true;
 			renderAny($file, $settings);
