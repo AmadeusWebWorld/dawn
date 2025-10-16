@@ -36,7 +36,7 @@ foreach ($sheet->rows as $repo) {
 	if ($onlyToClone && $exists) continue;
 
 	$actions = '';
-	if ($isMobile && $location == LOCATIONNOTSET) {
+	if ($isMobile && !$exists) {
 		$actions = linkBuilder::factory('Clone URL', $item['clone_url'], linkBuilder::copyUrl)
 			. ' ' . linkBuilder::factory('Relative Path', $location, linkBuilder::copyRelUrl);
 	}
@@ -47,7 +47,7 @@ foreach ($sheet->rows as $repo) {
 		'location' => $location == LOCATIONNOTSET ? $notSet . $clonePaths
 			: linkBuilder::factory($location, $location, linkBuilder::localhostLink),
 		'exists' => ($exists ? $yes : $no) . (!$exists && $location != LOCATIONNOTSET ? ' &mdash; ' . _clone($location, $item) : ''),
-		'actions' => $exists && $location != LOCATIONNOTSET ? _pull_and_log($location) : $actions,
+		'actions' => $exists && $location != LOCATIONNOTSET && !$actions ? _pull_and_log($location) : $actions,
 		'description' => returnLine($item['description']),
 	];
 
