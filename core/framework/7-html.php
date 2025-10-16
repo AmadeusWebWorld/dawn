@@ -390,6 +390,7 @@ function prepareLinks($output) {
 	$output = replaceItems($output, [
 		'DIV|LARGELIST' => '<div class="large-list">',
 		'DIV-CONTAINER' => '<div class="video-container">',
+		'DIV-MAX-500-CENTER' => '<div class="m-auto img-max-500">',
 		'DIV-CENTER' => '<div class="text-center">',
 		'DIV-RIGHT' => '<div class="float-right">',
 		'DIV-ROW' => '<div class="row">',

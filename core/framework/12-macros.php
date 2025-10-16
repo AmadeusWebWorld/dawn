@@ -29,6 +29,9 @@ function runAllMacros($html) {
 	if (contains($html, '[spotify]'))
 		$html = processSpotifyShortcode($html);
 
+	if (contains($html, '[instagram')) //post/reel
+		$html = processInstagramShortcode($html);
+
 	if (contains($html, '[audio]'))
 		$html = processAudioShortcode($html);
 
@@ -201,6 +204,24 @@ function processSpotifyShortcode($html) {
 	return replaceItems($html, [
 		'[spotify]' => '<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/',
 		'[/spotify]' => '?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+	]);
+}
+
+DEFINE('_IGPOSTSTART', '<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/');
+DEFINE('_IGREELSTART', '<blockquote class="instagram-media" style="max-width:540px; min-width:200px;" data-instgrm-permalink="https://www.instagram.com/p/');
+DEFINE('_IGEND', '/" data-instgrm-version="14"></blockquote>');
+
+DEFINE('IGPOSTFORMAT', _IGPOSTSTART . '%Instagram%' . _IGEND);
+DEFINE('IGREELFORMAT', _IGREELSTART . '%Instagram%' . _IGEND);
+DEFINE('IGEMBED', '<script async src="//www.instagram.com/embed.js"></script>');
+
+function processInstagramShortcode($html) {
+	$html .= NEWLINE . IGEMBED . NEWLINES2;
+	return replaceItems($html, [
+		'[instagram-post]' => _IGPOSTSTART,
+		'[instagram-reel]' => _IGREELSTART,
+		'[/instagram-post]' => _IGEND,
+		'[/instagram-reel]' => _IGEND,
 	]);
 }
 

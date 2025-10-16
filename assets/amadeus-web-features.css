@@ -60,6 +60,9 @@ code.language-poem { background-color: var(--amadeus-poem-bgd, #cce); }
 .content-box pre.language-sanskrit::before { content: "Sanskrit"; }
 .content-box pre.language-sanskrit { background-color: #f9d9ce; }
 
+.content-box pre.language-sanskritized-english::before { content: "Sanskritized English"; }
+.content-box pre.language-sanskritized-english { background-color: #f9f6ce; }
+
 .content-box pre.language-poetic-translation::before { content: "Poetic Translation"; }
 .content-box pre.language-poetic-translation { background-color: #cef9ed; }
 
