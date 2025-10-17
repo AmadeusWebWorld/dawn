@@ -205,8 +205,8 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 	if ($beforeContent = valueIfSetAndNotEmpty($values, 'before-content')) echo returnLine(pipeToBR($beforeContent));
 	if ($allowCards) echo '<div class="text-center"><button data-table-id="amadeus-table-' . $id . '" class="amadeus-table-' . $id . '-card-view">toggle card view</button></div>' . BRNL;
 
-	if ($wantsBSRow) echo '<div id="amadeus-bs-row-' . $id . '" class="row">';
-	else if ($customHead) echo $values['head-template'];
+	if ($customHead) echo $values['head-template'];
+	else if ($wantsBSRow) echo '<div id="amadeus-bs-row-' . $id . '" class="row">';
 	else echo '
 	<table id="amadeus-table-' . $id . '" class="' . $datatableClass . 'table table-striped table-bordered" ' . $datatableParams . 'cellspacing="0" width="100%">
 	<thead>
@@ -220,7 +220,9 @@ function add_table($id, $dataFile, $columnList, $template, $values = []) {
 		if ($dontTreat) {
 			$row = $item;
 		} else if($wantsBSRow && $lineTemplateForBS) {
+			if (isset($item[0]) && $item[0] == '') continue;
 			$row = $sheet->asObject($item);
+			if (valueIfSet($row, 'Skip') || valueIfSet($row, 'skip')) continue;
 		} else {
 			$more = isset($item[0]) && $item[0] == MORETAG;
 			if ($more) { if (variable('is-in-directory')) break; else continue; }

@@ -189,7 +189,7 @@ function listItem($html) {
 ///Internal Variables & its replacements
 
 function pipeToBR($raw) {
-	return replaceItems($raw, [ '|' => BRNL ]);
+	return replaceItems($raw, [ '|' => BRNL, 'NEWLINE' => NEWLINE ]);
 }
 
 function pipeToNL($raw) {
@@ -465,7 +465,7 @@ class bootstrapAndUX {
 	private static function buttonVars() {
 		if (count(self::$buttonVars) == 0) {
 			$btn = 'BTN'; $bigBtn = 'BTNLARGE';
-			$start = '" class="';
+			$start = '" class="m-1 ';
 			foreach (self::colors as $color) {
 				$colorUpper = strtoupper($color);
 				self::$buttonVars[$btn . $colorUpper] = $start . 'btn btn-' . $color;

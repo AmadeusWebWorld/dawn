@@ -1,47 +1,51 @@
-#Name	Location	Showcase	WeSay	TheySay
-|is-table
+#Name	Location	Showcase	Category	Subcategory	Status	Skip	WeSay	TheySay
+|is-table								
+|https://docs.google.com/spreadsheets/d/1dsEA395vzHMqRZTlUhPsc34LYFy-TRhbsNZA9L5Xvi8/edit?gid=0#gid=0								
+||no-content-box: yes								
+||use-template: for-projects
 
-dawn		Y	It's mindblowing - the developer and webowner / coordinator experience.	VSC: As an engineer, I can relate to the "craft" that Imran brings. Most work is painless and smooth.
-aw-products				
-alliance-of	
-
-aop	alliance-of/sites/
-ethos	alliance-of/sites/
-ideas	alliance-of/sites/
-wiseowls	alliance-of/sites/
-work	alliance-of/sites/
-world	alliance-of/sites/
-
-imran		Y	The site has transformed over so many years and code iterations.	Me: As a writer, presenting content has been without hiccup. The "All or Nothing" funda really is a wonder.
-more	imran/
-with-ai	imran/
-
-bhuvana	alliance-of/people/			
-vishnuvasu	friends/			
-
-awakentolife	friends/	Y	The 4th iteration of a very patient and kind collaborator.	VSC: The content, posters, features and design are all coming together great.
-vidyantara	friends/	Y	Our first aesthetic site in the new v8.5 framework.	VSC: Was happy with the way this one took shape.
-govindaraj	friends/			
-relieffoundation-team	teams/			
-
-imran-ali-namazi	alliance-of/sites/wiseowls/	Y	New WO site.	Me: With this, a fresh look at content / presenting services is possible.
-umsy	alliance-of/sites/wiseowls/			
-vijaya-srinivasan	alliance-of/sites/wiseowls/	Y	All agog to see how this shapes up.	Vijaya ma'am: Also interested to know what the AWW platform can do.
-
-bharath-muraliraman	alliance-of/sites/wiseowls/			
-srividya-srikumar	alliance-of/sites/wiseowls/			
-ganesh-n-rajan	alliance-of/sites/wiseowls/			
-
-anupam-jha	alliance-of/sites/wiseowls/people/			
-
-samatabooks	alliance-of/organizations/
-vishwas	alliance-of/organizations/	Y	First official member - now a subdomain.	Fem: Was good to work with Imran in early 2024 on this.
-puvidham	alliance-of/organizations/
-medha	alliance-of/organizations/
-
-intrepidresearch	alliance-of/networks/			
-joyfulearth	alliance-of/networks/			
-
-india	alliance-of/places/			
-
-aurrrah			A CB	
+dawn		Y	Technology	Core Builder			It's mindblowing - the developer and webowner / coordinator experience.	VSC: As an engineer, I can relate to the "craft" that Imran brings. Most work is painless and smooth.
+aw-products			Technology	For Team Internals		Y		
+alliance-of			Alliance	Virtual Folder		Y		
+								
+aop	alliance-of/sites/		IoM Showcase	Tech as an AoP			A place for documentation, planning, FAQs etc	Me: This is how we onboard teammages, for now our in-house "action oriented project, but with some momentum, the tech evolution showcasing an Internet of Missions.
+ethos	alliance-of/sites/		IoM Showcase	The new GH Spaces		Y		
+ideas	alliance-of/sites/			Applied Spirituality		Y		
+wiseowls	alliance-of/sites/							
+work	alliance-of/sites/		Technology	Our Offerings				
+world	alliance-of/sites/		IoM Showcase	Network Anchor				
+								
+imran		Y					The site has transformed over so many years and code iterations.	Me: As a writer, presenting content has been without hiccup. The "All or Nothing" funda really is a wonder.
+more	imran/					Y		
+with-ai	imran/					Y		
+								
+bhuvana	alliance-of/people/					Y		
+vishnuvasu	friends/					Y		
+								
+awakentolife	friends/	Y					The 4th iteration of a very patient and kind collaborator.	VSC: The content, posters, features and design are all coming together great.
+vidyantara	friends/	Y					Our first aesthetic site in the new v8.5 framework.	VSC: Was happy with the way this one took shape.
+govindaraj	friends/					Y		
+relieffoundation-team	teams/					Y		
+								
+imran-ali-namazi	alliance-of/sites/wiseowls/	Y					New WO site.	Me: With this, a fresh look at content / presenting services is possible.
+umsy	alliance-of/sites/wiseowls/							
+vijaya-srinivasan	alliance-of/sites/wiseowls/	Y				Y	All agog to see how this shapes up.	Vijaya ma'am: Also interested to know what the AWW platform can do.
+								
+bharath-muraliraman	alliance-of/sites/wiseowls/					Y		
+srividya-srikumar	alliance-of/sites/wiseowls/							
+ganesh-n-rajan	alliance-of/sites/wiseowls/					Y		
+								
+anupam-jha	alliance-of/sites/wiseowls/people/					Y		
+								
+samatabooks	alliance-of/organizations/					Y		
+vishwas	alliance-of/organizations/	Y					First official member - now a subdomain.	Fem: Was good to work with Imran in early 2024 on this.
+puvidham	alliance-of/organizations/					Y		
+medha	alliance-of/organizations/					Y		
+								
+intrepidresearch	alliance-of/networks/					Y		
+joyfulearth	alliance-of/networks/					Y		
+								
+india	alliance-of/places/					Y		
+								
+aurrrah						Y	A CB	
+								
